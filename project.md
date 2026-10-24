@@ -36,9 +36,7 @@ Yalnızca **Flutter + Dart**. Backend yoktur.
 | Bildirim | `flutter_local_notifications` |
 | Uygulama kilidi | `local_auth` |
 | Tarih/saat | `intl` |
-| Hedef platform | Android + iOS |
-
-Bu listenin dışında paket eklemek için **iki kişinin onayı** gerekir.
+| Hedef platform | Android + iOS | web. 
 
 ## 5. Kayıt Bütünlüğü Tasarımı (Yerel)
 1. **Append-only repository:** Uygulama kodunda `UPDATE` / `DELETE` kayıt metodu yoktur. Yalnızca `insert` ve `select`.
