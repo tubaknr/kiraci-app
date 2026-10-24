@@ -1,6 +1,13 @@
-# Done
+# done.md — Tamamlananlar
 
-> Biten görevler buraya taşınır (yeniden eskiye). Biçim: `- [tarih] ID — ne yapıldı (branch, önemli dosyalar)`
+> Her biten görev buraya eklenir (en yeni üstte). Biçim: tarih · ID · görev · kişi · puan · branch.
 
-- [2026-10-24] — Mimari kararlar kesinleştirildi (Hive, Dio, GoRouter, Argon2, Shelf). Dizin yapısı düzenlendi (docs/, skills/), ortam bilgileri ve görev paylaşımı güncellendi.
-- [2026-10-24] — Proje dosyaları hazırlandı: project.md, agents.md, progress.md, README.md, docs/veritabani.md, docs/api.md, skills/*
+| Tarih | ID | Görev | Kişi | Puan | Branch / Commit |
+|---|---|---|---|---|---|
+| 24.10.2026 | T00 | Proje dosyaları hazırlandı (project.md, agents.md, progress.md, skills/) | Tuba | 1 | — |
+
+## Puan Toplamı
+| Kişi | Tamamlanan puan |
+|---|---|
+| Tuba | 1 |
+| Sümeyye | 0 |

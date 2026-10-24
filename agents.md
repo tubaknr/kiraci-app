@@ -1,68 +1,56 @@
-# Ajan Kuralları
+# agents.md — Ajan Çalışma Kuralları (SafeRentHouse)
 
-> Bu dosya "nasıl çalışmalısın"ı anlatır. Her oturumda `project.md` ile birlikte okunur.
+Bu dosya, projede kod yazan yapay zeka ajanları (AntiGravity vb.) ve geliştiriciler için **bağlayıcı** kılavuzdur. Sıra: `project.md` → bu dosya → `progress.md`.
 
-## 1. Rolün
-Sen bu projede yazılım ajanısın. Dart sunucuyu **ve** Flutter uygulamasını (tema, navigasyon, tüm ekranlar dahil) geliştiriyorsun. Projeyi iki kişi yürütüyor; hangi görevin kimde olduğu `progress.md` → "Şu An Üzerinde Çalışılan" tablosundadır.
+## 1. Oturum Başlangıcı
+1. `project.md` → kapsam, sahiplik, kapsam dışı liste
+2. `progress.md` → aktif görev ve sıradaki iş
+3. İlgili skill'i `skills/` altından seç ve oku
+4. Hangi kişi için çalışıldığını anla (Tuba / Sümeyye). Başkasının alanında doğrudan değişiklik yapma.
 
-## 2. Oturum Başlangıcı (sırayla)
-1. `project.md` oku (amaç, mimari, güvenlik ilkeleri, kapsam dışı).
-2. `progress.md` oku → sadece **ilk uygun açık `[ ]` görevi** yap (başkasının üstlendiğini atla), başka görevlere geçme.
-3. Göreve ait doküman: `docs/veritabani.md` ve/veya `docs/api.md`.
-4. İlgili skill'i oku: `skills/git-workflow`, `skills/flutter-feature`, `skills/api-endpoint`, `skills/immutable-record`.
-5. Görev belirsizse **dur ve tek bir net soru sor**; tahminle ilerleme.
+## 2. Sahiplik ve Sınırlar
+| Alan | Sahip | Başkası değiştirmek isterse |
+|---|---|---|
+| `lib/core/db`, `core/integrity`, `core/services` | Tuba | PR + onay |
+| Tüm `features/*/controller/` ve `features/*/models/` | Tuba | PR + onay |
+| `features/forms/view` F1–F2 | Tuba | PR + onay |
+| `lib/core/theme`, `core/constants` | Sümeyye | PR + onay |
+| `features/*/view/` ve `widget/` (F1–F2 hariç) | Sümeyye | PR + onay |
+| `project.md`, `agents.md` | İkisi birlikte | Değişiklik öncesi haber ver |
 
-## 3. Çalışma İlkeleri
-- Küçük adımlarla ilerle; bir görev = bir branch = bir PR/commit grubu.
-- Yazmadan önce mevcut kodu oku; var olan desenleri (klasör yapısı, isimlendirme) takip et.
-- **Yalnızca Dart/Flutter.** Başka dilde dosya üretme (migration `.sql` hariç).
-- Yeni paket eklemeden önce adını ve nedenini söyleyip onay iste. Sürümleri sabitle.
-- Kapsam dışı işlere dokunma (`project.md` bölüm 9). Fark ettiğin ek işleri `progress.md` → Notlar'a yaz, yapma.
-- Başkasının `Şu An Üzerinde Çalışılan`'da yazılı görevinin dosyalarına dokunma. Göreve başlarken kendi görevini o tabloya yaz.
-- Ekranları sunucu hazır olmadan yazarsan `docs/api.md` sözleşmesine uygun sahte veri kaynağı kullan; sözleşmeyi kendin değiştirme.
-- Şema/API değişikliği gerekirse önce `docs/` dosyasını güncelle ve bana bildir; sonra kodu yaz.
+**Sözleşme kuralı:** UI, yalnızca controller'ın açtığı `ValueNotifier`'ları dinler ve metotlarını çağırır. Veritabanına veya hash koduna UI'dan doğrudan erişilmez. Controller arayüzü değişecekse önce Tuba'ya haber ver.
 
-## 4. Kod Standartları
-- Dart null safety, `flutter analyze` / `dart analyze` **0 uyarı**.
-- Dosya adı `snake_case`, sınıf `PascalCase`, değişken `camelCase`. Kod ve değişken adları İngilizce, kullanıcıya görünen metinler Türkçe.
-- Clean Architecture: `presentation → domain ← data`; `domain` saf Dart kalır; ekran doğrudan HTTP/Hive/SQL çağırmaz.
-- Hata: `Result<T>` kullan; boş `catch` yazma; kullanıcıya anlaşılır Türkçe mesaj göster.
-- Her ekranda loading / empty / error durumu olsun.
-- Para kuruş (int) tutulur, ekranda ₺ ile biçimlenir. Tarih/saat UTC saklanır, ekranda yerel gösterilir.
-- Yorum: "ne" değil "neden" açıkla; ölü kod ve `print` bırakma.
+## 3. Kırmızı Çizgiler
+1. **State:** `ValueNotifier` + `ValueListenableBuilder`. Sayfa düzeyinde ağır `setState` yasak. Yalnızca yerel UI durumu (animasyon, odak) için `StatefulWidget`.
+2. **UI ve performans:**
+   - Statik tüm widget'larda `const` zorunlu.
+   - Renk ve metin stilleri yalnızca `core/constants/app_colors.dart` ve `core/theme/app_theme.dart` içinde.
+   - 40 satırı geçen `build` metotları özel widget'lara bölünür.
+3. **Paketler:** `project.md` Bölüm 4 dışında paket eklenmez; onay iste.
+4. **Mimari:** Her özellik kendi klasöründe: `controller/`, `models/`, `view/`, `widget/`. Tek dosyada toplama yasak.
+5. **Append-only:** Kayıt tablosu için `update`/`delete` metodu yazma. Düzeltme = yeni kayıt.
+6. **Gizlilik:** Kullanıcı dosyaları yalnızca uygulama dizininde tutulur. Hiçbir veri ağa gönderilmez (uygulamada ağ isteği yoktur).
+7. **Hukuki dil:** "Mahkemede geçerli", "kesin delil" gibi ifadeler yazma. Kullan: "doğrulanabilir kayıt", "zincir doğrulandı".
+8. **Dürüst arayüz:** Kayıt zamanının cihaz saatine dayandığı kullanıcıya gösterilir; "resmî zaman damgası" deme.
 
-## 5. Güvenlik Kuralları (ihlal edilemez)
-- Sır, token, parola, `.env`, `storage/` içeriği commit edilmez ve loglanmaz.
-- İstemci saati resmi zaman olarak **kullanılmaz**; resmi zaman sunucudan gelir.
-- Korunan tablolarda `UPDATE`/`DELETE` yazma; düzeltme = yeni kayıt (`skills/immutable-record`).
-- Her sunucu uç noktasında: token doğrula → ev üyeliğini doğrula → işlem. Yetkisiz erişimde `404`.
-- Kullanıcı girdisini sunucuda doğrula (tür, boyut, uzunluk). SQL'de parametreli sorgu kullan, string birleştirme yok.
-- Uygulamada hukuki kesinlik içeren metin yazma ("hukuken geçerlidir" vb.).
+## 4. Doğrulama Komutları
+Kod değişikliğinden sonra **mutlaka** çalıştır:
 
-## 6. Test Beklentisi
-- Sunucu: her uç nokta için başarılı yol + yetkisiz erişim + geçersiz girdi testi. Başka kullanıcının kaydına erişim testi **zorunlu**.
-- Değiştirilemezlik: `UPDATE/DELETE` denemesinin DB'de reddedildiği ve hash zincirinin bozulmayı yakaladığı test.
-- İstemci: use case ve model birim testleri; kritik form için widget testi.
-- Test yazılmadan görev "bitti" sayılmaz.
+```bash
+flutter analyze      # 0 uyarı, 0 hata şart
+flutter test
+flutter run
+```
 
-## 7. Bitti Tanımı (Definition of Done)
-- [ ] Görev tarifindeki her madde çalışıyor
-- [ ] Analiz 0 uyarı, testler geçiyor
-- [ ] `docs/` güncel (şema/API değiştiyse)
-- [ ] Sır/dosya sızıntısı yok
-- [ ] `progress.md` → `done.md` güncellendi
-- [ ] Commit/push `skills/git-workflow` kurallarına uygun
+## 5. Ajanın Çıktı Standartları
+- **Dil:** Türkçe, net ve doğrudan.
+- **Değişiklik sunumu:** Büyük dosyada az satır değiştiyse tüm dosyayı basma; hedef satırları ve diff'i göster.
+- **Dosya yolları:** Bahsedilen/üretilen her dosya için projeye göre yol ver.
+- **Doğrulama:** Kod yazdıktan sonra "Şimdi `flutter analyze` ile kontrol edebilirsin." de.
+- **Emin değilsen sor:** Kapsam dışı görünen bir şeyi kendi kararınla ekleme.
 
-## 8. Oturum Sonu
-Bana kısa özet ver: ne yaptın, hangi dosyalar değişti, hangi karar/soru bekliyor, sıradaki görev ne. Emin olmadığın bir şeyi "yaptım" diye söyleme; doğrulanamayan şeyi açıkça belirt.
-
-## 9. Dur ve Sor
-Merge çakışması, beklenmeyen test hatası, şema/API'yi değiştirmeyi gerektiren durum, yeni paket ihtiyacı, başkasının görevinin dosyasına dokunma ihtiyacı, hukuki içerikli metin yazma ihtiyacı.
-
-## 10. Test Modu (Rol Değiştirme) Kuralları
-- Kiracı Modu / Ev Sahibi Modu yalnızca geliştirme içindir: `kDebugMode` **ve** `DEV_TOOLS=true` olmadan hiçbir kod yolu çalışmaz; release build'e girmez.
-- Sunucuda rol atlatan, parolasız giriş sağlayan veya yetkiyi gevşeten hiçbir şey yazma. Geçiş, iki **gerçek** test hesabı arasında oturum değiştirmektir.
-- Test hesabı parolalarını, token'ları repoya yazma ve loglama; seed parolaları `.env`'den okunur, seed yalnızca `APP_ENV=development`'ta çalışır.
-- Arayüzdeki rolü sabit kodlama; açık evin `property_members.role` değerinden oku.
-- Test modu açıkken her ekranda "TEST MODU" şeridi görünür olmalı (yanlışlıkla gerçek veri sanılmasın).
-- Açılış/giriş/kayıt ekranlarında hata ve yükleniyor durumlarını, ilk açılış uyarısının tek sefer çıktığını test et.
+## 6. Görev Bitirme Akışı
+1. Analiz + test geçti mi?
+2. `skills/git-workflow` ile commit/push
+3. `skills/progress-update` ile `progress.md` ve `done.md` güncelle
+4. Kullanıcıya özet: ne yapıldı, hangi dosyalar, sıradaki görev

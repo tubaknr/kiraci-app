@@ -1,106 +1,76 @@
-# Progress
+# progress.md — Güncel Durum ve Plan
 
-> Ajan her görevde günceller. Biten maddeler `done.md`'ye taşınır.
-> Son güncelleme: 2026-10-24
-> Kural: Bir göreve başlamadan önce "Şu An Üzerinde Çalışılan" tablosuna görevi (ve kimin üstlendiğini) yaz. İki kişi aynı anda çalışabilir; aynı görev/dosyada çakışma olmasın diye bu tablo kontrol edilir.
+> Tarih formatı: GG.AA.YYYY. Ajan her görev başında burayı okur, görev bitince `skills/progress-update` ile günceller.
+> Takvim varsayımsaldır (başlangıç: 26.10.2026, 5 hafta). Gerçek teslim tarihi netleşince kaydırılır.
 
-## Görev Sahipleri (netleşenler)
-| Kişi | Görevler |
+## Şu An
+| Alan | Durum |
 |---|---|
-| **Tuba** | S-01…S-19 (iskelet, sunucu, auth, uç noktalar, seed), A-01, A-05…A-14. Ayrıca Sümeyye projeye dahil olana kadar A-02, A-03, A-04, A-15 için iş görecek temel mock ekranlar/bileşenler |
-| **Sümeyye** | Projeye başladığında: Frontende dair her şey onun görevi (A-02 Tema/Widget nihai tasarımı, A-03 Splash, A-04 Giriş/Kayıt, A-15 Rol değiştirme ve tüm ekranların nihai UI/UX'i) |
+| Aktif görev | T01 / T02 — Proje iskeleti |
+| Aktif kişi | Tuba (T01) + Sümeyye (T02) |
+| Engel | Yok |
+| Son güncelleme | 24.10.2026 |
 
-## Şu An Üzerinde Çalışılan
-| Görev | Sahip | Branch | Durum | Not |
-|---|---|---|---|---|
-| Henüz başlanmadı | - | - | - | İlk görev: S-01 (iskelet) |
+## Görev Planı
+Durum: ⬜ Bekliyor · 🟨 Devam · ✅ Bitti. Puan: S=1, M=2, L=3.
 
-## Sıradaki Görevler (öncelik sırasıyla)
-Ön ek: **S** = sunucu/genel, **A** = Flutter uygulaması. Ajan yalnızca sıradaki `[ ]` görevi yapar (bağımsız ve farklı kişilerin üstlendiği görevler paralel ilerleyebilir).
+### Hafta 1 (26.10 – 01.11): Temel
+| ID | Görev | Sahip | Puan | Hedef | Durum |
+|---|---|---|---|---|---|
+| T01 | Flutter projesi, klasör yapısı, paketler, `analysis_options.yaml` | Tuba | 1 | 27.10 | ⬜ |
+| T02 | `main.dart`, tema (`app_colors`, `app_theme`, `ValueNotifier<ThemeMode>`) | Sümeyye | 2 | 28.10 | ⬜ |
+| T03 | SQLite şeması + `app_database.dart` (cases, records), append-only repository | Tuba | 2 | 30.10 | ⬜ |
+| T04 | Navigasyon + onboarding + KVKK/uyarı ekranı | Sümeyye | 2 | 01.11 | ⬜ |
+| T05 | `hash_utils.dart` (SHA-256, zincir, kanonik JSON) + birim testleri | Tuba | 2 | 01.11 | ⬜ |
 
-### Faz 0 — İskelet
-1. [ ] **S-01** Monorepo iskeleti: `app/` (Flutter), `server/` (Dart), `docs/`, `skills/`; Clean Architecture klasörleri; `.gitignore` (`.env`, `storage/`); `.env.example`
-2. [ ] **S-02** İstemci cihaz içi veri kurulumu: Hive (taslak + önbellek kutuları), `flutter_secure_storage` (token) — Hive kararlaştırıldı
-3. [ ] **S-03** Temel domain entity'leri ve modeller: `Property`(Ev), `Lease`(Sözleşme), `Receipt`(Dekont), `Notice`/`AuditLog`(Log/Bildirim), `User`, `InventoryItem`, `Message`, `StoredFile` (+ JSON dönüşümleri, birim test)
+### Hafta 2 (02.11 – 08.11): Dosya ve kayıt
+| ID | Görev | Sahip | Puan | Hedef | Durum |
+|---|---|---|---|---|---|
+| T06 | Dosya (case) modeli + repository + controller | Tuba | 2 | 04.11 | ⬜ |
+| T07 | Dosyalarım + Dosya Oluştur ekranları | Sümeyye | 2 | 06.11 | ⬜ |
+| T08 | Kayıt ekleme servisi: dosyayı uygulama dizinine kopyala, hash, zincir, saat anomalisi tespiti | Tuba | 3 | 07.11 | ⬜ |
+| T09 | Kayıt Ekle ekranı (tür seç, kamera/dosya seçici) | Sümeyye | 2 | 08.11 | ⬜ |
 
-### Faz 1 — Sunucu temeli
-4. [ ] **S-04** `server/` shelf iskeleti, config (.env), hata middleware'i, `GET /saglik`, docker-compose ile PostgreSQL
-5. [ ] **S-05** Migration'lar: `docs/veritabani.md`'deki tüm tablolar + `forbid_mutation` trigger'ları + yetki REVOKE
-6. [ ] **S-06** `TimestampService` (tek zaman otoritesi) + SHA-256 yardımcıları + birim test
-7. [ ] **S-07** Hash zinciri servisi: `audit_logs` ekleme (head kilidi) + `loglar/dogrula` mantığı + test (bozulmuş zincir yakalanıyor mu)
+### Hafta 3 (09.11 – 15.11): Zaman çizelgesi ve ilk form
+| ID | Görev | Sahip | Puan | Hedef | Durum |
+|---|---|---|---|---|---|
+| T10 | Zaman çizelgesi ekranı | Sümeyye | 2 | 11.11 | ⬜ |
+| T13 | Zincir doğrulama servisi (`verifyChain`) + test | Tuba | 1 | 12.11 | ⬜ |
+| T11 | Form altyapısı (alan modeli, doğrulama, submit) + F1 (mantık + ekran) | Tuba | 3 | 14.11 | ⬜ |
+| T12 | Kayıt Detayı + zincir doğrulama rozeti | Sümeyye | 1 | 14.11 | ⬜ |
+| T14 | Konuşma kanıtı ekranı (ekran görüntüsü + not) | Sümeyye | 1 | 15.11 | ⬜ |
 
-### Faz 2 — Kimlik doğrulama (sunucu)
-8. [ ] **S-08** `auth/kayit`, `auth/giris`, `auth/yenile`, `auth/cikis`, `auth/ben` (JWT, parola hash, refresh token hash'li saklama, hız sınırı)
-9. [ ] **S-09** Auth middleware + `evId` üyelik middleware'i (üye değilse 404) + "başkasının mesajını göremez" testleri
-10. [ ] **S-10** Ev oluşturma, davet kodu, eve katılma uç noktaları
-11. [ ] **S-19** Geliştirme seed'i `server/tool/seed_dev.dart`: iki test hesabı (kiracı, ev sahibi) + örnek ev + üyelikler; yalnızca `APP_ENV=development`, parolalar `.env`'den
+### Hafta 4 (16.11 – 22.11): Formlar ve çıktı
+| ID | Görev | Sahip | Puan | Hedef | Durum |
+|---|---|---|---|---|---|
+| T15 | F2 Teslim/Tahliye Formu (mantık + ekran) | Tuba | 3 | 18.11 | ⬜ |
+| T17 | F3 Arıza + F4 Ödeme — model/doğrulama/controller | Tuba | 2 | 19.11 | ⬜ |
+| T16 | PDF rapor (zaman çizelgesi + hash tablosu + saat uyarısı) | Sümeyye | 3 | 20.11 | ⬜ |
+| T18 | F3 + F4 ekranları + Form Listesi | Sümeyye | 2 | 22.11 | ⬜ |
+| T19 | ZIP delil paketi (`manifest.json`) + mühür kodu paylaşımı | Tuba | 2 | 22.11 | ⬜ |
 
-### Faz 3 — Kayıt uç noktaları (sunucu)
-12. [ ] **S-11** Dosya servisi: `POST /dosyalar` (multipart, tür/boyut doğrulama, sunucuda SHA-256), indir, doğrula
-13. [ ] **S-12** Sözleşme (sürümlü) + dekont uç noktaları
-14. [ ] **S-13** Demirbaş uç noktaları (ekle, listele, düzeltme, onay/itiraz)
-15. [ ] **S-14** Bildirim uç noktaları (oluştur, listele, detay, okundu, yanıt)
-16. [ ] **S-15** Mesaj uç noktaları (`mesaj-gonder`, liste) + log listeleme
-17. [ ] **S-16** Idempotency-Key middleware'i + uçtan uca sunucu testleri
+### Hafta 5 (23.11 – 29.11): Bitirme
+| ID | Görev | Sahip | Puan | Hedef | Durum |
+|---|---|---|---|---|---|
+| T20 | F5 Olay Notu — model/doğrulama/controller | Tuba | 1 | 23.11 | ⬜ |
+| T22 | Uygulama kilidi mantığı (PIN özeti + `local_auth`) | Tuba | 1 | 24.11 | ⬜ |
+| T21 | F5 ekranı + hatırlatıcı bildirim | Sümeyye | 2 | 25.11 | ⬜ |
+| T23 | Ayarlar + kilit ekranı + yedek hatırlatma | Sümeyye | 2 | 26.11 | ⬜ |
+| T24 | Uçtan uca test, `analyze`/`test` temizliği | İkisi | 1+1 | 27.11 | ⬜ |
+| T25 | README + demo senaryosu | İkisi | 1+1 | 29.11 | ⬜ |
 
-### Faz 4 — Uygulama temeli (Flutter)
-18. [ ] **A-01** İstemci ağ katmanı: `dio` entegrasyonu, token ekleme/yenileme, hata → `Result`, repository ve use case iskeletleri
-19. [ ] **A-02 (Geçici: Tuba / Nihai: Sümeyye)** Tema ve ortak widget'lar (`core/theme`): renkler, yazı tipi, buton, kart, durum etiketi, boş/hata/yükleniyor bileşenleri
-20. [ ] **A-03 (Sümeyye / Geçici mock: Tuba)** Açılış (Splash) ekranı tasarımı + oturum kontrolü/yönlendirme + ilk açılış hukuki uyarısı (bir kez, Hive'a onay) — `project.md` §7.1
-21. [ ] **A-04 (Sümeyye / Geçici mock: Tuba)** Giriş / Kayıt ekranı tasarımı ve kodu (doğrulama, Türkçe hata metinleri, 429 mesajı, token'ı secure storage'a yazma, kayıtta rol seçimi yok) — `project.md` §7.1
-22. [ ] **A-15 (Sümeyye / Geçici mock: Tuba)** Kiracı Modu / Ev Sahibi Modu rol değiştirme: iki test oturumu (secure storage), üstte "TEST MODU" şeridi, geçişte durum sıfırlama, yalnızca `kDebugMode` + `DEV_TOOLS=true`; mock repository desteği; release build'de görünmediğinin doğrulanması — `project.md` §7.2, `skills/role-switch-dev`
-23. [ ] **A-05** Ana sayfa (ev listesi), ev oluştur, davet kodu üret/gir, ev özeti (merkez) ekranı
+## Puan Dengesi (planlanan)
+| Kişi | Görev puanları | Ortak (T24+T25) | Toplam |
+|---|---|---|---|
+| Tuba | T01 1 + T03 2 + T05 2 + T06 2 + T08 3 + T11 3 + T13 1 + T15 3 + T17 2 + T19 2 + T20 1 + T22 1 = 23 | 2 | **25** |
+| Sümeyye | T02 2 + T04 2 + T07 2 + T09 2 + T10 2 + T12 1 + T14 1 + T16 3 + T18 2 + T21 2 + T23 2 = 21 | 2 | **23** |
 
-### Faz 5 — Özellik ekranları (Flutter)
-24. [ ] **A-06** Kira & Ev Kaydı detay ekranı (adres, tutar, tarihler, depozito, sürüm geçmişi, yeni sürüm formu)
-25. [ ] **A-07** Demirbaş formu (`image_picker`, çoklu fotoğraf) + demirbaş listesi + onay/itiraz
-26. [ ] **A-08** Belgeler ekranı: sözleşme PDF'i ve dekont seçme (`file_picker`), yükleme, türüne göre listeleme; dekont formu
-27. [ ] **A-09** Talep / Bildirim oluşturma ekranı + bildirim geçmişi/detay (zaman damgası, okundu, yanıt)
-28. [ ] **A-10** Ev fotoğrafları ekranı (oda bazlı çekme/yükleme)
-29. [ ] **A-11** Mesajlar ekranı (`mesaj-gonder`)
-30. [ ] **A-12** Zaman çizelgesi + "Zinciri doğrula" ekranı
-31. [ ] **A-13** Profil / ayarlar / hakkında (çıkış, hukuki metin)
-32. [ ] **A-14** Çevrimdışı taslak akışı (Hive) — "taslak, resmi değil" etiketi
+> Fark 2 puan (≈%8), kabul edilebilir. Sapma 4 puanı geçerse görev kaydırılır (ör. T22'yi Sümeyye'ye).
 
-### Faz 6 — Birleştirme
-33. [ ] **S-17** Uçtan uca test: iki kullanıcıyla tam senaryo (ev kur → davet → sözleşme → demirbaş → dekont → bildirim → mesaj → log doğrulama), hata düzeltmeleri
-34. [ ] **S-18** README / ortam kurulum adımlarının ve `docs/`'un son güncellemesi
-
-## Engeller / Bekleyen Kararlar
-## Çözülen / Kesinleşen Kararlar (2026-10-24)
-| Konu | Karar | Not |
-|---|---|---|
-| Cihaz içi veri paketi | **Hive** | Taslaklar ve önbellek için Hive kutuları kullanılacak |
-| Sunucu çatısı | **Dart shelf + shelf_router** | Kesinleşti |
-| Veritabanı ve ortamı | **PostgreSQL (Docker)** | Docker container üzerinde `tuba:123456@localhost:5432/shelf_db` hazır |
-| Ağ paketi | **dio** | İstemci ağ iletişimi Dio ile yapılacak |
-| Yönlendirme (Routing) | **go_router** | Onaylandı |
-| Parola hash algoritması | **argon2** | Kesinleşti |
-| Sunucu dosya depolama | **disk (`storage/`)** | İlk sürüm disk |
-| İş bölümü ve Frontend yaklaşımı | **Tuba (Çekirdek + Mock Frontend), Sümeyye (Nihai Frontend)** | Sümeyye projeye başlayana kadar frontend ekranları Tuba tarafından iş görecek temel mock sayfalar olarak hazırlanacak, Sümeyye dahil olunca güncelleyecek |
-| Flutter & Dart SDK | **Kurulu** | `/snap/bin/flutter` yolu ve Dart hazır |
-
-## Engeller / Kalan Bekleyen Kararlar
-| Konu | Kim karar verecek | Not |
-|---|---|---|
-| Tasarım: kesin renk paleti ve yazı tipi | Sümeyye + Tuba | `project.md` §8'deki değerler öneridir, Sümeyye başlayınca kesinleştirecek |
-| Proje kesin adı | Tuba + Sümeyye | Şimdilik "Güvenli Kira" |
-| Aynı evde kaç kiracı/ev sahibi olabilir | Tuba + Sümeyye | Şimdilik 1 + 1 |
-| Rol bazlı bildirim türleri (kiracı/ev sahibi hangi türleri gönderebilir) | Tuba + Sümeyye | Öneri `project.md` §7.2'de; kesinleşirse sunucuda da doğrulanır |
-| Logo / uygulama simgesi ve slogan | Sümeyye + Tuba | Geçici: kalkan + ev ikonu, "Kayıt altında, güvende." |
-| Test modu şeridi renkleri ve konumu | Sümeyye | Öneri: kiracı turkuaz, ev sahibi lacivert, ekranın üstünde ince şerit |
-| Hukuki geçerlilik / KVKK metinleri | Hukukçu | Uygulama iddia etmez |
-
-## Bilinen Hatalar
-- (şimdilik yok)
-
-## Notlar
-- `image_picker` PDF seçemez; PDF için `file_picker`.
-- Sunucu ve istemci **yalnızca Dart**. Migration'lar `.sql` (istisna).
-- Resmi zaman sadece sunucuda üretilir; istemci saati `client_reported_at` olarak bilgi amaçlıdır.
-- Kayıt güncellenmez/silinmez; düzeltme yeni kayıtla yapılır (`supersedes_id`).
-- Şema veya API değişirse önce `docs/veritabani.md` / `docs/api.md` güncellenir.
-- Uygulama ekranları sunucu uç noktaları hazır olmadan yazılırsa `docs/api.md`'deki sözleşmeye uygun sahte (mock) veri kaynağıyla geliştirilir; gerçek bağlantı sonra yapılır.
-- Rol değiştirme (A-15) **yalnızca geliştirme sürümündedir**; sunucuda özel bir uç nokta yoktur. İki gerçek test hesabı arasında oturum değiştirir (S-19 seed'i veya mock).
-- A-03/A-04/A-15 için tema (A-02) gerekir; tema henüz yoksa geçici `AppTheme` ile başla, sonra token'lara taşı.
-- Bu dosyayı ve `done.md`'yi her görev sonunda güncelle.
+## Kararlar Günlüğü
+| Tarih | Karar |
+|---|---|
+| 24.10.2026 | Yalnızca Flutter + Dart |
+| 24.10.2026 | **Backend kaldırıldı:** sunucu, PostgreSQL, JWT, davet/ortak dosya yok. Veri yerel SQLite; zaman damgası cihaz saati |
+| 24.10.2026 | Zaman güvenilirliği için: hash zinciri + saat anomalisi tespiti + mühür kodunu dışarıya (e-posta) gönderme |
+| 24.10.2026 | İş bölümü: Tuba = veri/mantık/formlar/ZIP; Sümeyye = tema/ekranlar/PDF/bildirim |

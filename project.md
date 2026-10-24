@@ -1,245 +1,162 @@
-# Güvenli Kira (çalışma adı)
+# SafeRentHouse
 
-> Bu dosya projenin "anayasası"dır. Ajan her oturumda ilk bunu okur.
-> Değişiklik nadirdir; kapsam değişirse önce burası güncellenir.
-> Ayrıntılı kaynaklar: `docs/veritabani.md` (tablolar, ilişkiler, değiştirilemezlik) ve `docs/api.md` (uç noktalar).
+> Bu dosya projenin "anayasası"dır. Ajan her oturumda ilk bunu okur, sonra `agents.md`, `progress.md`.
+> Kapsam değişirse önce burası güncellenir ve iki geliştirici de haberdar edilir.
 
 ## 1. Amaç
-Kiracı ve ev sahibi arasında yaşanabilecek her türlü soruna karşı sözleşmeleri, ödeme dekontlarını, ev ve demirbaş fotoğraflarını, mesajları ve resmi nitelikli bildirimleri **sunucu saatiyle damgalayıp değiştirilemez şekilde** kayıt altına alan bir mobil uygulama ve sunucu. Amaç, olası bir hukuki süreçte iki tarafın da hakkını koruyan, güvenilir bir kayıt ortamı sağlamaktır.
-
-> Hukuki not: Uygulama hukuki danışmanlık vermez. Kayıtların mahkemede delil olarak değeri ayrıca bir hukukçu tarafından değerlendirilmelidir. Arayüzde "hukuken geçerlidir" gibi kesin ifadeler KULLANILMAZ; bunun yerine "kayıt altına alındı" denir. Bu uyarı ilk açılışta ve "Hakkında" ekranında gösterilir.
+SafeRentHouse; kiracı ile ev sahibi arasında yaşanabilecek uyuşmazlıklara karşı **belgeleri, yazışma kanıtlarını ve delilleri** tarihli ve sıralı biçimde kaydeden, kayıtlar sonradan değiştirilirse bunu **tespit edebilen** bir mobil uygulamadır. Uygulama **backend'siz** çalışır: tüm veri kullanıcının cihazında tutulur. Hukuki süreçte kullanılabilecek **PDF raporu ve doğrulanabilir delil paketi (ZIP)** üretir. Hukuki tavsiye vermez; kayıt ve belge düzenleme aracıdır.
 
 ## 2. Hedef Kitle
-- **Kiracılar:** eve girişte durumu, aylık ödemelerini ve taleplerini belgelemek isteyenler
-- **Ev sahipleri:** demirbaş, depozito, ödeme ve tadilat süreçlerini kayıt altına almak isteyenler
-- Her ev (kayıt) iki taraflıdır: bir ev sahibi + bir kiracı. Bir kullanıcı birden fazla evde farklı rollerde olabilir.
+- Kiracılar (depozito, tadilat, arıza, tahliye, kira artışı anlaşmazlıkları)
+- Ev sahipleri (hasar, ödeme gecikmesi, tahliye tespiti)
 
-## 3. Teknoloji
-Kural: **kodun tamamı Dart/Flutter**. İstemci Flutter, sunucu da Dart. (Veritabanı şeması `.sql` migration dosyalarıyla tanımlanır; bu istisnadır.)
+Her kullanıcı kendi cihazında kendi dosyalarını tutar. Karşı tarafla paylaşım, dışa aktarılan PDF/ZIP ile yapılır (uygulama içi ortak dosya yoktur).
+
+## 3. Ekip ve İş Bölümü
+| Kişi | Rol | Sorumluluk alanı |
+|---|---|---|
+| **Tuba** | Veri + Mantık + Formlar | `core/db`, `core/integrity`, `core/services`, tüm `controller/` ve `models/` klasörleri, F1–F5 form mantığı, F1–F2 ekranları, ZIP delil paketi, uygulama kilidi mantığı |
+| **Sümeyye** | Frontend / UI | `core/theme`, `core/constants`, navigasyon, tüm ekranların `view/` ve `widget/` katmanı (F1–F2 hariç), F3–F5 form ekranları, PDF dışa aktarma, yerel bildirim |
+
+Ortak: `project.md`, `agents.md`, çaprazlama code review, test ve README.
+
+## 4. Teknoloji
+Yalnızca **Flutter + Dart**. Backend yoktur.
 
 | Katman | Seçim |
 |---|---|
-| İstemci | Flutter / Dart, Clean Architecture |
-| Durum yönetimi | Provider |
-| Cihaz içi veri | Hive (önbellek + gönderilmemiş taslaklar) |
-| Token saklama (istemci) | `flutter_secure_storage` (Hive'a token yazılmaz) |
-| Ağ | `dio` |
-| Yönlendirme | `go_router` |
-| Biçimlendirme / yerelleştirme | `intl` (tr_TR tarih ve para biçimi) |
-| Arayüz | Material 3, tek `AppTheme` (açık tema; koyu tema sonra) |
-| Fotoğraf | `image_picker` (kamera/galeri). NOT: PDF seçemez |
-| PDF / belge seçme | `file_picker` |
-| Sunucu | Dart, `shelf` + `shelf_router` |
-| Veritabanı | PostgreSQL (`postgres` paketi), geliştirmede Docker (`postgresql://tuba:123456@localhost:5432/shelf_db`) |
-| Kimlik doğrulama | JWT (kısa ömürlü access + yenileme token'ı), şifre hash'i için `argon2` |
-| Dosya depolama | Sunucu diskinde `storage/` (ev bazlı klasör); ileride S3 uyumlu depolama |
-| Bütünlük | SHA-256 (`crypto` paketi) |
-| Hedef platform | Android, iOS (sunucu: Linux/Docker) |
+| Framework | Flutter / Dart, Material 3 |
+| Durum yönetimi | `ValueNotifier` + `ValueListenableBuilder` (harici state paketi YOK) |
+| Yerel veri | `sqflite` + `path` + `path_provider` |
+| Dosya/Medya | `image_picker`, `file_picker` |
+| Hash | `crypto` (SHA-256) |
+| PDF | `pdf` + `printing` |
+| ZIP | `archive` |
+| Paylaşma | `share_plus` |
+| Bildirim | `flutter_local_notifications` |
+| Uygulama kilidi | `local_auth` |
+| Tarih/saat | `intl` |
+| Hedef platform | Android + iOS |
 
-## 4. Özellikler
-Proje **iki parçadan** oluşur: sunucu ve Flutter uygulaması. Aşağıdaki tablo tüm projeyi kapsar; görevleri kimin üstleneceği `progress.md`'de "Şu An Üzerinde Çalışılan" tablosuyla belirlenir.
+Bu listenin dışında paket eklemek için **iki kişinin onayı** gerekir.
 
-| # | Özellik | Katman | Öncelik | Açıklama |
-|---|---|---|---|---|
-| 1 | Proje iskeleti | Genel | Yüksek | Monorepo, Clean Architecture klasörleri, cihaz içi veri kurulumu |
-| 2 | Temel veri modelleri | Genel | Yüksek | Ev, Sözleşme, Dekont, Log/Bildirim (+ Kullanıcı, Demirbaş, Mesaj, Dosya) |
-| 3 | Veritabanı tasarımı | Sunucu | Yüksek | Tablolar, ilişkiler, değiştirilemez loglar (`docs/veritabani.md`) |
-| 4 | Kimlik doğrulama (Auth) | Sunucu + İstemci | Yüksek | Kayıt/giriş, JWT, yenileme, evlere üyelik; kimse başkasının evini/mesajını göremez |
-| 5 | Zaman damgası servisi | Sunucu | Yüksek | Her kayıt sunucu saatiyle damgalanır; istemci saati resmi sayılmaz |
-| 6 | Değiştirilemezlik (immutability) | Sunucu | Yüksek | Append-only tablolar, DB trigger'ları, hash zinciri, dosya SHA-256 |
-| 7 | API uç noktaları | Sunucu | Yüksek | `/mesaj-gonder`, `/delil-yukle` gibi tüm servisler (`docs/api.md`) |
-| 8 | İstemci ağ katmanı + çevrimdışı taslak | İstemci | Yüksek | Token ekleme/yenileme, `Result` dönüşümü, Hive taslak ve önbellek |
-| 9 | Tema ve ortak widget'lar | İstemci | Yüksek | Renk, yazı tipi, buton, kart, boş/hata/yükleniyor bileşenleri |
-| 10 | Açılış (Splash) ekranı tasarımı, oturum yönlendirme, ilk açılış uyarısı | İstemci | Yüksek | Ayrıntı §7.1 |
-| 11 | Giriş / kayıt ekranları tasarımı ve kodu | İstemci | Yüksek | `auth` API'sini kullanır; ayrıntı §7.1 |
-| 12 | Ana sayfa: ev listesi, ev oluştur, davet kodu | İstemci | Yüksek | Üyesi olunan evler, yeni ev, koda katılma |
-| 13 | Kira & Ev Kaydı detay ekranı | İstemci | Yüksek | Adres, tutar, tarihler, depozito, sürüm geçmişi |
-| 14 | Demirbaş formu + listesi | İstemci | Yüksek | Fotoğraflı ("kombi sağlam", "parke çizik") kayıt, karşı tarafın onayı/itirazı |
-| 15 | Belge yükleme + listeleme | İstemci | Yüksek | Sözleşme PDF'i ve ödeme dekontu seçme, türüne göre liste |
-| 16 | Talep / Bildirim oluşturma | İstemci | Yüksek | "Kira ödendi", "Tadilat talebi" vb. zaman damgalı resmi ileti, okundu kaydı |
-| 17 | Ev fotoğrafları | İstemci | Orta | Oda bazlı çekme/yükleme, sunucu damgası + SHA-256 |
-| 18 | Mesajlaşma ekranı | İstemci | Orta | `mesaj-gonder` servisini kullanır; yalnızca evin iki üyesi |
-| 19 | Zaman çizelgesi + log doğrulama | İstemci | Orta | Logları sıralı gösterir, hash zinciri doğrulamasını tetikler |
-| 20 | Profil / ayarlar / hakkında | İstemci | Düşük | Hesap bilgisi, çıkış, hukuki uyarı metni |
-| 21 | Rol değiştirme: Kiracı Modu / Ev Sahibi Modu (test) | İstemci (+ geliştirme seed'i) | Yüksek | Tek cihazda iki tarafı test etmek için; **yalnızca geliştirme sürümünde** (bkz. §7.2) |
-| 22 | Dışa aktarma (PDF özet raporu) | İstemci + Sunucu | Düşük | İlk sürümde YOK |
+## 5. Kayıt Bütünlüğü Tasarımı (Yerel)
+1. **Append-only repository:** Uygulama kodunda `UPDATE` / `DELETE` kayıt metodu yoktur. Yalnızca `insert` ve `select`.
+2. **SHA-256 özeti:** Her dosya uygulamanın kendi dizinine kopyalanır ve baytlarından hash'lenir.
+3. **Zincir:** `chain_hash = SHA256(önceki_chain_hash | content_hash | kayıt_zamanı)`. Bir kayıt değiştirilir veya silinirse doğrulama zinciri o noktada kırılır.
+4. **Saat anomalisi tespiti:** Yeni kaydın zamanı bir önceki kaydın zamanından eskiyse kayıt `clock_anomaly` ile işaretlenir ve raporda gösterilir.
+5. **Dış çapa (mühür kodu):** Kullanıcı, dosyanın son `chain_hash` değerini e-posta/mesajla kendine veya karşı tarafa gönderebilir. Zaman damgası bu bağımsız kanaldan gelir.
+6. **Dışa aktarma doğrulaması:** ZIP paketindeki `manifest.json` her dosyanın hash'ini ve zinciri içerir; üçüncü kişi hash'leri yeniden hesaplayarak kontrol edebilir.
 
-### Görev sahipleri (netleşenler)
-| Kişi | Görev |
+## 6. Özellikler ve Sahiplik
+Puan: S=1, M=2, L=3.
+
+| # | Özellik | Öncelik | Mantık (Tuba) | Ekran (Sümeyye) | Açıklama |
+|---|---|---|---|---|---|
+| 1 | Onboarding + KVKK/uyarı metni | Yüksek | – | M | İlk açılışta kullanım sınırları ve rıza |
+| 2 | Dosya (case) oluşturma | Yüksek | M | M | Adres, taraflar, sözleşme tarihleri |
+| 3 | Kayıt ekleme: belge/foto/video/ses | Yüksek | L | M | Kopyala → hash → zincire ekle |
+| 4 | Konuşma kanıtı (ekran görüntüsü + not) | Yüksek | (3'ü kullanır) | S | WhatsApp vb. ekran görüntüsü + açıklama |
+| 5 | **Formlar F1–F5** (Bölüm 7) | Yüksek | L+M+S | F1–F2: Tuba, F3–F5: M+S | Yapılandırılmış form → JSON → kayıt |
+| 6 | Zaman çizelgesi | Yüksek | – | M | Dosyadaki tüm kayıtlar kronolojik |
+| 7 | Kayıt detayı + zincir doğrulama | Orta | S | S | "Zincir sağlam / kırık" rozeti |
+| 8 | PDF rapor | Orta | – | L | Zaman çizelgesi + hash tablosu |
+| 9 | ZIP delil paketi + mühür kodu paylaşımı | Orta | M | – | Dosyalar + `manifest.json`, `share_plus` |
+| 10 | Tema, ayarlar | Orta | – | M | Açık/koyu tema |
+| 11 | Uygulama kilidi (PIN/biyometrik) | Orta | S | S | `local_auth` |
+| 12 | Hatırlatıcı bildirim | Düşük | – | S | Kira tarihi vb., yerel bildirim |
+
+Toplam puanlar `progress.md`'de takip edilir (planlanan: Tuba 25, Sümeyye 23).
+
+## 7. Formlar
+| Form | Amaç | Ana alanlar |
+|---|---|---|
+| F1 Sözleşme Bilgi Formu | Kira şartlarını sabitlemek | Taraflar, adres, kira bedeli, depozito, başlangıç/bitiş, artış oranı |
+| F2 Teslim / Tahliye Tespit Formu | Evin durumunu belgelemek | Oda oda durum, sayaç değerleri, anahtar sayısı, foto bağlantıları |
+| F3 Arıza / Sorun Bildirim Formu | Sorunu tarihli kaydetmek | Sorun türü, açıklama, aciliyet, foto |
+| F4 Ödeme Bildirim Formu | Kira/depozito ödemesini kayda geçirmek | Tutar, dönem, yöntem, dekont dosyası |
+| F5 Olay Notu Formu | Serbest olay/konuşma özeti | Tarih-saat, kişiler, özet, ek dosyalar |
+
+**İş bölümü:** Model, doğrulama ve controller (F1–F5) Tuba'dadır. Ekranlar: F1–F2 Tuba, F3–F5 Sümeyye. Sümeyye'nin ekranları Tuba'nın controller arayüzüne bağlanır.
+
+**Kural:** Gönderilen form kanonik (sıralı anahtar) JSON olarak hash'lenir ve kayıt olarak eklenir. Form düzenlenemez; düzeltme için yeni form + `corrects_record_id` kullanılır.
+
+## 8. Sayfalar / Ekranlar
+| Ekran | Dosya | Sahip |
+|---|---|---|
+| Onboarding / KVKK | `lib/features/onboarding/view/onboarding_view.dart` | Sümeyye |
+| Dosyalarım | `lib/features/cases/view/cases_view.dart` | Sümeyye |
+| Dosya Oluştur | `lib/features/cases/view/case_create_view.dart` | Sümeyye |
+| Zaman Çizelgesi | `lib/features/records/view/timeline_view.dart` | Sümeyye |
+| Kayıt Ekle | `lib/features/records/view/record_add_view.dart` | Sümeyye |
+| Kayıt Detayı | `lib/features/records/view/record_detail_view.dart` | Sümeyye |
+| Form Listesi | `lib/features/forms/view/forms_menu_view.dart` | Sümeyye |
+| F1, F2 ekranları | `lib/features/forms/view/f1_*_view.dart`, `f2_*_view.dart` | Tuba |
+| F3, F4, F5 ekranları | `lib/features/forms/view/f3_*` … `f5_*_view.dart` | Sümeyye |
+| Dışa Aktar (PDF / ZIP) | `lib/features/export/view/export_view.dart` | Sümeyye |
+| Ayarlar + Kilit | `lib/features/settings/view/settings_view.dart`, `lock/view/lock_view.dart` | Sümeyye |
+
+## 9. Tasarım
+- Tema: Material 3, açık + koyu (`ValueNotifier<ThemeMode>`)
+- Ana renkler (öneri, son karar Sümeyye'de): lacivert `#1F3A5F`, turkuaz `#2BB3A3`, uyarı turuncu `#E08A2E`, zemin `#F7F9FC` / `#0E1420`
+- Yazı tipi: sistem varsayılanı (ek font paketi YOK)
+- Genel his: sakin, resmî ama sıcak. Her kayıtta görünen "zincir sağlam" rozeti ana görsel öğedir.
+
+## 10. Kapsam Dışı (YAPMA)
+- Backend, sunucu, bulut, hesap/giriş sistemi
+- Uygulama içi karşı tarafla ortak dosya veya davet
+- Hukuki tavsiye ve "mahkemede geçerlidir" iddiası
+- Gizli/rızasız ses veya görüntü kaydı
+- Sohbet uygulaması içeriğini otomatik çekme
+- E-imza, blockchain, ödeme
+- Kayıt silme veya düzenleme
+- Web ve masaüstü arayüzü (ilk sürümde)
+
+## 11. Riskler ve Dürüst Sınırlar
+| Konu | Not |
 |---|---|
-| **Tuba** | Sunucu (#3–#7), iskelet ve modeller (#1–#2), istemci ağ katmanı (#8) ve özellik ekranları (#13–#20). Ayrıca Sümeyye projeye dahil olana kadar #9 Tema/ortak widget'lar ile #10, #11 ve #21 için iş görecek temel mock sayfaların/bileşenlerin hazırlanması |
-| **Sümeyye** | Projeye dahil olduğunda: #10 Açılış (Splash) ekranı nihai tasarımı · #11 Giriş / Kayıt ekranı nihai tasarımı ve UI kodu · #21 "Kiracı Modu / Ev Sahibi Modu" rol değiştirme nihai arayüzü ve genel UI/UX (Frontend'e dair her şey) |
+| **Zaman güvenilirliği** | Backend olmadığı için zaman damgası **cihaz saatidir** ve kullanıcı tarafından değiştirilebilir. Hash zinciri ve saat anomalisi tespiti bunu *görünür* kılar ama *önlemez*. Dış çapa (mühür kodunu e-postayla göndermek) bu zayıflığı azaltır. Arayüz bunu açıkça belirtmelidir. |
+| **Delil geçerliliği** | Delilin kabulü mahkemenin takdirindedir. Metinlerde "doğrulanabilir kayıt" ifadesi kullanılır. Bir hukukçuya gösterilmesi önerilir. |
+| **Veri kaybı** | Veri yalnızca cihazdadır. Cihaz kaybı/silinmesi = veri kaybı. ZIP dışa aktarma aynı zamanda yedektir; kullanıcıya düzenli yedek hatırlatılır. |
+| **Cihaz güvenliği** | Root/jailbreak'li cihazda veritabanı elle değiştirilebilir; zincir bunu doğrulamada yakalar. Uygulama kilidi ve dosyaların uygulama dizininde tutulması temel korumadır. |
+| **KVKK** | Kimlik, adres, foto kişisel veridir. Veri cihazda kalır, dışarı yalnızca kullanıcı paylaşırsa çıkar; yine de aydınlatma metni gerekir. |
+| **Ses/konuşma** | Karşı tarafın bilgisi olmadan kaydedilen konuşmalar hukuki risk taşır; uygulama içinde uyarı gösterilir. |
 
-## 5. Mimari
+## 12. Başarı Kriterleri
+- [ ] Dosya oluştur → kayıt ekle → zaman çizelgesinde gör akışı çalışıyor
+- [ ] Belge/foto/ses/form kayıtları hash ve zincirle ekleniyor
+- [ ] Kayıt elle değiştirilince zincir doğrulama bozulmayı yakalıyor (test ile kanıtlı)
+- [ ] Saat geri alınınca `clock_anomaly` işaretleniyor
+- [ ] F1–F5 formları doğrulama ile çalışıyor
+- [ ] PDF rapor ve ZIP delil paketi üretilip paylaşılabiliyor
+- [ ] Açık/koyu tema, uygulama kilidi çalışıyor
+- [ ] `flutter analyze` 0 uyarı / 0 hata, `flutter test` geçiyor
+- [ ] İş yükü: iki kişinin tamamlanan puanı birbirine yakın (`done.md`)
 
+## 13. Klasör Yapısı
 ```
-[Flutter uygulaması] --HTTPS + JWT--> [Dart sunucu (shelf)] --> [PostgreSQL]
-   Hive (taslak/önbellek)                  |--> storage/ (dosyalar)
-   secure storage (token)                  |--> TimestampService (tek zaman otoritesi)
-```
-
-### 5.1 Clean Architecture (istemci ve sunucu için aynı fikir)
-Katmanlar ve bağımlılık yönü: **presentation → domain ← data**. `domain` hiçbir şeye (Flutter, HTTP, Hive, SQL) bağımlı olmaz.
-
-| Katman | İçerik | Kural |
-|---|---|---|
-| domain | entity'ler, repository arayüzleri, use case'ler | Saf Dart; paket bağımlılığı yok (`equatable` hariç) |
-| data | model (JSON/DB dönüşümü), datasource (remote/local), repository gerçeklemeleri | Domain arayüzlerini uygular |
-| presentation | ekran, widget, Provider (ChangeNotifier) | Sadece use case çağırır, repository'ye/Hive'a doğrudan erişmez |
-
-Hata yönetimi: use case'ler `Result<T>` (başarı/hata) döner; ham exception arayüze çıkmaz.
-
-### 5.2 Zaman otoritesi
-Resmi zaman **yalnızca sunucuda** `TimestampService.now()` ile (UTC) üretilir. İstemcinin gönderdiği saat, `client_reported_at` olarak sadece bilgi için saklanır ve hiçbir yerde resmi sayılmaz. İleride harici güvenilir zaman damgası (RFC 3161 TSA) eklenebilir.
-
-## 6. Güvenlik ve Değiştirilemezlik İlkeleri
-1. **Sunucu saati tek otorite.** Kayıt, `server_time` ile damgalanır; istemci saati değiştirilse bile kayıt zamanı değişmez.
-2. **Append-only.** `files`, `notices`, `messages`, `receipts`, `inventory_items`, `leases` (sürümlü), `audit_logs` tablolarında `UPDATE` ve `DELETE` yasaktır; veritabanı trigger'ı ile engellenir. Düzeltme = yeni kayıt (`supersedes_id` ile eskisine bağlanır).
-3. **Hash zinciri.** Her `audit_logs` satırı bir önceki satırın hash'ini içerir (`prev_hash` → `entry_hash`); zincir ev bazlıdır. Araya girilen/silinen kayıt zinciri bozar ve `GET /evler/{evId}/loglar/dogrula` ile tespit edilir.
-4. **Dosya bütünlüğü.** Yüklenen her dosyanın SHA-256 özeti **sunucuda** hesaplanır ve kaydedilir; indirmede/doğrulamada tekrar hesaplanıp karşılaştırılır.
-5. **Yetki = üyelik.** Her istek JWT'den kullanıcıyı çıkarır; erişilen `evId` için `property_members` kaydı yoksa `403` (kaynağın varlığı da sızdırılmaz → `404`). Mesajlar, dosyalar, loglar yalnızca o evin iki üyesine açıktır.
-6. **Token.** Access token kısa ömürlü (ör. 15 dk), yenileme token'ı DB'de **hash'lenmiş** saklanır, çıkışta iptal edilir. JWT sırrı ortam değişkenindedir.
-7. **Parola.** Düz metin saklanmaz; `bcrypt`/`argon2` ile hash'lenir. Giriş denemelerine hız sınırı uygulanır.
-8. **Girdi doğrulama.** Dosya türü (mime + uzantı), boyut sınırı (ör. 15 MB), alan uzunlukları sunucuda doğrulanır; istemci doğrulaması yeterli sayılmaz.
-9. **Sır yönetimi.** `.env`, anahtarlar, `storage/` içeriği git'e girmez. Loglara token, parola, kişisel veri yazılmaz.
-10. **Kişisel veri (KVKK).** Yalnızca gerekli veri toplanır; kullanıcı kendi verisini dışa aktarma/silme talebi sürecini ileride tanımlayacağız (hukuki silme yasağı ile çelişen noktalar için hukukçuya danışılır).
-11. **İdempotentlik.** Yazma isteklerinde `Idempotency-Key` başlığı desteklenir; ağ kopmasında aynı kayıt iki kez oluşmaz.
-K. **Test modu üretimde yok.** Rol değiştirme (Kiracı/Ev Sahibi Modu) yalnızca geliştirme sürümünde çalışır; sunucuda rol atlatan, yetki devreden gizli uç nokta veya "test" bayrağı **bulunmaz**. Yetki her zaman gerçek hesap + `property_members` üyeliğinden gelir.
-
-## 7. Sayfalar / Ekranlar
-Yollar `app/lib/features/...` altındadır.
-
-| Ekran | Dosya | Ne gösterir |
-|---|---|---|
-| Açılış (Splash) + Hukuki Uyarı | home/presentation/screens/splash_screen.dart | Oturum kontrolü, ilk açılış uyarısı |
-| Giriş | auth/presentation/screens/login_screen.dart | E-posta + parola |
-| Kayıt | auth/presentation/screens/register_screen.dart | Ad, e-posta, parola |
-| Ana Sayfa (Ev Listesi) | home/presentation/screens/home_screen.dart | Evlerim, "Yeni ev", "Davet koduyla katıl" |
-| Ev Oluştur / Davet | home/presentation/screens/create_property_screen.dart | Başlık, adres, rol; davet kodu üretme/girme |
-| Ev Özeti (merkez) | home/presentation/screens/property_hub_screen.dart | Sekmeler/kısayollar: Kira, Demirbaş, Belgeler, Bildirimler, Mesajlar, Zaman Çizelgesi, Fotoğraflar |
-| Kira & Ev Kaydı Detay | lease/presentation/screens/lease_detail_screen.dart | Adres, kira tutarı, başlangıç/bitiş, depozito, sürüm geçmişi |
-| Demirbaş Formu | inventory/presentation/screens/inventory_form_screen.dart | Oda, kalem, durum, not, fotoğraf (çoklu) |
-| Demirbaş Listesi | inventory/presentation/screens/inventory_list_screen.dart | Kalemler, fotoğraflar, karşı taraf onay durumu |
-| Belgeler | documents/presentation/screens/documents_screen.dart | Sözleşme PDF / dekont seçme + türüne göre liste |
-| Dekont Ekle | documents/presentation/screens/receipt_form_screen.dart | Dönem, tutar, dosya |
-| Talep / Bildirim Oluştur | notices/presentation/screens/create_notice_screen.dart | Tür ("Kira ödendi", "Tadilat talebi"...), açıklama, ek |
-| Bildirim Geçmişi / Detay | notices/presentation/screens/notice_list_screen.dart | Zaman damgalı liste, okundu bilgisi, yanıt |
-| Ev Fotoğrafları | photos/presentation/screens/house_photos_screen.dart | Oda bazlı çekme/yükleme |
-| Mesajlar | messages/presentation/screens/chat_screen.dart | Ev bazlı mesajlaşma |
-| Zaman Çizelgesi | timeline/presentation/screens/timeline_screen.dart | Log akışı + "Zinciri doğrula" |
-| Profil / Ayarlar / Hakkında | home/presentation/screens/settings_screen.dart | Hesap, çıkış, hukuki metin |
-| Test Modu Şeridi + Rol Değiştirici (yalnızca geliştirme) | core/dev_tools/role_switcher_overlay.dart | Üstte "TEST MODU — Kiracı Modu / Ev Sahibi Modu" şeridi ve geçiş düğmesi |
-
-### 7.1 Açılış ve Giriş / Kayıt Ekranı Tasarımı
-Tasarım `project.md` §8'deki token'larla yapılır (tema henüz yoksa önce A-02 görevi veya geçici `AppTheme`).
-
-**Açılış (Splash)**
-- Ortada uygulama simgesi (geçici: kalkan + ev ikonu) ve ad "Güvenli Kira"; altında slogan önerisi: "Kayıt altında, güvende."
-- Arka planda oturum kontrolü: geçerli token varsa → Ana Sayfa; yoksa → Giriş. Ağ yoksa son oturum Hive önbelleğinden açılır ve "çevrimdışı" etiketi gösterilir.
-- Süre en fazla ~1,5 sn; oturum kontrolü uzun sürerse ilerleme göstergesi.
-- **İlk açılışta hukuki uyarı** (tam ekran/alt sayfa): "Bu uygulama hukuki danışmanlık vermez; kayıtlar sunucu saatiyle damgalanır ve değiştirilemez şekilde saklanır." + "Anladım" düğmesi. Onay bilgisi Hive'a yazılır, bir daha çıkmaz.
-
-**Giriş**
-- Alanlar: e-posta, parola (göster/gizle). Düğme: "Giriş yap" (istek sürerken pasif + yükleniyor). Bağlantılar: "Hesabın yok mu? Kayıt ol".
-- Doğrulama: e-posta biçimi, parola boş olamaz. Hata metinleri Türkçe ve sade ("E-posta veya parola hatalı", "Bağlantı kurulamadı").
-- Hız sınırı (429) gelirse "Çok fazla deneme yaptınız, biraz bekleyin" gösterilir.
-- Başarılı girişte access/refresh token `flutter_secure_storage`'a yazılır; ekran Ana Sayfa'ya geçer.
-
-**Kayıt**
-- Alanlar: ad soyad, e-posta, parola (en az 8 karakter), parola tekrar; kullanım/gizlilik onayı kutusu.
-- Rol seçimi kayıtta YOKTUR: rol evden eve değişir ve ev oluşturulurken/davet kabul edilirken belirlenir (`property_members.role`).
-- Başarılı kayıttan sonra doğrudan oturum açılır.
-
-**Ortak kurallar:** klavye açıldığında alanlar kaymasın/taşmasın, dokunma alanı ≥ 48 dp, ekran okuyucu etiketleri, yatay ekranda taşma yok.
-
-### 7.2 Rol Değiştirme Mekanizması (Kiracı Modu / Ev Sahibi Modu)
-**Amaç:** Tek cihazda iki tarafı da denemek (ör. kiracı olarak bildirim gönder → ev sahibi olarak okundu/onay ver) ve ekranları iki rolle test etmek.
-
-**Nasıl çalışır**
-1. Rol bir **kullanıcı özelliği değil**, evdeki üyeliktir (`property_members.role`). Bu yüzden "mod değiştirmek" = iki gerçek **test hesabı** arasında oturum değiştirmektir. Sunucu yetkilendirmesi hiç gevşetilmez.
-2. İki test oturumu `flutter_secure_storage`'da ayrı anahtarlarla tutulur: `dev_session_tenant`, `dev_session_landlord`. Anahtar kullanımı yalnızca geliştirme sürümünde.
-3. Ekranın üstünde (`MaterialApp.builder` ile her ekranın üzerinde) ince bir **Test Modu şeridi** görünür: "TEST MODU — Kiracı Modu" (turkuaz) veya "TEST MODU — Ev Sahibi Modu" (lacivert). Şeritteki düğmeye dokununca rol değişir.
-4. Değişimde: aktif token'lar yer değiştirir → Provider/önbellek durumu sıfırlanır → mevcut ev yeniden yüklenir → ekran, o evdeki gerçek role göre yeniden çizilir.
-5. Arayüz rolü, açık evin `role` değerinden okur (sabit kodlanmaz). Önerilen farklar: kiracıda "Kira ödendi", "Tadilat talebi", "Arıza bildirimi"; ev sahibinde "Depozito talebi", "Uyarı"; her ikisinde "Diğer", "Tahliye bildirimi". Okundu/onay düğmeleri **karşı tarafa** görünür. (Kural kesinleşince sunucuda da doğrulanır — `progress.md` → Bekleyen Kararlar.)
-
-**Etkinleştirme (iki koşul birden):** `kDebugMode` **ve** `--dart-define=DEV_TOOLS=true`. Release build'de kod yolu derlemeye girmez; şerit, anahtarlar ve geçiş mantığı yoktur.
-
-**Test verisi:** `server/tool/seed_dev.dart` (yalnızca `APP_ENV=development`) iki test hesabı + bir örnek ev + üyelikler oluşturur. Parolalar repoda yazılı olmaz, `.env`'den okunur. Sunucu çalışmıyorsa aynı geçiş mock repository ile iki sahte kullanıcı üzerinden çalışır.
-
-**Yapılmayacaklar:** sunucuda rol atlatan uç nokta, parolasız giriş, token'ı loglama, test modunu kullanıcıya gösterme.
-
-## 8. Tasarım
-> Aşağıdaki değerler **öneridir**; kesinleşince burası güncellenir. Tüm renk/font/boşluk değerleri tek yerde (`app/lib/core/theme/`) tanımlanır, ekranlar sadece bu token'ları kullanır.
-
-- **Genel his:** sade, güven veren, resmi ama sıcak. Hukuki bir kayıt aracı olduğu için gösterişsiz ve okunaklı.
-- **Renkler (öneri):** birincil lacivert `#1F3A5F`, vurgu turkuaz `#2A9D8F`, arka plan `#F7F8FA`, yüzey `#FFFFFF`, metin `#1B1F24`, ikincil metin `#5B6572`, başarı `#2E7D32`, uyarı `#B26A00`, hata `#C0392B`.
-- **Yazı tipi:** sistem yazı tipi veya `Inter` (paket eklenecekse onay gerekir). Başlık 20–24, gövde 14–16, yardımcı metin 12.
-- **Boşluk/şekil:** 8'in katları (8/16/24), kart köşesi 12, düğme yüksekliği 48.
-- **Ortak bileşenler:** birincil/ikincil düğme, metin alanı, kart, durum etiketi (taslak / kaydedildi / onaylandı / itiraz), boş durum, hata durumu, yükleniyor iskeleti, "Kaydedildi — {sunucu tarihi}" satırı.
-- **Zaman damgası gösterimi:** her kritik kayıtta "Kaydedildi — 24.10.2026 09:30" görünür; taslakta "Taslak — henüz resmi kayıt değil".
-- **Dil/biçim:** Türkçe metin; tarih `gg.AA.yyyy SS:dd`; para ₺ (veritabanında kuruş tam sayısı).
-- **Erişilebilirlik:** yeterli kontrast, en az 48 dp dokunma alanı, ekran okuyucu etiketleri.
-
-## 9. Kapsam Dışı (YAPMA)
-- Dart/Flutter dışında bir dilde sunucu veya istemci yazma
-- Gerçek e-imza, noter, mahkeme (UYAP) entegrasyonu
-- "Hukuken geçerlidir/delildir" gibi kesin ifadeler
-- Kayıt güncelleme veya silme (düzeltme yeni kayıtla yapılır)
-- İstemci saatini resmi zaman olarak kullanma
-- Kullanıcıya sormadan paket ekleme / sürüm yükseltme
-- Başkasının `Şu An Üzerinde Çalışılan` listesinde duran görevin dosyalarını izinsiz değiştirme
-- Sesli/görüntülü arama, WhatsApp içe aktarma (ilk sürümde yok)
-- Üretim sürümünde rol değiştirme / test modu bulunması; sunucuda rol atlatan gizli uç nokta
-
-## 10. Başarı Kriterleri
-- [ ] İskelet kuruldu; `flutter analyze` ve `dart analyze` hatasız
-- [ ] Kayıt/giriş çalışıyor; başka kullanıcının evi/mesajı/dosyası `404/403` dönüyor (test var)
-- [ ] Her yazma işlemi sunucu zamanıyla damgalanıyor; `UPDATE/DELETE` denemeleri DB tarafından reddediliyor (test var)
-- [ ] Hash zinciri doğrulama uç noktası bozulmuş kaydı yakalıyor (test var)
-- [ ] Giriş/kayıt, ev listesi, kira detay, demirbaş formu, belge listesi, bildirim oluşturma, mesajlar ve zaman çizelgesi ekranları sunucuyla uçtan uca çalışıyor
-- [ ] Dosya yüklemede SHA-256 sunucuda hesaplanıp doğrulanabiliyor
-- [ ] Açılış, giriş ve kayıt ekranları tasarıma uygun çalışıyor; ilk açılış uyarısı bir kez çıkıyor
-- [ ] Tek cihazda Kiracı Modu ↔ Ev Sahibi Modu geçişiyle "bildirim gönder → okundu → onay" akışı denenebiliyor
-- [ ] Release build'de test modu şeridi/kodu yok (build ile doğrulandı)
-- [ ] İki kullanıcıyla (kiracı + ev sahibi) tam senaryo çalışıyor: ev kur → davet → sözleşme → demirbaş → dekont → bildirim → mesaj → log doğrulama
-
-## 11. Klasör Yapısı (monorepo)
-```
-guvenli_kira/
+saferenthouse/
 ├── project.md
 ├── agents.md
 ├── progress.md
 ├── done.md
-├── README.md
-├── docs/
-│   ├── veritabani.md
-│   └── api.md
 ├── skills/
 │   ├── git-workflow/SKILL.md
-│   ├── flutter-feature/SKILL.md
-│   ├── api-endpoint/SKILL.md
-│   └── immutable-record/SKILL.md
-├── app/                         # Flutter istemci
-│   └── lib/
-│       ├── core/                # tema, hata, ağ, di, yardımcılar, dev_tools/ (yalnız geliştirme: rol değiştirici)
-│       └── features/
-│           ├── auth/ home/ lease/ inventory/ documents/ notices/ photos/ messages/ timeline/
-│               ├── domain/{entities,repositories,usecases}
-│               ├── data/{models,datasources,repositories}
-│               └── presentation/{screens,widgets,providers}
-└── server/                      # Dart sunucu
-    ├── bin/server.dart
-    ├── tool/seed_dev.dart       # geliştirme test hesapları + örnek ev (yalnız APP_ENV=development)
-    ├── migrations/              # .sql dosyaları (sıralı)
-    ├── lib/
-    │   ├── core/                # config, hata, timestamp_service, hash yardımcıları
-    │   ├── features/<ozellik>/{domain,data,presentation(handlers)}
-    │   └── middleware/          # auth, hata, rate-limit, idempotency
-    ├── storage/                 # yüklenen dosyalar (git'e GİRMEZ)
-    └── test/
+│   ├── flutter-feature-scaffold/SKILL.md
+│   ├── form-screen/SKILL.md
+│   ├── local-data-layer/SKILL.md
+│   ├── evidence-integrity/SKILL.md
+│   └── progress-update/SKILL.md
+├── lib/
+│   ├── main.dart
+│   ├── core/
+│   │   ├── constants/app_colors.dart
+│   │   ├── theme/app_theme.dart
+│   │   ├── db/app_database.dart
+│   │   ├── integrity/hash_utils.dart
+│   │   └── services/            # dosya kopyalama, zip, kilit
+│   └── features/
+│       ├── onboarding/ cases/ records/ forms/ export/ settings/ lock/
+│       └── (her feature: controller/ models/ view/ widget/)
+└── test/
 ```
-
-## 12. Ortam Değişkenleri (`server/.env`, git'e girmez; örnek: `.env.example`)
-`DATABASE_URL`, `JWT_SECRET`, `ACCESS_TOKEN_MINUTES`, `REFRESH_TOKEN_DAYS`, `STORAGE_PATH`, `MAX_UPLOAD_MB`, `PORT`, `APP_ENV` (`development`/`production`), `DEV_SEED_TENANT_EMAIL`, `DEV_SEED_LANDLORD_EMAIL`, `DEV_SEED_PASSWORD` (yalnız geliştirme)
-
-Uygulama tarafı: test modu için `flutter run --dart-define=DEV_TOOLS=true` (yalnız debug).
