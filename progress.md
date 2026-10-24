@@ -6,7 +6,7 @@
 ## Şu An
 | Alan | Durum |
 |---|---|
-| Aktif görev | T05 (Tuba) / T02 (Sümeyye) |
+| Aktif görev | T06 (Tuba) / T02 (Sümeyye) |
 | Aktif kişi | Tuba |
 | Engel | Yok |
 | Son güncelleme | 24.10.2026 |
@@ -21,7 +21,7 @@ Durum: ⬜ Bekliyor · 🟨 Devam · ✅ Bitti. Puan: S=1, M=2, L=3.
 | T02 | `main.dart`, tema (`app_colors`, `app_theme`, `ValueNotifier<ThemeMode>`) | Sümeyye | 2 | 28.10 | ⬜ |
 | T03 | SQLite şeması + `app_database.dart` (cases, records), append-only repository | Tuba | 2 | 30.10 | ✅ |
 | T04 | Navigasyon + onboarding + KVKK/uyarı ekranı | Sümeyye | 2 | 01.11 | ⬜ |
-| T05 | `hash_utils.dart` (SHA-256, zincir, kanonik JSON) + birim testleri | Tuba | 2 | 01.11 | ⬜ |
+| T05 | `hash_utils.dart` (SHA-256, zincir, kanonik JSON) + birim testleri | Tuba | 2 | 01.11 | ✅ |
 
 ### 2.Adım Dosya ve kayıt
 | ID | Görev | Sahip | Puan | Hedef | Durum |
