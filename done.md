@@ -4,6 +4,7 @@
 
 | Tarih | ID | Görev | Kişi | Puan | Branch / Commit |
 |---|---|---|---|---|---|
+| 25.10.2026 | T14 | Konuşma kanıtı ekranı (ekran görüntüsü + not) | Sümeyye | 1 | sumeyye/T14-konusma-kaniti |
 | 25.10.2026 | T12 | Kayıt Detayı + zincir doğrulama rozeti | Sümeyye | 1 | sumeyye/T10-T12-zaman-cizelgesi-detay |
 | 25.10.2026 | T10 | Zaman çizelgesi ekranı | Sümeyye | 2 | sumeyye/T10-T12-zaman-cizelgesi-detay |
 | 25.10.2026 | T09 | Kayıt Ekle ekranı (tür seç, kamera/dosya seçici) | Sümeyye | 2 | sumeyye/T09-kayit-ekle-ekrani |
@@ -30,4 +31,4 @@
 | Kişi | Tamamlanan puan |
 |---|---|
 | Tuba | 25 |
-| Sümeyye | 11 |
+| Sümeyye | 12 |
