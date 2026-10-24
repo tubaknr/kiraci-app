@@ -1,6 +1,6 @@
 # API Sözleşmesi (REST, JSON)
 
-> Taban: `/api/v1`. Frontend (arkadaş) ve istemci katmanı bu dokümana göre yazılır. Değişiklik önce burada yapılır.
+> Taban: `/api/v1`. Uygulama (istemci) katmanı bu dokümana göre yazılır. Değişiklik önce burada yapılır.
 
 ## 1. Genel Kurallar
 - Kimlik: `Authorization: Bearer <access_token>` (auth uç noktaları hariç).
@@ -89,3 +89,4 @@ POST /api/v1/evler/{evId}/mesajlar
 - Dosya indirmede yol parametresi doğrudan disk yoluna çevrilmez (path traversal yok); `storage_path` DB'den okunur.
 - Giriş ve kayıt uç noktalarında IP + e-posta bazlı hız sınırı.
 - Yanıtlarda `password_hash`, token hash'i, depolama yolu asla dönmez.
+- Test modu (Kiracı/Ev Sahibi geçişi) için **özel uç nokta yoktur**; istemci iki gerçek hesabın oturumları arasında geçiş yapar. Üretimde `tool/seed_dev.dart` çalışmaz (`APP_ENV` kontrolü).

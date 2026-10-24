@@ -3,11 +3,11 @@
 > Bu dosya "nasıl çalışmalısın"ı anlatır. Her oturumda `project.md` ile birlikte okunur.
 
 ## 1. Rolün
-Sen bu projede Tuba'nın yazılım ajanısın. Flutter/Dart istemci ve Dart sunucuyu birlikte geliştiriyorsun. Tuba sunucu tarafını ve belirlenen ekranları yapıyor; arkadaşı arayüz kabuğunu (tema, giriş, ana sayfa, mesajlar, zaman çizelgesi) yapıyor.
+Sen bu projede yazılım ajanısın. Dart sunucuyu **ve** Flutter uygulamasını (tema, navigasyon, tüm ekranlar dahil) geliştiriyorsun. Projeyi iki kişi yürütüyor; hangi görevin kimde olduğu `progress.md` → "Şu An Üzerinde Çalışılan" tablosundadır.
 
 ## 2. Oturum Başlangıcı (sırayla)
 1. `project.md` oku (amaç, mimari, güvenlik ilkeleri, kapsam dışı).
-2. `progress.md` oku → sadece **ilk açık `[ ]` görevi** yap, başka görevlere geçme.
+2. `progress.md` oku → sadece **ilk uygun açık `[ ]` görevi** yap (başkasının üstlendiğini atla), başka görevlere geçme.
 3. Göreve ait doküman: `docs/veritabani.md` ve/veya `docs/api.md`.
 4. İlgili skill'i oku: `skills/git-workflow`, `skills/flutter-feature`, `skills/api-endpoint`, `skills/immutable-record`.
 5. Görev belirsizse **dur ve tek bir net soru sor**; tahminle ilerleme.
@@ -18,7 +18,8 @@ Sen bu projede Tuba'nın yazılım ajanısın. Flutter/Dart istemci ve Dart sunu
 - **Yalnızca Dart/Flutter.** Başka dilde dosya üretme (migration `.sql` hariç).
 - Yeni paket eklemeden önce adını ve nedenini söyleyip onay iste. Sürümleri sabitle.
 - Kapsam dışı işlere dokunma (`project.md` bölüm 9). Fark ettiğin ek işleri `progress.md` → Notlar'a yaz, yapma.
-- Arkadaşın klasörlerine (`core/theme`, `auth` ekranları, `home`, `messages`, `timeline`) dokunma.
+- Başkasının `Şu An Üzerinde Çalışılan`'da yazılı görevinin dosyalarına dokunma. Göreve başlarken kendi görevini o tabloya yaz.
+- Ekranları sunucu hazır olmadan yazarsan `docs/api.md` sözleşmesine uygun sahte veri kaynağı kullan; sözleşmeyi kendin değiştirme.
 - Şema/API değişikliği gerekirse önce `docs/` dosyasını güncelle ve bana bildir; sonra kodu yaz.
 
 ## 4. Kod Standartları
@@ -56,4 +57,12 @@ Sen bu projede Tuba'nın yazılım ajanısın. Flutter/Dart istemci ve Dart sunu
 Bana kısa özet ver: ne yaptın, hangi dosyalar değişti, hangi karar/soru bekliyor, sıradaki görev ne. Emin olmadığın bir şeyi "yaptım" diye söyleme; doğrulanamayan şeyi açıkça belirt.
 
 ## 9. Dur ve Sor
-Merge çakışması, beklenmeyen test hatası, şema/API'yi değiştirmeyi gerektiren durum, yeni paket ihtiyacı, arkadaşın dosyasına dokunma ihtiyacı, hukuki içerikli metin yazma ihtiyacı.
+Merge çakışması, beklenmeyen test hatası, şema/API'yi değiştirmeyi gerektiren durum, yeni paket ihtiyacı, başkasının görevinin dosyasına dokunma ihtiyacı, hukuki içerikli metin yazma ihtiyacı.
+
+## 10. Test Modu (Rol Değiştirme) Kuralları
+- Kiracı Modu / Ev Sahibi Modu yalnızca geliştirme içindir: `kDebugMode` **ve** `DEV_TOOLS=true` olmadan hiçbir kod yolu çalışmaz; release build'e girmez.
+- Sunucuda rol atlatan, parolasız giriş sağlayan veya yetkiyi gevşeten hiçbir şey yazma. Geçiş, iki **gerçek** test hesabı arasında oturum değiştirmektir.
+- Test hesabı parolalarını, token'ları repoya yazma ve loglama; seed parolaları `.env`'den okunur, seed yalnızca `APP_ENV=development`'ta çalışır.
+- Arayüzdeki rolü sabit kodlama; açık evin `property_members.role` değerinden oku.
+- Test modu açıkken her ekranda "TEST MODU" şeridi görünür olmalı (yanlışlıkla gerçek veri sanılmasın).
+- Açılış/giriş/kayıt ekranlarında hata ve yükleniyor durumlarını, ilk açılış uyarısının tek sefer çıktığını test et.

@@ -1,47 +1,40 @@
 ---
-name: git-workflow
-description: Bir göreve başlarken branch açmak, görev bitince analiz, test, commit ve push yapmak için kullan. İki kişilik ekipte (Tuba: sunucu + belirlenen ekranlar, arkadaş: arayüz kabuğu) çakışmayı önler. Konum: skills/git-workflow/SKILL.md
+name: role-switch-dev
+description: Tek cihazda Kiracı Modu / Ev Sahibi Modu geçişini (test amaçlı rol değiştirme) yazarken kullan. Yalnızca geliştirme sürümünde çalışır; üretimde bulunmaz.
 ---
 
-# Git İş Akışı
+# Rol Değiştirme (Kiracı Modu / Ev Sahibi Modu) — Yalnızca Geliştirme
 
-## A) Göreve başlarken
-1. `git status` → çalışma alanı temiz mi kontrol et (değilse bana sor)
-2. `git checkout main && git pull`
-3. `git checkout -b <tip>/<gorev-id>-<kisa-aciklama>`
-   Örnek: `feature/t-04-sunucu-iskeleti`, `feature/t-19-demirbas-formu`, `fix/t-14-bildirim-saat`
+## İlke
+Rol kullanıcıya değil **eve** aittir (`property_members.role`). "Mod değiştirmek" = iki gerçek test hesabı arasında oturum değiştirmektir. Sunucu tarafında hiçbir yetki gevşetilmez, özel uç nokta yazılmaz.
 
-## B) Görev biterken
-1. Analiz ve test:
-   - İstemci: `cd app && flutter analyze && flutter test`
-   - Sunucu: `cd server && dart analyze && dart test`
-   Hata/uyarı varsa düzelt.
-2. `git status` → sadece beklenen dosyalar değişmiş mi bak. Arkadaşın klasörlerine (`app/lib/core/theme`, `auth`, `home`, `messages`, `timeline`) dokunulduysa DUR, bana sor.
-3. `git add <dosyalar>` (mümkünse tek tek; `git add .` yalnızca `git status` kontrolünden sonra)
-4. `git commit -m "<tip>: <ne yapıldı>"`
-   Tipler: `feat`, `fix`, `docs`, `refactor`, `test`, `chore`
-   Örnek: `feat: bildirim olusturma ucnoktasi eklendi (T-14)`
-5. `git push -u origin <branch-adi>`
-6. `progress.md` → `done.md` güncelle, ayrı commit at: `docs: progress ve done guncellendi`
-7. Bana özetle: ne yapıldı, hangi dosyalar değişti, sıradaki görev ne
+## Etkinleştirme
+- `const devTools = bool.fromEnvironment('DEV_TOOLS');` ve `kDebugMode` **ikisi birden** doğruysa devreye girer.
+- Tüm test modu kodu `app/lib/core/dev_tools/` altındadır; dışarıdan yalnızca `if (devToolsEnabled)` kapısı üzerinden çağrılır, böylece release build'de derlemeye girmez.
 
-## C) Kontrol Listesi
-- [ ] main'de değilim
-- [ ] `.env`, JWT sırrı, anahtar, `server/storage/` içeriği, test PDF/fotoğrafları eklenmedi
-- [ ] Commit mesajı formatlı ve görev ID'si var
-- [ ] `flutter analyze` / `dart analyze` ve testler geçti
-- [ ] Şema/API değiştiyse `docs/` güncellendi
-- [ ] Arkadaşın dosyalarına dokunmadım
-- [ ] Push başarılı
+## Adımlar
+1. `DevSessionStore`: `flutter_secure_storage` içinde `dev_session_tenant` ve `dev_session_landlord` anahtarlarında access/refresh token çiftlerini tutar. Başka yere token yazılmaz, loglanmaz.
+2. `DevRoleController` (`ChangeNotifier`): `activeMode` (`tenant` | `landlord`), `switchTo(mode)`:
+   - aktif oturumu kaydet → hedef oturumu yükle (yoksa seed hesabıyla giriş yap)
+   - ağ katmanındaki token'ı değiştir
+   - ilgili Provider'ları ve Hive önbelleğini sıfırla, açık evi yeniden yükle
+3. `RoleSwitcherOverlay`: `MaterialApp.builder` içinde tüm ekranların üstüne ince şerit koyar. Metin: "TEST MODU — Kiracı Modu" (turkuaz) / "TEST MODU — Ev Sahibi Modu" (lacivert). Şeritteki düğme geçişi tetikler. Şerit klavye ve güvenli alanla çakışmaz.
+4. Mock desteği: sunucu yoksa `MockAuthRepository` iki sahte kullanıcıyla aynı arayüzü sağlar.
+5. Uygulama rolü açık evin `role` alanından okur (`PropertyRole` yardımcısı); modun kendisi rolü belirlemez, hangi hesabın aktif olduğunu belirler.
 
-## D) Sorun Çıkarsa
-| Durum | Ne yap |
-|---|---|
-| Merge çakışması | DUR, bana bildir. Kendin çözmeye çalışma |
-| Push reddedildi | `git pull --rebase`, sonra tekrar dene; olmazsa bana sor |
-| Yanlış branch'e commit | Dur, bana söyle. `reset --hard` kullanma |
-| Ortak dosyada (tema, router, `docs/api.md`) değişiklik gerekiyor | Dokunma, bana yaz; arkadaşla konuşulacak |
-| Yanlışlıkla sır commit'lendi | Dur, bana söyle; sır döndürülmeli (rotate), geçmiş temizliğini ben yönetirim |
+## Test Verisi
+- `server/tool/seed_dev.dart`: yalnızca `APP_ENV=development`; iki hesap + örnek ev + üyelikler oluşturur. E-posta ve parola `.env`'den (`DEV_SEED_*`), repoda yazılı değil.
 
-## E) Asla
-`git push --force`, `git reset --hard`, main'e doğrudan push, başkasının branch'ini silmek, sır içeren dosyayı commit etmek.
+## Yasaklar
+- Sunucuda "test" bayrağı, rol atlatan veya parolasız giriş veren uç nokta
+- Test hesabı bilgilerini koda gömmek veya commit etmek
+- Release build'de şeridin/anahtarların görünmesi
+- Test modunu kullanıcıya ayar olarak sunmak
+
+## Kontrol Listesi
+- [ ] `flutter run` (DEV_TOOLS yok) → şerit görünmüyor
+- [ ] `flutter run --dart-define=DEV_TOOLS=true` → şerit var, geçiş çalışıyor
+- [ ] Geçişten sonra önceki rolün verisi ekranda kalmıyor
+- [ ] Kiracı olarak gönderilen bildirim, ev sahibi modunda görünüyor ve okundu/onay verilebiliyor
+- [ ] Release build'de `dev_tools` kodu/anahtarı yok (build çıktısı veya test ile doğrulandı)
+- [ ] `flutter analyze` 0 uyarı

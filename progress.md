@@ -2,70 +2,89 @@
 
 > Ajan her görevde günceller. Biten maddeler `done.md`'ye taşınır.
 > Son güncelleme: 2026-10-24
+> Kural: Bir göreve başlamadan önce "Şu An Üzerinde Çalışılan" tablosuna görevi (ve kimin üstlendiğini) yaz. İki kişi aynı anda çalışabilir; aynı görev/dosyada çakışma olmasın diye bu tablo kontrol edilir.
+
+## Görev Sahipleri (netleşenler)
+| Kişi | Görevler |
+|---|---|
+| **Sümeyye** | A-03 Açılış (Splash) ekranı tasarımı · A-04 Giriş / Kayıt ekranı tasarımı ve kodu · A-15 Kiracı Modu / Ev Sahibi Modu rol değiştirme |
+| **Tuba** | S-01…S-19 (iskelet, sunucu, auth, uç noktalar, seed), A-01, A-05…A-14 |
+| Atanmadı | A-02 Tema ve ortak widget'lar — Sümeyye'nin ekranları buna dayanır, ilk sırada netleşmeli |
 
 ## Şu An Üzerinde Çalışılan
-| Görev | Branch | Durum | Not |
-|---|---|---|---|
-| Henüz başlanmadı | - | - | İlk görev: T-01 (iskelet) |
+| Görev | Sahip | Branch | Durum | Not |
+|---|---|---|---|---|
+| Henüz başlanmadı | - | - | - | İlk görev: S-01 (iskelet) |
 
 ## Sıradaki Görevler (öncelik sırasıyla)
-Sorumlu: **T** = Tuba, **A** = Arkadaş. Ajan sadece sıradaki `[ ]` görevi yapar.
+Ön ek: **S** = sunucu/genel, **A** = Flutter uygulaması. Ajan yalnızca sıradaki `[ ]` görevi yapar (bağımsız ve farklı kişilerin üstlendiği görevler paralel ilerleyebilir).
 
 ### Faz 0 — İskelet
-1. [ ] **T-01 (T)** Monorepo iskeleti: `app/` (Flutter), `server/` (Dart), `docs/`, `skills/`; Clean Architecture klasörleri; `.gitignore` (`.env`, `storage/`)
-2. [ ] **T-02 (T)** İstemci cihaz içi veri kurulumu: Hive (taslak + önbellek kutuları), `flutter_secure_storage` (token) — karar bekliyor, aşağıya bak
-3. [ ] **T-03 (T)** Temel domain entity'leri ve modeller: `Property`(Ev), `Lease`(Sözleşme), `Receipt`(Dekont), `Notice`/`AuditLog`(Log/Bildirim), `User`, `InventoryItem`, `Message`, `StoredFile` (+ JSON dönüşümleri, birim test)
+1. [ ] **S-01** Monorepo iskeleti: `app/` (Flutter), `server/` (Dart), `docs/`, `skills/`; Clean Architecture klasörleri; `.gitignore` (`.env`, `storage/`); `.env.example`
+2. [ ] **S-02** İstemci cihaz içi veri kurulumu: Hive (taslak + önbellek kutuları), `flutter_secure_storage` (token) — karar bekliyor, aşağıya bak
+3. [ ] **S-03** Temel domain entity'leri ve modeller: `Property`(Ev), `Lease`(Sözleşme), `Receipt`(Dekont), `Notice`/`AuditLog`(Log/Bildirim), `User`, `InventoryItem`, `Message`, `StoredFile` (+ JSON dönüşümleri, birim test)
 
 ### Faz 1 — Sunucu temeli
-4. [ ] **T-04 (T)** `server/` shelf iskeleti, config (.env), hata middleware'i, `GET /saglik`, docker-compose ile PostgreSQL
-5. [ ] **T-05 (T)** Migration'lar: `docs/veritabani.md`'deki tüm tablolar + `forbid_mutation` trigger'ları + yetki REVOKE
-6. [ ] **T-06 (T)** `TimestampService` (tek zaman otoritesi) + SHA-256 yardımcıları + birim test
-7. [ ] **T-07 (T)** Hash zinciri servisi: `audit_logs` ekleme (head kilidi) + `loglar/dogrula` mantığı + test (bozulmuş zincir yakalanıyor mu)
+4. [ ] **S-04** `server/` shelf iskeleti, config (.env), hata middleware'i, `GET /saglik`, docker-compose ile PostgreSQL
+5. [ ] **S-05** Migration'lar: `docs/veritabani.md`'deki tüm tablolar + `forbid_mutation` trigger'ları + yetki REVOKE
+6. [ ] **S-06** `TimestampService` (tek zaman otoritesi) + SHA-256 yardımcıları + birim test
+7. [ ] **S-07** Hash zinciri servisi: `audit_logs` ekleme (head kilidi) + `loglar/dogrula` mantığı + test (bozulmuş zincir yakalanıyor mu)
 
-### Faz 2 — Kimlik doğrulama
-8. [ ] **T-08 (T)** `auth/kayit`, `auth/giris`, `auth/yenile`, `auth/cikis`, `auth/ben` (JWT, parola hash, refresh token hash'li saklama, hız sınırı)
-9. [ ] **T-09 (T)** Auth middleware + `evId` üyelik middleware'i (üye değilse 404) + "başkasının mesajını göremez" testleri
-10. [ ] **T-10 (T)** Ev oluşturma, davet kodu, eve katılma uç noktaları
+### Faz 2 — Kimlik doğrulama (sunucu)
+8. [ ] **S-08** `auth/kayit`, `auth/giris`, `auth/yenile`, `auth/cikis`, `auth/ben` (JWT, parola hash, refresh token hash'li saklama, hız sınırı)
+9. [ ] **S-09** Auth middleware + `evId` üyelik middleware'i (üye değilse 404) + "başkasının mesajını göremez" testleri
+10. [ ] **S-10** Ev oluşturma, davet kodu, eve katılma uç noktaları
+11. [ ] **S-19** Geliştirme seed'i `server/tool/seed_dev.dart`: iki test hesabı (kiracı, ev sahibi) + örnek ev + üyelikler; yalnızca `APP_ENV=development`, parolalar `.env`'den
 
-### Faz 3 — Kayıt uç noktaları
-11. [ ] **T-11 (T)** Dosya servisi: `POST /dosyalar` (multipart, tür/boyut doğrulama, sunucuda SHA-256), indir, doğrula
-12. [ ] **T-12 (T)** Sözleşme (sürümlü) + dekont uç noktaları
-13. [ ] **T-13 (T)** Demirbaş uç noktaları (ekle, listele, düzeltme, onay/itiraz)
-14. [ ] **T-14 (T)** Bildirim uç noktaları (oluştur, listele, detay, okundu, yanıt)
-15. [ ] **T-15 (T)** Mesaj uç noktaları (`mesaj-gonder`, liste) + log listeleme
-16. [ ] **T-16 (T)** Idempotency-Key middleware'i + uçtan uca sunucu testleri
+### Faz 3 — Kayıt uç noktaları (sunucu)
+12. [ ] **S-11** Dosya servisi: `POST /dosyalar` (multipart, tür/boyut doğrulama, sunucuda SHA-256), indir, doğrula
+13. [ ] **S-12** Sözleşme (sürümlü) + dekont uç noktaları
+14. [ ] **S-13** Demirbaş uç noktaları (ekle, listele, düzeltme, onay/itiraz)
+15. [ ] **S-14** Bildirim uç noktaları (oluştur, listele, detay, okundu, yanıt)
+16. [ ] **S-15** Mesaj uç noktaları (`mesaj-gonder`, liste) + log listeleme
+17. [ ] **S-16** Idempotency-Key middleware'i + uçtan uca sunucu testleri
 
-### Faz 4 — İstemci veri katmanı ve ekranlar (Tuba)
-17. [ ] **T-17 (T)** İstemci ağ katmanı (token ekleme, yenileme, hata → `Result`), repository'ler, use case'ler
-18. [ ] **T-18 (T)** Kira & Ev Kaydı detay ekranı (adres, tutar, tarihler, depozito, sürüm geçmişi)
-19. [ ] **T-19 (T)** Demirbaş formu (`image_picker`, çoklu fotoğraf) + demirbaş listesi + onay durumu
-20. [ ] **T-20 (T)** Belgeler ekranı: sözleşme PDF'i ve dekont seçme (`file_picker`), yükleme, türüne göre listeleme; dekont formu
-21. [ ] **T-21 (T)** Talep / Bildirim oluşturma ekranı + bildirim geçmişi (zaman damgası, okundu bilgisi)
-22. [ ] **T-22 (T)** Ev fotoğrafları ekranı (oda bazlı çekme/yükleme)
-23. [ ] **T-23 (T)** Çevrimdışı taslak akışı (Hive) — "taslak, resmi değil" etiketi
+### Faz 4 — Uygulama temeli (Flutter)
+18. [ ] **A-01** İstemci ağ katmanı: token ekleme/yenileme, hata → `Result`, repository ve use case iskeletleri
+19. [ ] **A-02** Tema ve ortak widget'lar (`core/theme`): renkler, yazı tipi, buton, kart, durum etiketi, boş/hata/yükleniyor bileşenleri
+20. [ ] **A-03 (Sümeyye)** Açılış (Splash) ekranı tasarımı + oturum kontrolü/yönlendirme + ilk açılış hukuki uyarısı (bir kez, Hive'a onay) — `project.md` §7.1
+21. [ ] **A-04 (Sümeyye)** Giriş / Kayıt ekranı tasarımı ve kodu (doğrulama, Türkçe hata metinleri, 429 mesajı, token'ı secure storage'a yazma, kayıtta rol seçimi yok) — `project.md` §7.1
+22. [ ] **A-15 (Sümeyye)** Kiracı Modu / Ev Sahibi Modu rol değiştirme: iki test oturumu (secure storage), üstte "TEST MODU" şeridi, geçişte durum sıfırlama, yalnızca `kDebugMode` + `DEV_TOOLS=true`; mock repository desteği; release build'de görünmediğinin doğrulanması — `project.md` §7.2, `skills/role-switch-dev`
+23. [ ] **A-05** Ana sayfa (ev listesi), ev oluştur, davet kodu üret/gir, ev özeti (merkez) ekranı
 
-### Faz 5 — Arkadaşın tarafı (öneri, netleşecek)
-24. [ ] **A-01 (A)** Tema (`core/theme`), navigasyon, ana sayfa
-25. [ ] **A-02 (A)** Giriş / kayıt ekranları (`auth` API'sini kullanır)
-26. [ ] **A-03 (A)** Mesajlar ekranı, zaman çizelgesi + log doğrulama ekranı
+### Faz 5 — Özellik ekranları (Flutter)
+24. [ ] **A-06** Kira & Ev Kaydı detay ekranı (adres, tutar, tarihler, depozito, sürüm geçmişi, yeni sürüm formu)
+25. [ ] **A-07** Demirbaş formu (`image_picker`, çoklu fotoğraf) + demirbaş listesi + onay/itiraz
+26. [ ] **A-08** Belgeler ekranı: sözleşme PDF'i ve dekont seçme (`file_picker`), yükleme, türüne göre listeleme; dekont formu
+27. [ ] **A-09** Talep / Bildirim oluşturma ekranı + bildirim geçmişi/detay (zaman damgası, okundu, yanıt)
+28. [ ] **A-10** Ev fotoğrafları ekranı (oda bazlı çekme/yükleme)
+29. [ ] **A-11** Mesajlar ekranı (`mesaj-gonder`)
+30. [ ] **A-12** Zaman çizelgesi + "Zinciri doğrula" ekranı
+31. [ ] **A-13** Profil / ayarlar / hakkında (çıkış, hukuki metin)
+32. [ ] **A-14** Çevrimdışı taslak akışı (Hive) — "taslak, resmi değil" etiketi
 
 ### Faz 6 — Birleştirme
-27. [ ] **T-24 (T+A)** Entegrasyon, iki kullanıcıyla tam senaryo testi, hata düzeltmeleri
-28. [ ] **T-25 (T)** README/ortam kurulum adımlarının güncellenmesi
+33. [ ] **S-17** Uçtan uca test: iki kullanıcıyla tam senaryo (ev kur → davet → sözleşme → demirbaş → dekont → bildirim → mesaj → log doğrulama), hata düzeltmeleri
+34. [ ] **S-18** README / ortam kurulum adımlarının ve `docs/`'un son güncellemesi
 
 ## Engeller / Bekleyen Kararlar
 | Konu | Kim karar verecek | Not |
 |---|---|---|
-| Cihaz içi veri: Hive mi yerel JSON mu | Tuba | Öneri: Hive (kutular, hızlı); T-02 öncesi kesinleşmeli |
+| Cihaz içi veri: Hive mi yerel JSON mu | Tuba | Öneri: Hive (kutular, hızlı); S-02 öncesi kesinleşmeli |
 | Sunucu çatısı: `shelf` mi `dart_frog` mu | Tuba | Öneri: `shelf` + `shelf_router` (az bağımlılık) |
 | Veritabanı: PostgreSQL (öneri) mi SQLite mı | Tuba | Trigger/zincir tasarımı PostgreSQL'e göre yazıldı |
 | Sunucuyu nerede çalıştıracağız (bulut/yerel) | Tuba + arkadaş | Geliştirmede docker-compose |
 | Sunucu dosya depolama: disk mi S3 mü | Tuba | İlk sürüm disk |
 | Ağ paketi: `dio` mu `http` mi | Tuba | |
+| Yönlendirme: `go_router` onayı | Tuba | |
 | Parola hash: `bcrypt` mi `argon2` mi | Tuba | Paket varlığı/bakımı kontrol edilecek |
+| Tasarım: renk paleti ve yazı tipi | Tuba + arkadaş | `project.md` §8'deki değerler öneridir |
 | Proje kesin adı | Tuba + arkadaş | Şimdilik "Güvenli Kira" |
-| İş bölümü (Faz 5 + mesajlaşma/zaman çizelgesi kimde) | Tuba + arkadaş | Şu an öneri |
+| İş bölümü (hangi görevleri kim alacak) | Tuba + arkadaş | Görevi alan "Şu An Üzerinde Çalışılan" tablosuna yazar |
 | Aynı evde kaç kiracı/ev sahibi olabilir | Tuba + arkadaş | Şimdilik 1 + 1 |
+| Rol bazlı bildirim türleri (kiracı/ev sahibi hangi türleri gönderebilir) | Tuba + Sümeyye | Öneri `project.md` §7.2'de; kesinleşirse sunucuda da doğrulanır |
+| Logo / uygulama simgesi ve slogan | Sümeyye + Tuba | Geçici: kalkan + ev ikonu, "Kayıt altında, güvende." |
+| Test modu şeridi renkleri ve konumu | Sümeyye | Öneri: kiracı turkuaz, ev sahibi lacivert, ekranın üstünde ince şerit |
 | Hukuki geçerlilik / KVKK metinleri | Hukukçu | Uygulama iddia etmez |
 
 ## Bilinen Hatalar
@@ -76,6 +95,8 @@ Sorumlu: **T** = Tuba, **A** = Arkadaş. Ajan sadece sıradaki `[ ]` görevi yap
 - Sunucu ve istemci **yalnızca Dart**. Migration'lar `.sql` (istisna).
 - Resmi zaman sadece sunucuda üretilir; istemci saati `client_reported_at` olarak bilgi amaçlıdır.
 - Kayıt güncellenmez/silinmez; düzeltme yeni kayıtla yapılır (`supersedes_id`).
-- Arkadaşın klasörlerine (`core/theme`, `auth`, `home`, `messages`, `timeline`) dokunma.
 - Şema veya API değişirse önce `docs/veritabani.md` / `docs/api.md` güncellenir.
+- Uygulama ekranları sunucu uç noktaları hazır olmadan yazılırsa `docs/api.md`'deki sözleşmeye uygun sahte (mock) veri kaynağıyla geliştirilir; gerçek bağlantı sonra yapılır.
+- Rol değiştirme (A-15) **yalnızca geliştirme sürümündedir**; sunucuda özel bir uç nokta yoktur. İki gerçek test hesabı arasında oturum değiştirir (S-19 seed'i veya mock).
+- A-03/A-04/A-15 için tema (A-02) gerekir; tema henüz yoksa geçici `AppTheme` ile başla, sonra token'lara taşı.
 - Bu dosyayı ve `done.md`'yi her görev sonunda güncelle.
