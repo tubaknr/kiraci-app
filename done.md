@@ -4,6 +4,7 @@
 
 | Tarih | ID | Görev | Kişi | Puan | Branch / Commit |
 |---|---|---|---|---|---|
+| 25.10.2026 | T21 | F5 ekranı + hatırlatıcı bildirim | Sümeyye | 2 | sumeyye/T21-f5-ve-bildirim |
 | 25.10.2026 | T16 | PDF rapor (zaman çizelgesi + hash tablosu + saat uyarısı) | Sümeyye | 3 | sumeyye/T16-pdf-rapor |
 | 25.10.2026 | T18 | F3 + F4 ekranları + Form Listesi | Sümeyye | 2 | sumeyye/T18-f3-f4-formlari |
 | 25.10.2026 | T14 | Konuşma kanıtı ekranı (ekran görüntüsü + not) | Sümeyye | 1 | sumeyye/T14-konusma-kaniti |
@@ -33,4 +34,4 @@
 | Kişi | Tamamlanan puan |
 |---|---|
 | Tuba | 25 |
-| Sümeyye | 17 |
+| Sümeyye | 19 |
