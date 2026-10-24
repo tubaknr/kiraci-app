@@ -6,7 +6,7 @@
 ## Şu An
 | Alan | Durum |
 |---|---|
-| Aktif görev | T08 (Tuba) / T07 (Sümeyye) |
+| Aktif görev | T13 (Tuba) / T07 (Sümeyye) |
 | Aktif kişi | Tuba |
 | Engel | Yok |
 | Son güncelleme | 24.10.2026 |
@@ -28,7 +28,7 @@ Durum: ⬜ Bekliyor · 🟨 Devam · ✅ Bitti. Puan: S=1, M=2, L=3.
 |---|---|---|---|---|---|
 | T06 | Dosya (case) modeli + repository + controller | Tuba | 2 | 04.11 | ✅ |
 | T07 | Dosyalarım + Dosya Oluştur ekranları | Sümeyye | 2 | 06.11 | ⬜ |
-| T08 | Kayıt ekleme servisi: dosyayı uygulama dizinine kopyala, hash, zincir, saat anomalisi tespiti | Tuba | 3 | 07.11 | ⬜ |
+| T08 | Kayıt ekleme servisi: dosyayı uygulama dizinine kopyala, hash, zincir, saat anomalisi tespiti | Tuba | 3 | 07.11 | ✅ |
 | T09 | Kayıt Ekle ekranı (tür seç, kamera/dosya seçici) | Sümeyye | 2 | 08.11 | ⬜ |
 
 ### 3.Adım Zaman çizelgesi ve ilk form
