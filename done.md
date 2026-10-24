@@ -4,6 +4,8 @@
 
 | Tarih | ID | Görev | Kişi | Puan | Branch / Commit |
 |---|---|---|---|---|---|
+| 25.10.2026 | T12 | Kayıt Detayı + zincir doğrulama rozeti | Sümeyye | 1 | sumeyye/T10-T12-zaman-cizelgesi-detay |
+| 25.10.2026 | T10 | Zaman çizelgesi ekranı | Sümeyye | 2 | sumeyye/T10-T12-zaman-cizelgesi-detay |
 | 25.10.2026 | T09 | Kayıt Ekle ekranı (tür seç, kamera/dosya seçici) | Sümeyye | 2 | sumeyye/T09-kayit-ekle-ekrani |
 | 25.10.2026 | T07 | Dosyalarım + Dosya Oluştur ekranları | Sümeyye | 2 | sumeyye/T07-dosya-ekranlari |
 | 25.10.2026 | T04 | Navigasyon + onboarding + KVKK/uyarı ekranı | Sümeyye | 2 | sumeyye/T04-onboarding-kvkk |
@@ -28,4 +30,4 @@
 | Kişi | Tamamlanan puan |
 |---|---|
 | Tuba | 25 |
-| Sümeyye | 8 |
+| Sümeyye | 11 |
