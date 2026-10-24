@@ -4,6 +4,7 @@
 
 | Tarih | ID | Görev | Kişi | Puan | Branch / Commit |
 |---|---|---|---|---|---|
+| 25.10.2026 | T09 | Kayıt Ekle ekranı (tür seç, kamera/dosya seçici) | Sümeyye | 2 | sumeyye/T09-kayit-ekle-ekrani |
 | 25.10.2026 | T07 | Dosyalarım + Dosya Oluştur ekranları | Sümeyye | 2 | sumeyye/T07-dosya-ekranlari |
 | 25.10.2026 | T04 | Navigasyon + onboarding + KVKK/uyarı ekranı | Sümeyye | 2 | sumeyye/T04-onboarding-kvkk |
 | 25.10.2026 | T02 | main.dart, tema (app_colors, app_theme, ValueNotifier<ThemeMode>) | Sümeyye | 2 | sumeyye/T02-tema-main |
@@ -27,4 +28,4 @@
 | Kişi | Tamamlanan puan |
 |---|---|
 | Tuba | 25 |
-| Sümeyye | 6 |
+| Sümeyye | 8 |
