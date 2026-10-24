@@ -54,11 +54,11 @@ Durum: ⬜ Bekliyor · 🟨 Devam · ✅ Bitti. Puan: S=1, M=2, L=3.
 |---|---|---|---|---|---|
 | T20 | F5 Olay Notu — model/doğrulama/controller | Tuba | 1 | 23.11 | ✅ |
 | T22 | Uygulama kilidi mantığı (PIN özeti + `local_auth`) | Tuba | 1 | 24.11 | ✅ |
-| T21 | F5 ekranı + hatırlatıcı bildirim | Sümeyye | 2 | 25.11 | ⬜ |
+| T21 | F5 ekranı + hatırlatıcı bildirim | Sümeyye | 2 | 25.11 | ✅ |
 | T23 | Ayarlar + kilit ekranı + yedek hatırlatma | Sümeyye | 2 | 26.11 | ⬜ |
 | T24 | Uçtan uca test, `analyze`/`test` temizliği | İkisi | 1+1 | 27.11 | ✅ (Tuba) |
 | T25 | README + demo senaryosu | İkisi | 1+1 | 29.11 | ✅ (Tuba) |
-| T21 | F5 ekranı + hatırlatıcı bildirim | Sümeyye | 2 | 25.11 | ⬜ |
+| T21 | F5 ekranı + hatırlatıcı bildirim | Sümeyye | 2 | 25.11 | ✅ |
 | T23 | Ayarlar + kilit ekranı + yedek hatırlatma | Sümeyye | 2 | 26.11 | ⬜ |
 | T24 | Uçtan uca test, `analyze`/`test` temizliği | İkisi | 1+1 | 27.11 | ⬜ |
 | T25 | README + demo senaryosu | İkisi | 1+1 | 29.11 | ⬜ |

@@ -5,10 +5,12 @@ import '../controller/f1_lease_controller.dart';
 import '../controller/f2_handover_controller.dart';
 import '../controller/f3_defect_controller.dart';
 import '../controller/f4_payment_controller.dart';
+import '../controller/f5_incident_controller.dart';
 import 'f1_lease_view.dart';
 import 'f2_handover_view.dart';
 import 'f3_defect_view.dart';
 import 'f4_payment_view.dart';
+import 'f5_incident_view.dart';
 
 /// Yapılandırılmış Formlar Menüsü (Sümeyye - T18)
 class FormsMenuView extends StatelessWidget {
@@ -118,9 +120,17 @@ class FormsMenuView extends StatelessWidget {
             subtitle: 'Kira ilişkisindeki serbest olaylar, sözlü görüşmeler ve ihtar kayıtları',
             icon: Icons.note_alt_outlined,
             onTap: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('F5 Formu Sümeyye tarafından T21 adımında bağlanacaktır.'),
+              final controller = F5IncidentController(RecordService());
+              Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (context) => F5IncidentView(
+                    caseId: currentCaseId,
+                    controller: controller,
+                    onSuccess: () {
+                      controller.dispose();
+                      Navigator.of(context).pop();
+                    },
+                  ),
                 ),
               );
             },
