@@ -4,6 +4,7 @@
 
 | Tarih | ID | Görev | Kişi | Puan | Branch / Commit |
 |---|---|---|---|---|---|
+| 24.10.2026 | T13 | Zincir doğrulama servisi (verifyChain) + test | Tuba | 1 | tuba/T13-zincir-dogrulama |
 | 24.10.2026 | T08 | Kayıt ekleme servisi: dosyayı kopyala, hash, zincir, saat anomalisi | Tuba | 3 | tuba/T08-kayit-ekleme-servisi |
 | 24.10.2026 | T06 | Dosya (case) modeli + repository + controller | Tuba | 2 | tuba/T06-case-controller |
 | 24.10.2026 | T05 | hash_utils.dart (SHA-256, zincir, kanonik JSON) + birim testleri | Tuba | 2 | tuba/T05-hash-zinciri |
@@ -14,5 +15,5 @@
 ## Puan Toplamı
 | Kişi | Tamamlanan puan |
 |---|---|
-| Tuba | 11 |
+| Tuba | 12 |
 | Sümeyye | 0 |
