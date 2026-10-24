@@ -7,9 +7,8 @@
 ## Görev Sahipleri (netleşenler)
 | Kişi | Görevler |
 |---|---|
-| **Sümeyye** | A-03 Açılış (Splash) ekranı tasarımı · A-04 Giriş / Kayıt ekranı tasarımı ve kodu · A-15 Kiracı Modu / Ev Sahibi Modu rol değiştirme |
-| **Tuba** | S-01…S-19 (iskelet, sunucu, auth, uç noktalar, seed), A-01, A-05…A-14 |
-| Atanmadı | A-02 Tema ve ortak widget'lar — Sümeyye'nin ekranları buna dayanır, ilk sırada netleşmeli |
+| **Tuba** | S-01…S-19 (iskelet, sunucu, auth, uç noktalar, seed), A-01, A-05…A-14. Ayrıca Sümeyye projeye dahil olana kadar A-02, A-03, A-04, A-15 için iş görecek temel mock ekranlar/bileşenler |
+| **Sümeyye** | Projeye başladığında: Frontende dair her şey onun görevi (A-02 Tema/Widget nihai tasarımı, A-03 Splash, A-04 Giriş/Kayıt, A-15 Rol değiştirme ve tüm ekranların nihai UI/UX'i) |
 
 ## Şu An Üzerinde Çalışılan
 | Görev | Sahip | Branch | Durum | Not |
@@ -21,7 +20,7 @@
 
 ### Faz 0 — İskelet
 1. [ ] **S-01** Monorepo iskeleti: `app/` (Flutter), `server/` (Dart), `docs/`, `skills/`; Clean Architecture klasörleri; `.gitignore` (`.env`, `storage/`); `.env.example`
-2. [ ] **S-02** İstemci cihaz içi veri kurulumu: Hive (taslak + önbellek kutuları), `flutter_secure_storage` (token) — karar bekliyor, aşağıya bak
+2. [ ] **S-02** İstemci cihaz içi veri kurulumu: Hive (taslak + önbellek kutuları), `flutter_secure_storage` (token) — Hive kararlaştırıldı
 3. [ ] **S-03** Temel domain entity'leri ve modeller: `Property`(Ev), `Lease`(Sözleşme), `Receipt`(Dekont), `Notice`/`AuditLog`(Log/Bildirim), `User`, `InventoryItem`, `Message`, `StoredFile` (+ JSON dönüşümleri, birim test)
 
 ### Faz 1 — Sunucu temeli
@@ -45,11 +44,11 @@
 17. [ ] **S-16** Idempotency-Key middleware'i + uçtan uca sunucu testleri
 
 ### Faz 4 — Uygulama temeli (Flutter)
-18. [ ] **A-01** İstemci ağ katmanı: token ekleme/yenileme, hata → `Result`, repository ve use case iskeletleri
-19. [ ] **A-02** Tema ve ortak widget'lar (`core/theme`): renkler, yazı tipi, buton, kart, durum etiketi, boş/hata/yükleniyor bileşenleri
-20. [ ] **A-03 (Sümeyye)** Açılış (Splash) ekranı tasarımı + oturum kontrolü/yönlendirme + ilk açılış hukuki uyarısı (bir kez, Hive'a onay) — `project.md` §7.1
-21. [ ] **A-04 (Sümeyye)** Giriş / Kayıt ekranı tasarımı ve kodu (doğrulama, Türkçe hata metinleri, 429 mesajı, token'ı secure storage'a yazma, kayıtta rol seçimi yok) — `project.md` §7.1
-22. [ ] **A-15 (Sümeyye)** Kiracı Modu / Ev Sahibi Modu rol değiştirme: iki test oturumu (secure storage), üstte "TEST MODU" şeridi, geçişte durum sıfırlama, yalnızca `kDebugMode` + `DEV_TOOLS=true`; mock repository desteği; release build'de görünmediğinin doğrulanması — `project.md` §7.2, `skills/role-switch-dev`
+18. [ ] **A-01** İstemci ağ katmanı: `dio` entegrasyonu, token ekleme/yenileme, hata → `Result`, repository ve use case iskeletleri
+19. [ ] **A-02 (Geçici: Tuba / Nihai: Sümeyye)** Tema ve ortak widget'lar (`core/theme`): renkler, yazı tipi, buton, kart, durum etiketi, boş/hata/yükleniyor bileşenleri
+20. [ ] **A-03 (Sümeyye / Geçici mock: Tuba)** Açılış (Splash) ekranı tasarımı + oturum kontrolü/yönlendirme + ilk açılış hukuki uyarısı (bir kez, Hive'a onay) — `project.md` §7.1
+21. [ ] **A-04 (Sümeyye / Geçici mock: Tuba)** Giriş / Kayıt ekranı tasarımı ve kodu (doğrulama, Türkçe hata metinleri, 429 mesajı, token'ı secure storage'a yazma, kayıtta rol seçimi yok) — `project.md` §7.1
+22. [ ] **A-15 (Sümeyye / Geçici mock: Tuba)** Kiracı Modu / Ev Sahibi Modu rol değiştirme: iki test oturumu (secure storage), üstte "TEST MODU" şeridi, geçişte durum sıfırlama, yalnızca `kDebugMode` + `DEV_TOOLS=true`; mock repository desteği; release build'de görünmediğinin doğrulanması — `project.md` §7.2, `skills/role-switch-dev`
 23. [ ] **A-05** Ana sayfa (ev listesi), ev oluştur, davet kodu üret/gir, ev özeti (merkez) ekranı
 
 ### Faz 5 — Özellik ekranları (Flutter)
@@ -68,20 +67,25 @@
 34. [ ] **S-18** README / ortam kurulum adımlarının ve `docs/`'un son güncellemesi
 
 ## Engeller / Bekleyen Kararlar
+## Çözülen / Kesinleşen Kararlar (2026-10-24)
+| Konu | Karar | Not |
+|---|---|---|
+| Cihaz içi veri paketi | **Hive** | Taslaklar ve önbellek için Hive kutuları kullanılacak |
+| Sunucu çatısı | **Dart shelf + shelf_router** | Kesinleşti |
+| Veritabanı ve ortamı | **PostgreSQL (Docker)** | Docker container üzerinde `tuba:123456@localhost:5432/shelf_db` hazır |
+| Ağ paketi | **dio** | İstemci ağ iletişimi Dio ile yapılacak |
+| Yönlendirme (Routing) | **go_router** | Onaylandı |
+| Parola hash algoritması | **argon2** | Kesinleşti |
+| Sunucu dosya depolama | **disk (`storage/`)** | İlk sürüm disk |
+| İş bölümü ve Frontend yaklaşımı | **Tuba (Çekirdek + Mock Frontend), Sümeyye (Nihai Frontend)** | Sümeyye projeye başlayana kadar frontend ekranları Tuba tarafından iş görecek temel mock sayfalar olarak hazırlanacak, Sümeyye dahil olunca güncelleyecek |
+| Flutter & Dart SDK | **Kurulu** | `/snap/bin/flutter` yolu ve Dart hazır |
+
+## Engeller / Kalan Bekleyen Kararlar
 | Konu | Kim karar verecek | Not |
 |---|---|---|
-| Cihaz içi veri: Hive mi yerel JSON mu | Tuba | Öneri: Hive (kutular, hızlı); S-02 öncesi kesinleşmeli |
-| Sunucu çatısı: `shelf` mi `dart_frog` mu | Tuba | Öneri: `shelf` + `shelf_router` (az bağımlılık) |
-| Veritabanı: PostgreSQL (öneri) mi SQLite mı | Tuba | Trigger/zincir tasarımı PostgreSQL'e göre yazıldı |
-| Sunucuyu nerede çalıştıracağız (bulut/yerel) | Tuba + arkadaş | Geliştirmede docker-compose |
-| Sunucu dosya depolama: disk mi S3 mü | Tuba | İlk sürüm disk |
-| Ağ paketi: `dio` mu `http` mi | Tuba | |
-| Yönlendirme: `go_router` onayı | Tuba | |
-| Parola hash: `bcrypt` mi `argon2` mi | Tuba | Paket varlığı/bakımı kontrol edilecek |
-| Tasarım: renk paleti ve yazı tipi | Tuba + arkadaş | `project.md` §8'deki değerler öneridir |
-| Proje kesin adı | Tuba + arkadaş | Şimdilik "Güvenli Kira" |
-| İş bölümü (hangi görevleri kim alacak) | Tuba + arkadaş | Görevi alan "Şu An Üzerinde Çalışılan" tablosuna yazar |
-| Aynı evde kaç kiracı/ev sahibi olabilir | Tuba + arkadaş | Şimdilik 1 + 1 |
+| Tasarım: kesin renk paleti ve yazı tipi | Sümeyye + Tuba | `project.md` §8'deki değerler öneridir, Sümeyye başlayınca kesinleştirecek |
+| Proje kesin adı | Tuba + Sümeyye | Şimdilik "Güvenli Kira" |
+| Aynı evde kaç kiracı/ev sahibi olabilir | Tuba + Sümeyye | Şimdilik 1 + 1 |
 | Rol bazlı bildirim türleri (kiracı/ev sahibi hangi türleri gönderebilir) | Tuba + Sümeyye | Öneri `project.md` §7.2'de; kesinleşirse sunucuda da doğrulanır |
 | Logo / uygulama simgesi ve slogan | Sümeyye + Tuba | Geçici: kalkan + ev ikonu, "Kayıt altında, güvende." |
 | Test modu şeridi renkleri ve konumu | Sümeyye | Öneri: kiracı turkuaz, ev sahibi lacivert, ekranın üstünde ince şerit |

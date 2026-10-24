@@ -21,17 +21,17 @@ Kural: **kodun tamamı Dart/Flutter**. İstemci Flutter, sunucu da Dart. (Verita
 |---|---|
 | İstemci | Flutter / Dart, Clean Architecture |
 | Durum yönetimi | Provider |
-| Cihaz içi veri | Hive (önbellek + gönderilmemiş taslaklar). Alternatif: yerel JSON — karar `progress.md`'de |
+| Cihaz içi veri | Hive (önbellek + gönderilmemiş taslaklar) |
 | Token saklama (istemci) | `flutter_secure_storage` (Hive'a token yazılmaz) |
-| Ağ | `dio` (ya da `http`) — ajan paketi eklemeden önce sorar |
-| Yönlendirme | `go_router` (öneri; onay gerekir) |
+| Ağ | `dio` |
+| Yönlendirme | `go_router` |
 | Biçimlendirme / yerelleştirme | `intl` (tr_TR tarih ve para biçimi) |
 | Arayüz | Material 3, tek `AppTheme` (açık tema; koyu tema sonra) |
 | Fotoğraf | `image_picker` (kamera/galeri). NOT: PDF seçemez |
 | PDF / belge seçme | `file_picker` |
 | Sunucu | Dart, `shelf` + `shelf_router` |
-| Veritabanı | PostgreSQL (`postgres` paketi), geliştirmede docker-compose |
-| Kimlik doğrulama | JWT (kısa ömürlü access + yenileme token'ı), şifre hash'i için `bcrypt` veya `argon2` |
+| Veritabanı | PostgreSQL (`postgres` paketi), geliştirmede Docker (`postgresql://tuba:123456@localhost:5432/shelf_db`) |
+| Kimlik doğrulama | JWT (kısa ömürlü access + yenileme token'ı), şifre hash'i için `argon2` |
 | Dosya depolama | Sunucu diskinde `storage/` (ev bazlı klasör); ileride S3 uyumlu depolama |
 | Bütünlük | SHA-256 (`crypto` paketi) |
 | Hedef platform | Android, iOS (sunucu: Linux/Docker) |
@@ -67,9 +67,8 @@ Proje **iki parçadan** oluşur: sunucu ve Flutter uygulaması. Aşağıdaki tab
 ### Görev sahipleri (netleşenler)
 | Kişi | Görev |
 |---|---|
-| **Sümeyye** | #10 Açılış (Splash) ekranı tasarımı · #11 Giriş / Kayıt ekranı tasarımı ve kodu · #21 "Kiracı Modu / Ev Sahibi Modu" rol değiştirme mekanizması |
-| **Tuba** | Sunucu (#3–#7), iskelet ve modeller (#1–#2), istemci ağ katmanı (#8) ve özellik ekranları (#13–#20) |
-| Henüz atanmadı | #9 Tema ve ortak widget'lar — Sümeyye'nin ekranlarından önce gerekir, hızlıca netleştirilmeli |
+| **Tuba** | Sunucu (#3–#7), iskelet ve modeller (#1–#2), istemci ağ katmanı (#8) ve özellik ekranları (#13–#20). Ayrıca Sümeyye projeye dahil olana kadar #9 Tema/ortak widget'lar ile #10, #11 ve #21 için iş görecek temel mock sayfaların/bileşenlerin hazırlanması |
+| **Sümeyye** | Projeye dahil olduğunda: #10 Açılış (Splash) ekranı nihai tasarımı · #11 Giriş / Kayıt ekranı nihai tasarımı ve UI kodu · #21 "Kiracı Modu / Ev Sahibi Modu" rol değiştirme nihai arayüzü ve genel UI/UX (Frontend'e dair her şey) |
 
 ## 5. Mimari
 

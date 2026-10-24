@@ -29,7 +29,7 @@ Kiracı ve ev sahibi arasındaki sözleşme, dekont, demirbaş, fotoğraf, mesaj
 ## Çalışma Düzeni
 - Proje iki parçadır: **sunucu** (`server/`) ve **Flutter uygulaması** (`app/`). Dosya seti her ikisini de kapsar.
 - Görevler `progress.md`'de S (sunucu/genel) ve A (uygulama) ön ekleriyle numaralıdır; iki kişi de her alanda çalışabilir.
-- **Sümeyye:** açılış (splash) ve giriş/kayıt ekranı tasarımı, Kiracı Modu / Ev Sahibi Modu rol değiştirme. **Tuba:** sunucu, iskelet, veri katmanı ve özellik ekranları. Tema (A-02) henüz atanmadı.
+- **Sümeyye:** projeye dahil olduğunda açılış (splash) ve giriş/kayıt ekranı tasarımı, Kiracı Modu / Ev Sahibi Modu rol değiştirme ve genel UI/UX geliştirmeleri (frontende dair tüm ekranlar). **Tuba:** sunucu, iskelet, veri katmanı, özellik ekranları ve Sümeyye başlayana kadar iş görecek temel mock ekranlar.
 - Göreve başlarken `progress.md` → "Şu An Üzerinde Çalışılan" tablosuna görevi ve sahibini yaz; branch adı `feature/<id>-<ad>`.
 - Ortak dosyalar (`docs/api.md`, `docs/veritabani.md`, tema) değişmeden önce konuşulur.
 
@@ -41,7 +41,7 @@ cd app && flutter pub get && flutter run                  # istemci
 cd app && flutter run --dart-define=DEV_TOOLS=true        # istemci + Kiracı/Ev Sahibi test modu (yalnız debug)
 cd server && dart run tool/seed_dev.dart                  # test hesapları + örnek ev (APP_ENV=development)
 cd app && flutter analyze && flutter test
-docker compose up -d                                      # geliştirme PostgreSQL'i
+# Geliştirme PostgreSQL: postgresql://tuba:123456@localhost:5432/shelf_db (Docker üzerinde ayakta)
 ```
 Sunucu ortam değişkenleri: `DATABASE_URL`, `JWT_SECRET`, `ACCESS_TOKEN_MINUTES`, `REFRESH_TOKEN_DAYS`, `STORAGE_PATH`, `MAX_UPLOAD_MB`, `PORT` (`server/.env`, git'e girmez).
 
