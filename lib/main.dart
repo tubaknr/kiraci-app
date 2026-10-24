@@ -7,6 +7,7 @@ import 'features/cases/view/cases_view.dart';
 import 'features/forms/view/forms_menu_view.dart';
 import 'features/onboarding/view/onboarding_view.dart';
 import 'features/records/view/timeline_view.dart';
+import 'features/settings/view/settings_view.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -70,7 +71,9 @@ class _SafeRentHouseAppState extends State<SafeRentHouseApp> {
                       ),
                       TimelineView(caseId: _activeCaseId),
                       FormsMenuView(currentCaseId: _activeCaseId),
-                      _buildSettingsAndAboutView(currentThemeMode),
+                      SettingsView(
+                        onShowOnboarding: () => setState(() => _hasSeenOnboarding = false),
+                      ),
                     ],
                   ),
                   bottomNavigationBar: NavigationBar(
@@ -102,96 +105,6 @@ class _SafeRentHouseAppState extends State<SafeRentHouseApp> {
                 ),
         );
       },
-    );
-  }
-
-  Widget _buildSettingsAndAboutView(ThemeMode currentThemeMode) {
-    final bool isDark = currentThemeMode == ThemeMode.dark;
-
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Ayarlar & Bilgi'),
-        actions: [
-          IconButton(
-            tooltip: isDark ? 'Açık Temaya Geç' : 'Koyu Temaya Geç',
-            icon: Icon(isDark ? Icons.light_mode : Icons.dark_mode),
-            onPressed: AppTheme.toggleTheme,
-          ),
-        ],
-      ),
-      body: ListView(
-        padding: const EdgeInsets.all(16.0),
-        children: [
-          Card(
-            child: ListTile(
-              leading: Icon(
-                isDark ? Icons.dark_mode : Icons.light_mode,
-                color: Theme.of(context).colorScheme.primary,
-              ),
-              title: const Text('Uygulama Teması'),
-              subtitle: Text(
-                currentThemeMode == ThemeMode.system
-                    ? 'Sistem Varsayılanı'
-                    : (isDark ? 'Koyu Tema' : 'Açık Tema'),
-              ),
-              trailing: DropdownButton<ThemeMode>(
-                value: currentThemeMode,
-                underline: const SizedBox.shrink(),
-                items: const [
-                  DropdownMenuItem(
-                    value: ThemeMode.system,
-                    child: Text('Sistem'),
-                  ),
-                  DropdownMenuItem(
-                    value: ThemeMode.light,
-                    child: Text('Açık'),
-                  ),
-                  DropdownMenuItem(
-                    value: ThemeMode.dark,
-                    child: Text('Koyu'),
-                  ),
-                ],
-                onChanged: (ThemeMode? newMode) {
-                  if (newMode != null) {
-                    AppTheme.setThemeMode(newMode);
-                  }
-                },
-              ),
-            ),
-          ),
-          const SizedBox(height: 12),
-          const Card(
-            child: Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'SafeRentHouse',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 8),
-                  Text(
-                    'Kiracı ve ev sahipleri için çevrimdışı, SHA-256 hash zinciri destekli doğrulanabilir delil ve kayıt defteri.',
-                    style: TextStyle(color: Colors.blueGrey),
-                  ),
-                  SizedBox(height: 8),
-                  Text(
-                    'Tüm veriler yerel SQLite üzerinde tutulur ve üçüncü taraf sunuculara iletilmez.',
-                    style: TextStyle(fontSize: 12, color: Colors.grey),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(height: 16),
-          ElevatedButton.icon(
-            icon: const Icon(Icons.replay),
-            label: const Text('Onboarding & KVKK Ekranını Göster'),
-            onPressed: () => setState(() => _hasSeenOnboarding = false),
-          ),
-        ],
-      ),
     );
   }
 }

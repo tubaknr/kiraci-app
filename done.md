@@ -4,6 +4,9 @@
 
 | Tarih | ID | Görev | Kişi | Puan | Branch / Commit |
 |---|---|---|---|---|---|
+| 25.10.2026 | T25 | README ve demo senaryosu inceleme | Sümeyye | 1 | sumeyye/T23-ayarlar-kilit |
+| 25.10.2026 | T24 | Uçtan uca test, analyze/test temizliği (76 test) | Sümeyye | 1 | sumeyye/T23-ayarlar-kilit |
+| 25.10.2026 | T23 | Ayarlar + kilit ekranı + yedek hatırlatma | Sümeyye | 2 | sumeyye/T23-ayarlar-kilit |
 | 25.10.2026 | T21 | F5 ekranı + hatırlatıcı bildirim | Sümeyye | 2 | sumeyye/T21-f5-ve-bildirim |
 | 25.10.2026 | T16 | PDF rapor (zaman çizelgesi + hash tablosu + saat uyarısı) | Sümeyye | 3 | sumeyye/T16-pdf-rapor |
 | 25.10.2026 | T18 | F3 + F4 ekranları + Form Listesi | Sümeyye | 2 | sumeyye/T18-f3-f4-formlari |
@@ -34,4 +37,5 @@
 | Kişi | Tamamlanan puan |
 |---|---|
 | Tuba | 25 |
-| Sümeyye | 19 |
+| Sümeyye | 23 |
+| **Toplam** | **48 / 48** |

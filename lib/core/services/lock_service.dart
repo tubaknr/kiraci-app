@@ -70,12 +70,12 @@ class LockService {
   /// Kilit yapılandırma dosyasını okur.
   Future<LockConfig> loadConfig() async {
     final file = await _getConfigFile();
-    if (!await file.exists()) {
+    if (!file.existsSync()) {
       return const LockConfig();
     }
 
     try {
-      final jsonStr = await file.readAsString();
+      final jsonStr = file.readAsStringSync();
       final map = jsonDecode(jsonStr) as Map<String, dynamic>;
       return LockConfig.fromMap(map);
     } catch (_) {
@@ -87,7 +87,7 @@ class LockService {
   Future<void> saveConfig(LockConfig config) async {
     final file = await _getConfigFile();
     final jsonStr = jsonEncode(config.toMap());
-    await file.writeAsString(jsonStr);
+    file.writeAsStringSync(jsonStr);
   }
 
   /// Cihazın biyometrik donanım desteğini kontrol eder.
