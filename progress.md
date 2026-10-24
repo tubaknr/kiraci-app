@@ -6,7 +6,7 @@
 ## Şu An
 | Alan | Durum |
 |---|---|
-| Aktif görev | T17 (Tuba) / T10 (Sümeyye) |
+| Aktif görev | T19 (Tuba) / T10 (Sümeyye) |
 | Aktif kişi | Tuba |
 | Engel | Yok |
 | Son güncelleme | 24.10.2026 |
@@ -44,7 +44,7 @@ Durum: ⬜ Bekliyor · 🟨 Devam · ✅ Bitti. Puan: S=1, M=2, L=3.
 | ID | Görev | Sahip | Puan | Hedef | Durum |
 |---|---|---|---|---|---|
 | T15 | F2 Teslim/Tahliye Formu (mantık + ekran) | Tuba | 3 | 18.11 | ✅ |
-| T17 | F3 Arıza + F4 Ödeme — model/doğrulama/controller | Tuba | 2 | 19.11 | ⬜ |
+| T17 | F3 Arıza + F4 Ödeme — model/doğrulama/controller | Tuba | 2 | 19.11 | ✅ |
 | T16 | PDF rapor (zaman çizelgesi + hash tablosu + saat uyarısı) | Sümeyye | 3 | 20.11 | ⬜ |
 | T18 | F3 + F4 ekranları + Form Listesi | Sümeyye | 2 | 22.11 | ⬜ |
 | T19 | ZIP delil paketi (`manifest.json`) + mühür kodu paylaşımı | Tuba | 2 | 22.11 | ⬜ |

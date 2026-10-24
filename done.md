@@ -4,6 +4,7 @@
 
 | Tarih | ID | Görev | Kişi | Puan | Branch / Commit |
 |---|---|---|---|---|---|
+| 24.10.2026 | T17 | F3 Arıza + F4 Ödeme — model/doğrulama/controller | Tuba | 2 | tuba/T17-f3-f4-formlari |
 | 24.10.2026 | T15 | F2 Teslim/Tahliye Formu (mantık + ekran) | Tuba | 3 | tuba/T15-f2-teslim-tahliye-formu |
 | 24.10.2026 | T11 | Form altyapısı + F1 Sözleşme Formu (mantık + ekran) | Tuba | 3 | tuba/T11-f1-sozlesme-formu |
 | 24.10.2026 | T13 | Zincir doğrulama servisi (verifyChain) + test | Tuba | 1 | tuba/T13-zincir-dogrulama |
@@ -17,5 +18,5 @@
 ## Puan Toplamı
 | Kişi | Tamamlanan puan |
 |---|---|
-| Tuba | 18 |
+| Tuba | 20 |
 | Sümeyye | 0 |
