@@ -1,11 +1,41 @@
 import 'package:flutter/material.dart';
 
-/// Geçici renk sabitleri (Mock - Sümeyye T02'de güncelleyecek)
+/// SafeRentHouse renk paleti (Sümeyye - T02)
 class AppColors {
   const AppColors._();
 
-  static const Color primary = Color(0xFF1E88E5);
-  static const Color background = Color(0xFFF5F5F5);
-  static const Color surface = Colors.white;
-  static const Color textPrimary = Color(0xFF212121);
+  // Ana & Vurgulu Renkler
+  static const Color primary = Color(0xFF1E3A8A); // Güven veren koyu lacivert
+  static const Color primaryLight = Color(0xFF3B82F6);
+  static const Color secondary = Color(0xFF0D9488); // Bütünlük & teyit yeşili
+  static const Color secondaryLight = Color(0xFF14B8A6);
+
+  // Doğrulama & Durum Renkleri
+  static const Color success = Color(0xFF10B981); // Bozulmamış delil zinciri
+  static const Color warning = Color(0xFFF59E0B); // Saat anomalisi / Dikkat
+  static const Color error = Color(0xFFEF4444); // Bozuk zincir / Değiştirilmiş kayıt
+  static const Color info = Color(0xFF3B82F6);
+
+  // Açık Tema Yüzey & Zemin
+  static const Color lightBackground = Color(0xFFF8FAFC);
+  static const Color lightSurface = Colors.white;
+  static const Color lightCard = Colors.white;
+  static const Color lightBorder = Color(0xFFE2E8F0);
+  static const Color lightTextPrimary = Color(0xFF0F172A);
+  static const Color lightTextSecondary = Color(0xFF64748B);
+  static const Color lightTextHint = Color(0xFF94A3B8);
+
+  // Koyu Tema Yüzey & Zemin
+  static const Color darkBackground = Color(0xFF0F172A);
+  static const Color darkSurface = Color(0xFF1E293B);
+  static const Color darkCard = Color(0xFF1E293B);
+  static const Color darkBorder = Color(0xFF334155);
+  static const Color darkTextPrimary = Color(0xFFF8FAFC);
+  static const Color darkTextSecondary = Color(0xFF94A3B8);
+  static const Color darkTextHint = Color(0xFF64748B);
+
+  // Geriye dönük uyumluluk için genel aliaslar
+  static const Color background = lightBackground;
+  static const Color surface = lightSurface;
+  static const Color textPrimary = lightTextPrimary;
 }
