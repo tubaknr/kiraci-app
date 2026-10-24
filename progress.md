@@ -27,7 +27,7 @@ Durum: ⬜ Bekliyor · 🟨 Devam · ✅ Bitti. Puan: S=1, M=2, L=3.
 | ID | Görev | Sahip | Puan | Hedef | Durum |
 |---|---|---|---|---|---|
 | T06 | Dosya (case) modeli + repository + controller | Tuba | 2 | 04.11 | ✅ |
-| T07 | Dosyalarım + Dosya Oluştur ekranları | Sümeyye | 2 | 06.11 | ⬜ |
+| T07 | Dosyalarım + Dosya Oluştur ekranları | Sümeyye | 2 | 06.11 | ✅ |
 | T08 | Kayıt ekleme servisi: dosyayı uygulama dizinine kopyala, hash, zincir, saat anomalisi tespiti | Tuba | 3 | 07.11 | ✅ |
 | T09 | Kayıt Ekle ekranı (tür seç, kamera/dosya seçici) | Sümeyye | 2 | 08.11 | ⬜ |
 
