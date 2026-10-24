@@ -4,6 +4,7 @@
 
 | Tarih | ID | Görev | Kişi | Puan | Branch / Commit |
 |---|---|---|---|---|---|
+| 25.10.2026 | T02 | main.dart, tema (app_colors, app_theme, ValueNotifier<ThemeMode>) | Sümeyye | 2 | sumeyye/T02-tema-main |
 | 25.10.2026 | T25 | README ve demo senaryosu | Tuba | 1 | main |
 | 25.10.2026 | T24 | Uçtan uca test, analyze/test temizliği (53 test) | Tuba | 1 | main |
 | 24.10.2026 | T22 | Uygulama kilidi mantığı (PIN özeti + local_auth) | Tuba | 1 | tuba/T22-uygulama-kilidi |
@@ -24,4 +25,4 @@
 | Kişi | Tamamlanan puan |
 |---|---|
 | Tuba | 25 |
-| Sümeyye | 0 |
+| Sümeyye | 2 |
