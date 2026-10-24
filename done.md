@@ -4,6 +4,7 @@
 
 | Tarih | ID | Görev | Kişi | Puan | Branch / Commit |
 |---|---|---|---|---|---|
+| 24.10.2026 | T20 | F5 Olay Notu — model/doğrulama/controller | Tuba | 1 | tuba/T20-f5-olay-notu |
 | 24.10.2026 | T19 | ZIP delil paketi (manifest.json) + mühür kodu paylaşımı | Tuba | 2 | tuba/T19-zip-delil-paketi |
 | 24.10.2026 | T17 | F3 Arıza + F4 Ödeme — model/doğrulama/controller | Tuba | 2 | tuba/T17-f3-f4-formlari |
 | 24.10.2026 | T15 | F2 Teslim/Tahliye Formu (mantık + ekran) | Tuba | 3 | tuba/T15-f2-teslim-tahliye-formu |
@@ -19,5 +20,5 @@
 ## Puan Toplamı
 | Kişi | Tamamlanan puan |
 |---|---|
-| Tuba | 22 |
+| Tuba | 23 |
 | Sümeyye | 0 |
