@@ -4,6 +4,8 @@
 
 | Tarih | ID | Görev | Kişi | Puan | Branch / Commit |
 |---|---|---|---|---|---|
+| 25.10.2026 | T25 | README ve demo senaryosu | Tuba | 1 | main |
+| 25.10.2026 | T24 | Uçtan uca test, analyze/test temizliği (53 test) | Tuba | 1 | main |
 | 24.10.2026 | T22 | Uygulama kilidi mantığı (PIN özeti + local_auth) | Tuba | 1 | tuba/T22-uygulama-kilidi |
 | 24.10.2026 | T20 | F5 Olay Notu — model/doğrulama/controller | Tuba | 1 | tuba/T20-f5-olay-notu |
 | 24.10.2026 | T19 | ZIP delil paketi (manifest.json) + mühür kodu paylaşımı | Tuba | 2 | tuba/T19-zip-delil-paketi |
@@ -21,5 +23,5 @@
 ## Puan Toplamı
 | Kişi | Tamamlanan puan |
 |---|---|
-| Tuba | 24 |
+| Tuba | 25 |
 | Sümeyye | 0 |
