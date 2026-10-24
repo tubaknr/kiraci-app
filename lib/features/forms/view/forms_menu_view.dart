@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import '../../../core/constants/app_colors.dart';
 import '../../../core/services/record_service.dart';
 import '../controller/f1_lease_controller.dart';
 import '../controller/f2_handover_controller.dart';
+import '../controller/f3_defect_controller.dart';
+import '../controller/f4_payment_controller.dart';
 import 'f1_lease_view.dart';
 import 'f2_handover_view.dart';
+import 'f3_defect_view.dart';
+import 'f4_payment_view.dart';
 
-/// Mock Form Listesi Menüsü (Sümeyye T18'de güncelleyecek)
+/// Yapılandırılmış Formlar Menüsü (Sümeyye - T18)
 class FormsMenuView extends StatelessWidget {
   final String currentCaseId;
 
@@ -16,18 +21,18 @@ class FormsMenuView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('Yapılandırılmış Formlar')),
       body: ListView(
-        padding: const EdgeInsets.all(12),
+        padding: const EdgeInsets.all(16),
         children: [
           _buildFormCard(
             context,
             code: 'F1',
             title: 'Sözleşme Bilgi Formu',
-            subtitle: 'Kira şartlarını, bedeli ve depozitoyu sabitlemek için',
+            subtitle: 'Kira başlangıcı, bedel, artış oranı ve depozito tespiti',
             icon: Icons.assignment_outlined,
             onTap: () {
               final controller = F1LeaseController(RecordService());
               Navigator.of(context).push(
-                MaterialPageRoute(
+                MaterialPageRoute<void>(
                   builder: (context) => F1LeaseView(
                     caseId: currentCaseId,
                     controller: controller,
@@ -44,12 +49,12 @@ class FormsMenuView extends StatelessWidget {
             context,
             code: 'F2',
             title: 'Teslim / Tahliye Tespit Formu',
-            subtitle: 'Oda durumu, sayaç değerleri ve anahtar sayısı',
+            subtitle: 'Anahtar teslimi, sayaç değerleri ve oda demirbaş durumları',
             icon: Icons.key_outlined,
             onTap: () {
               final controller = F2HandoverController(RecordService());
               Navigator.of(context).push(
-                MaterialPageRoute(
+                MaterialPageRoute<void>(
                   builder: (context) => F2HandoverView(
                     caseId: currentCaseId,
                     controller: controller,
@@ -66,35 +71,57 @@ class FormsMenuView extends StatelessWidget {
             context,
             code: 'F3',
             title: 'Arıza / Sorun Bildirim Formu',
-            subtitle: 'Evdeki tadilat/arıza bildirimleri (Sümeyye T18)',
+            subtitle: 'Evdeki tesisat, elektrik veya kombi arızalarının tespiti',
             icon: Icons.build_outlined,
             onTap: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('F3 Formu Sümeyye tarafından T18\'de tasarlanacaktır.')),
+              final controller = F3DefectController(RecordService());
+              Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (context) => F3DefectView(
+                    caseId: currentCaseId,
+                    controller: controller,
+                    onSuccess: () {
+                      controller.dispose();
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ),
               );
             },
           ),
           _buildFormCard(
             context,
             code: 'F4',
-            title: 'Ödeme Bildirim Formu',
-            subtitle: 'Kira ve depozito ödeme dekontları (Sümeyye T18)',
+            title: 'Kira & Ödeme Bildirim Formu',
+            subtitle: 'Kira bedeli, depozito veya aidat ödeme kayıtları ve dekontları',
             icon: Icons.payment_outlined,
             onTap: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('F4 Formu Sümeyye tarafından T18\'de tasarlanacaktır.')),
+              final controller = F4PaymentController(RecordService());
+              Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (context) => F4PaymentView(
+                    caseId: currentCaseId,
+                    controller: controller,
+                    onSuccess: () {
+                      controller.dispose();
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ),
               );
             },
           ),
           _buildFormCard(
             context,
             code: 'F5',
-            title: 'Olay Notu Formu',
-            subtitle: 'Serbest olay ve konuşma kayıtları (Sümeyye T21)',
+            title: 'Olay ve Durum Notu Formu',
+            subtitle: 'Kira ilişkisindeki serbest olaylar, sözlü görüşmeler ve ihtar kayıtları',
             icon: Icons.note_alt_outlined,
             onTap: () {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('F5 Formu Sümeyye tarafından T21\'de tasarlanacaktır.')),
+                const SnackBar(
+                  content: Text('F5 Formu Sümeyye tarafından T21 adımında bağlanacaktır.'),
+                ),
               );
             },
           ),
@@ -112,15 +139,19 @@ class FormsMenuView extends StatelessWidget {
     required VoidCallback onTap,
   }) {
     return Card(
-      margin: const EdgeInsets.only(bottom: 10),
+      margin: const EdgeInsets.only(bottom: 12),
       child: ListTile(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         leading: CircleAvatar(
-          backgroundColor: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
-          child: Text(code, style: const TextStyle(fontWeight: FontWeight.bold)),
+          backgroundColor: AppColors.primary.withValues(alpha: 0.1),
+          child: Text(
+            code,
+            style: const TextStyle(fontWeight: FontWeight.bold, color: AppColors.primary),
+          ),
         ),
-        title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
-        subtitle: Text(subtitle),
-        trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+        title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+        subtitle: Text(subtitle, style: const TextStyle(fontSize: 12, color: AppColors.lightTextSecondary)),
+        trailing: const Icon(Icons.chevron_right, color: AppColors.primary),
         onTap: onTap,
       ),
     );
