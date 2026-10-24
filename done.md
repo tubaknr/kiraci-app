@@ -4,6 +4,7 @@
 
 | Tarih | ID | Görev | Kişi | Puan | Branch / Commit |
 |---|---|---|---|---|---|
+| 24.10.2026 | T22 | Uygulama kilidi mantığı (PIN özeti + local_auth) | Tuba | 1 | tuba/T22-uygulama-kilidi |
 | 24.10.2026 | T20 | F5 Olay Notu — model/doğrulama/controller | Tuba | 1 | tuba/T20-f5-olay-notu |
 | 24.10.2026 | T19 | ZIP delil paketi (manifest.json) + mühür kodu paylaşımı | Tuba | 2 | tuba/T19-zip-delil-paketi |
 | 24.10.2026 | T17 | F3 Arıza + F4 Ödeme — model/doğrulama/controller | Tuba | 2 | tuba/T17-f3-f4-formlari |
@@ -20,5 +21,5 @@
 ## Puan Toplamı
 | Kişi | Tamamlanan puan |
 |---|---|
-| Tuba | 23 |
+| Tuba | 24 |
 | Sümeyye | 0 |

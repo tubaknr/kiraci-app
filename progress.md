@@ -6,7 +6,7 @@
 ## Şu An
 | Alan | Durum |
 |---|---|
-| Aktif görev | T22 (Tuba) / T10 (Sümeyye) |
+| Aktif görev | T24 (Ortak Test Temizliği) / T10 (Sümeyye) |
 | Aktif kişi | Tuba |
 | Engel | Yok |
 | Son güncelleme | 24.10.2026 |
@@ -53,7 +53,7 @@ Durum: ⬜ Bekliyor · 🟨 Devam · ✅ Bitti. Puan: S=1, M=2, L=3.
 | ID | Görev | Sahip | Puan | Hedef | Durum |
 |---|---|---|---|---|---|
 | T20 | F5 Olay Notu — model/doğrulama/controller | Tuba | 1 | 23.11 | ✅ |
-| T22 | Uygulama kilidi mantığı (PIN özeti + `local_auth`) | Tuba | 1 | 24.11 | ⬜ |
+| T22 | Uygulama kilidi mantığı (PIN özeti + `local_auth`) | Tuba | 1 | 24.11 | ✅ |
 | T21 | F5 ekranı + hatırlatıcı bildirim | Sümeyye | 2 | 25.11 | ⬜ |
 | T23 | Ayarlar + kilit ekranı + yedek hatırlatma | Sümeyye | 2 | 26.11 | ⬜ |
 | T24 | Uçtan uca test, `analyze`/`test` temizliği | İkisi | 1+1 | 27.11 | ⬜ |
