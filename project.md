@@ -79,6 +79,92 @@ Toplam puanlar `progress.md`'de takip edilir (planlanan: Tuba 25, Sümeyye 23).
 
 **Kural:** Gönderilen form kanonik (sıralı anahtar) JSON olarak hash'lenir ve kayıt olarak eklenir. Form düzenlenemez; düzeltme için yeni form + `corrects_record_id` kullanılır.
 
+# SafeRentHouse: Görev Dağılımı
+
+Proje: Kiracı ve ev sahibi arasındaki uyuşmazlıklar için belge, yazışma kanıtı ve delil kaydı tutan, kayıtlar değiştirilirse bunu tespit eden mobil uygulama.
+Teknoloji: Yalnızca Flutter + Dart. Backend yok, veri cihazda (SQLite).
+Takvim: 26.10.2026 – 29.11.2026 (5 hafta, varsayımsal)
+Puan: S=1, M=2, L=3
+
+## 1. Kim Ne Yapacak (Özet)
+| | Tuba | Sümeyye |
+|---|---|---|
+| Rol | Veri + mantık + formlar | Arayüz (frontend) |
+| Sorumlu klasörler | `core/db`, `core/integrity`, `core/services`, tüm `controller/` ve `models/` | `core/theme`, `core/constants`, `view/` ve `widget/` (F1–F2 hariç) |
+| Ana işler | SQLite, hash zinciri, kayıt servisi, form mantığı (F1–F5), F1–F2 ekranları, ZIP paketi, kilit mantığı | Tema, navigasyon, tüm ekranlar, F3–F5 form ekranları, PDF rapor, bildirim, ayarlar |
+| Toplam puan | **25** | **23** |
+
+Ortak işler: test temizliği (T24), README ve demo (T25), code review (çaprazlama).
+
+## 2. Tuba'nın Görevleri
+| ID | Görev | Puan | Hedef |
+|---|---|---|---|
+| T01 | Flutter projesi, klasör yapısı, paketler, `analysis_options.yaml` | 1 | 
+| T03 | SQLite şeması + `app_database.dart` + append-only repository | 2 | 
+| T05 | `hash_utils.dart` (SHA-256, zincir, kanonik JSON) + birim testleri | 2 | 
+| T06 | Dosya (case) modeli + repository + controller | 2 | 
+| T08 | Kayıt ekleme servisi: dosyayı uygulama dizinine kopyala, hash, zincir, saat anomalisi tespiti | 3 | 
+| T13 | Zincir doğrulama servisi (`verifyChain`) + test | 1 | 
+| T11 | Form altyapısı (alan modeli, doğrulama, submit) + F1 Sözleşme Formu (mantık + ekran) | 3 | 
+| T15 | F2 Teslim/Tahliye Formu (mantık + ekran) | 3 | 
+| T17 | F3 Arıza + F4 Ödeme formları: model, doğrulama, controller | 2 | 
+| T19 | ZIP delil paketi (`manifest.json`) + mühür kodu paylaşımı | 2 | 
+| T20 | F5 Olay Notu formu: model, doğrulama, controller | 1 | 
+| T22 | Uygulama kilidi mantığı (PIN özeti + `local_auth`) | 1 | 
+| | **Toplam** | **23** | |
+
+## 3. Sümeyye'nin Görevleri
+| ID | Görev | Puan | Hedef |
+|---|---|---|---|
+| T02 | `main.dart`, tema (`app_colors`, `app_theme`, `ValueNotifier<ThemeMode>`) | 2 | 
+| T04 | Navigasyon + onboarding + KVKK/uyarı ekranı | 2 | 
+| T07 | Dosyalarım + Dosya Oluştur ekranları | 2 | 
+| T09 | Kayıt Ekle ekranı (tür seç, kamera/dosya seçici) | 2 | 
+| T10 | Zaman çizelgesi ekranı | 2 | 
+| T12 | Kayıt Detayı + zincir doğrulama rozeti | 1 | 
+| T14 | Konuşma kanıtı ekranı (ekran görüntüsü + not) | 1 | 
+| T16 | PDF rapor (zaman çizelgesi + hash tablosu + saat uyarısı) | 3 | 
+| T18 | F3 + F4 form ekranları + Form Listesi | 2 | 
+| T21 | F5 form ekranı + hatırlatıcı bildirim | 2 | 
+| T23 | Ayarlar + kilit ekranı + yedek hatırlatma | 2 | 
+| | **Toplam** | **21** | |
+
+## 4. Ortak Görevler
+| ID | Görev | Tuba | Sümeyye | Hedef |
+|---|---|---|---|---|
+| T24 | Uçtan uca test, `flutter analyze` / `flutter test` temizliği | 1 | 1 | 
+| T25 | README + demo senaryosu | 1 | 1 |
+
+## 7. Uygulama Özellikleri (Kapsam)
+1. Onboarding + KVKK/uyarı metni
+2. Dosya (case) oluşturma: adres, taraflar, sözleşme tarihleri
+3. Kayıt ekleme: belge, foto, video, ses
+4. Konuşma kanıtı: ekran görüntüsü + not
+5. Formlar: F1 Sözleşme, F2 Teslim/Tahliye, F3 Arıza, F4 Ödeme, F5 Olay Notu
+6. Zaman çizelgesi
+7. Kayıt detayı + zincir doğrulama
+8. PDF rapor
+9. ZIP delil paketi + mühür kodu paylaşımı
+10. Tema ve ayarlar
+11. Uygulama kilidi
+12. Hatırlatıcı bildirim
+
+## 8. Kapsam Dışı
+Backend, hesap/giriş, karşı tarafla ortak dosya, hukuki tavsiye, gizli kayıt, e-imza, blockchain, kayıt silme/düzenleme, web/masaüstü.
+
+## 9. Ortak Kurallar
+- State: `ValueNotifier` + `ValueListenableBuilder`; sayfa düzeyinde ağır `setState` yok
+- Statik widget'larda `const`; renk ve stil yalnızca tema dosyalarında; 40 satırı geçen `build` bölünür
+- Onaysız yeni paket eklenmez
+- Kayıtlar yalnızca eklenir; `update` ve `delete` yazılmaz
+- Her görev sonrası `flutter analyze` (0 uyarı) ve `flutter test`
+- Her görev ayrı branch (`kisi/T-no-aciklama`), PR'ı diğer kişi inceler
+- Görev bitince `progress.md` ve `done.md` güncellenir
+- Arayüzde "mahkemede geçerli" yazılmaz; "doğrulanabilir kayıt" kullanılır
+
+## 10. Bilinen Sınır
+Zaman damgası cihaz saatidir ve değiştirilebilir. Zincir değişikliği tespit eder, zamanın doğruluğunu kanıtlamaz. Azaltma: saat anomalisi tespiti + mühür kodunu e-postayla dışarı gönderme + ZIP doğrulaması.
+
 ## 8. Sayfalar / Ekranlar
 | Ekran | Dosya | Sahip |
 |---|---|---|
@@ -93,12 +179,6 @@ Toplam puanlar `progress.md`'de takip edilir (planlanan: Tuba 25, Sümeyye 23).
 | F3, F4, F5 ekranları | `lib/features/forms/view/f3_*` … `f5_*_view.dart` | Sümeyye |
 | Dışa Aktar (PDF / ZIP) | `lib/features/export/view/export_view.dart` | Sümeyye |
 | Ayarlar + Kilit | `lib/features/settings/view/settings_view.dart`, `lock/view/lock_view.dart` | Sümeyye |
-
-## 9. Tasarım
-- Tema: Material 3, açık + koyu (`ValueNotifier<ThemeMode>`)
-- Ana renkler (öneri, son karar Sümeyye'de): lacivert `#1F3A5F`, turkuaz `#2BB3A3`, uyarı turuncu `#E08A2E`, zemin `#F7F9FC` / `#0E1420`
-- Yazı tipi: sistem varsayılanı (ek font paketi YOK)
-- Genel his: sakin, resmî ama sıcak. Her kayıtta görünen "zincir sağlam" rozeti ana görsel öğedir.
 
 ## 10. Kapsam Dışı (YAPMA)
 - Backend, sunucu, bulut, hesap/giriş sistemi
