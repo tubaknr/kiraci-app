@@ -6,7 +6,7 @@
 ## Şu An
 | Alan | Durum |
 |---|---|
-| Aktif görev | T11 (Tuba) / T10 (Sümeyye) |
+| Aktif görev | T15 (Tuba) / T10 (Sümeyye) |
 | Aktif kişi | Tuba |
 | Engel | Yok |
 | Son güncelleme | 24.10.2026 |
@@ -36,7 +36,14 @@ Durum: ⬜ Bekliyor · 🟨 Devam · ✅ Bitti. Puan: S=1, M=2, L=3.
 |---|---|---|---|---|---|
 | T10 | Zaman çizelgesi ekranı | Sümeyye | 2 | 11.11 | ⬜ |
 | T13 | Zincir doğrulama servisi (`verifyChain`) + test | Tuba | 1 | 12.11 | ✅ |
-| T11 | Form altyapısı (alan modeli, doğrulama, submit) + F1 (mantık + ekran) | Tuba | 3 | 14.11 | ⬜ |
+| T11 | Form altyapısı (alan modeli, doğrulama, submit) + F1 (mantık + ekran) | Tuba | 3 | 14.11 | ✅ |
+| T12 | Kayıt Detayı + zincir doğrulama rozeti | Sümeyye | 1 | 14.11 | ⬜ |
+| T14 | Konuşma kanıtı ekranı (ekran görüntüsü + not) | Sümeyye | 1 | 15.11 | ⬜ |
+
+### 4.Adım Formlar ve çıktı
+| ID | Görev | Sahip | Puan | Hedef | Durum |
+|---|---|---|---|---|---|
+| T15 | F2 Teslim/Tahliye Formu (mantık + ekran) | Tuba | 3 | 18.11 | ⬜ |
 | T11 | Form altyapısı (alan modeli, doğrulama, submit) + F1 (mantık + ekran) | Tuba | 3 | 14.11 | ⬜ |
 | T12 | Kayıt Detayı + zincir doğrulama rozeti | Sümeyye | 1 | 14.11 | ⬜ |
 | T14 | Konuşma kanıtı ekranı (ekran görüntüsü + not) | Sümeyye | 1 | 15.11 | ⬜ |

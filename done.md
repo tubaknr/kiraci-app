@@ -4,6 +4,7 @@
 
 | Tarih | ID | Görev | Kişi | Puan | Branch / Commit |
 |---|---|---|---|---|---|
+| 24.10.2026 | T11 | Form altyapısı + F1 Sözleşme Formu (mantık + ekran) | Tuba | 3 | tuba/T11-f1-sozlesme-formu |
 | 24.10.2026 | T13 | Zincir doğrulama servisi (verifyChain) + test | Tuba | 1 | tuba/T13-zincir-dogrulama |
 | 24.10.2026 | T08 | Kayıt ekleme servisi: dosyayı kopyala, hash, zincir, saat anomalisi | Tuba | 3 | tuba/T08-kayit-ekleme-servisi |
 | 24.10.2026 | T06 | Dosya (case) modeli + repository + controller | Tuba | 2 | tuba/T06-case-controller |
@@ -15,5 +16,5 @@
 ## Puan Toplamı
 | Kişi | Tamamlanan puan |
 |---|---|
-| Tuba | 12 |
+| Tuba | 15 |
 | Sümeyye | 0 |
