@@ -38,7 +38,7 @@ Durum: ⬜ Bekliyor · 🟨 Devam · ✅ Bitti. Puan: S=1, M=2, L=3.
 | T13 | Zincir doğrulama servisi (`verifyChain`) + test | Tuba | 1 | 12.11 | ✅ |
 | T11 | Form altyapısı (alan modeli, doğrulama, submit) + F1 (mantık + ekran) | Tuba | 3 | 14.11 | ✅ |
 | T12 | Kayıt Detayı + zincir doğrulama rozeti | Sümeyye | 1 | 14.11 | ✅ |
-| T14 | Konuşma kanıtı ekranı (ekran görüntüsü + not) | Sümeyye | 1 | 15.11 | ⬜ |
+| T14 | Konuşma kanıtı ekranı (ekran görüntüsü + not) | Sümeyye | 1 | 15.11 | ✅ |
 
 ### 4.Adım Formlar ve çıktı
 | ID | Görev | Sahip | Puan | Hedef | Durum |
