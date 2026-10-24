@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import '../../../core/services/record_service.dart';
 import '../controller/f1_lease_controller.dart';
+import '../controller/f2_handover_controller.dart';
 import 'f1_lease_view.dart';
+import 'f2_handover_view.dart';
 
 /// Mock Form Listesi Menüsü (Sümeyye T18'de güncelleyecek)
 class FormsMenuView extends StatelessWidget {
@@ -42,11 +44,21 @@ class FormsMenuView extends StatelessWidget {
             context,
             code: 'F2',
             title: 'Teslim / Tahliye Tespit Formu',
-            subtitle: 'Oda durumu, sayaç değerleri ve anahtar sayısı (Tuba T15)',
+            subtitle: 'Oda durumu, sayaç değerleri ve anahtar sayısı',
             icon: Icons.key_outlined,
             onTap: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('F2 Formu T15 görevinde tamamlanacaktır.')),
+              final controller = F2HandoverController(RecordService());
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => F2HandoverView(
+                    caseId: currentCaseId,
+                    controller: controller,
+                    onSuccess: () {
+                      controller.dispose();
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ),
               );
             },
           ),
