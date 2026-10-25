@@ -1,32 +1,30 @@
 import 'package:flutter/material.dart';
 import '../../../core/constants/app_colors.dart';
-import '../widget/auth_role_badge.dart';
-import '../widget/auth_submit_button.dart';
-import '../widget/auth_switch_prompt.dart';
-import '../widget/auth_text_field.dart';
-import 'tenant_login_view.dart';
+import '../widget/auth_form_widgets.dart';
+import 'auth_login_view.dart';
 
-/// Kiracı Hesap Açma Ekranı (Sümeyye - SOLID SRP)
-class TenantRegisterView extends StatefulWidget {
+/// Parametrik Kimlik Doğrulama Hesap Açma Ekranı (Sümeyye - SOLID SRP & OCP)
+class AuthRegisterView extends StatefulWidget {
+  final AuthRole role;
   final Function(String role, String name) onAuthenticated;
 
-  const TenantRegisterView({
+  const AuthRegisterView({
     super.key,
+    required this.role,
     required this.onAuthenticated,
   });
 
   @override
-  State<TenantRegisterView> createState() => _TenantRegisterViewState();
+  State<AuthRegisterView> createState() => _AuthRegisterViewState();
 }
 
-class _TenantRegisterViewState extends State<TenantRegisterView> {
+class _AuthRegisterViewState extends State<AuthRegisterView> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _contactController = TextEditingController();
   final TextEditingController _identityController = TextEditingController();
   final TextEditingController _pinController = TextEditingController();
   final TextEditingController _pinConfirmController = TextEditingController();
-  final bool _isLoading = false;
 
   @override
   void dispose() {
@@ -49,12 +47,16 @@ class _TenantRegisterViewState extends State<TenantRegisterView> {
     }
 
     final String name = _nameController.text.trim();
-    widget.onAuthenticated('tenant', name.isNotEmpty ? name : 'Kiracı');
+    final String displayName = name.isNotEmpty ? name : widget.role.defaultDisplayName;
+    widget.onAuthenticated(widget.role.key, displayName);
+
     if (mounted) {
       Navigator.of(context, rootNavigator: true).popUntil((route) => route.isFirst);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Kiracı hesabı oluşturuldu. Hoş geldiniz, ${name.isNotEmpty ? name : "Kiracı"}!'),
+          content: Text(
+            '${widget.role.defaultDisplayName} hesabı oluşturuldu. Hoş geldiniz, $displayName!',
+          ),
           backgroundColor: AppColors.success,
         ),
       );
@@ -64,7 +66,8 @@ class _TenantRegisterViewState extends State<TenantRegisterView> {
   void _openLogin() {
     Navigator.of(context).pushReplacement(
       MaterialPageRoute<void>(
-        builder: (context) => TenantLoginView(
+        builder: (context) => AuthLoginView(
+          role: widget.role,
           onAuthenticated: widget.onAuthenticated,
         ),
       ),
@@ -73,10 +76,14 @@ class _TenantRegisterViewState extends State<TenantRegisterView> {
 
   @override
   Widget build(BuildContext context) {
+    final Color actionColor = widget.role.isTenant
+        ? AppColors.primaryCol(context)
+        : AppColors.secondaryCol(context);
+
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title: const Text('Kiracı Hesabı Aç'),
+        title: Text(widget.role.isTenant ? 'Kiracı Hesabı Aç' : 'Kiraya Veren Hesabı Aç'),
         elevation: 0,
       ),
       body: SafeArea(
@@ -87,25 +94,26 @@ class _TenantRegisterViewState extends State<TenantRegisterView> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildHeader(),
+                _buildHeader(context),
                 const SizedBox(height: 20),
                 _buildFormFields(),
                 const SizedBox(height: 24),
                 AuthSubmitButton(
-                  label: 'Kiracı Hesabını Başlat',
+                  label: widget.role.isTenant ? 'Kiracı Hesabını Başlat' : 'Ev Sahibi Hesabını Başlat',
                   icon: Icons.person_add_rounded,
-                  backgroundColor: AppColors.primaryCol(context),
-                  isLoading: _isLoading,
+                  backgroundColor: actionColor,
                   onPressed: _handleRegister,
                 ),
-                const SizedBox(height: 18),
+                const SizedBox(height: 14),
                 AuthSwitchPrompt(
-                  promptText: 'Zaten bir kiracı hesabınız var mı?',
+                  promptText: widget.role.isTenant
+                      ? 'Zaten bir kiracı hesabınız var mı?'
+                      : 'Zaten bir ev sahibi hesabınız var mı?',
                   actionText: 'Giriş Yapın',
-                  actionColor: AppColors.primaryCol(context),
+                  actionColor: actionColor,
                   onTap: _openLogin,
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 20),
               ],
             ),
           ),
@@ -114,23 +122,23 @@ class _TenantRegisterViewState extends State<TenantRegisterView> {
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const AuthRoleBadge(
-          roleName: 'Kiracı Kayıt',
-          icon: Icons.vpn_key_rounded,
-          isTenant: true,
+        AuthRoleBadge(
+          roleName: widget.role.isTenant ? 'Yeni Kiracı Profili' : 'Mülk Sahibi Profili',
+          icon: widget.role.roleIcon,
+          isTenant: widget.role.isTenant,
         ),
         const SizedBox(height: 12),
         const Text(
-          'Yeni Kiracı Profili',
+          'Profilinizi Oluşturun',
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 4),
         Text(
-          'Ev kiralama sürecinizi tarafsız delil zinciriyle koruma altına alın.',
+          'Delil kayıtlarınız bu cihazda güvenle saklanacak ve kriptografik mühür alacaktır.',
           style: TextStyle(fontSize: 13, color: AppColors.textMuted(context), height: 1.4),
         ),
       ],
@@ -143,38 +151,49 @@ class _TenantRegisterViewState extends State<TenantRegisterView> {
         AuthTextField(
           controller: _nameController,
           label: 'Ad Soyad',
-          hintText: 'Örn: Ahmet Yılmaz',
-          prefixIcon: Icons.badge_outlined,
+          hintText: widget.role.isTenant ? 'Örn: Ahmet Yılmaz' : 'Örn: Mehmet Öz',
+          prefixIcon: Icons.person_outline_rounded,
           validator: (val) {
-            if (val == null || val.trim().isEmpty) return 'Lütfen adınızı girin';
+            if (val == null || val.trim().isEmpty) {
+              return 'Lütfen adınızı ve soyadınızı girin';
+            }
             return null;
           },
         ),
         const SizedBox(height: 12),
         AuthTextField(
           controller: _contactController,
-          label: 'E-posta veya Telefon Numarası (İsteğe Bağlı)',
-          hintText: 'ornek@posta.com veya 0555 123 45 67',
-          prefixIcon: Icons.contact_mail_outlined,
+          label: 'E-posta veya Telefon',
+          hintText: 'ornek@posta.com / 0555 123 45 67',
+          prefixIcon: Icons.alternate_email_rounded,
           keyboardType: TextInputType.emailAddress,
+          validator: (val) {
+            if (val == null || val.trim().isEmpty) {
+              return 'Lütfen iletişim bilginizi girin';
+            }
+            return null;
+          },
         ),
         const SizedBox(height: 12),
         AuthTextField(
           controller: _identityController,
-          label: 'T.C. Kimlik No veya Rumuz (İsteğe Bağlı)',
-          hintText: 'Raporlarda görünmesi için (isteğe bağlı)',
-          prefixIcon: Icons.fingerprint_rounded,
+          label: 'T.C. Kimlik No (Opsiyonel - Yerel Doğrulama)',
+          hintText: '11 haneli T.C. Kimlik Numarası',
+          prefixIcon: Icons.badge_outlined,
+          keyboardType: TextInputType.number,
         ),
         const SizedBox(height: 12),
         AuthTextField(
           controller: _pinController,
-          label: 'Cihaz Güvenlik PIN Kodu Belirleyin',
-          hintText: 'En az 4 haneli PIN',
+          label: 'Cihaz İçi Güvenlik PIN Kodu',
+          hintText: '4-8 haneli PIN kodu belirleyin',
           prefixIcon: Icons.lock_outline_rounded,
           isPassword: true,
           keyboardType: TextInputType.number,
           validator: (val) {
-            if (val == null || val.trim().length < 4) return 'PIN en az 4 haneli olmalıdır';
+            if (val == null || val.trim().length < 4) {
+              return 'En az 4 haneli PIN kodu belirleyin';
+            }
             return null;
           },
         ),
@@ -182,16 +201,42 @@ class _TenantRegisterViewState extends State<TenantRegisterView> {
         AuthTextField(
           controller: _pinConfirmController,
           label: 'PIN Kodunu Tekrar Girin',
-          hintText: 'PIN tekrarı',
+          hintText: 'Belirlediğiniz PIN kodunu doğrulayın',
           prefixIcon: Icons.lock_reset_rounded,
           isPassword: true,
           keyboardType: TextInputType.number,
           validator: (val) {
-            if (val == null || val.trim().isEmpty) return 'PIN tekrarı gereklidir';
+            if (val == null || val.trim().isEmpty) {
+              return 'Lütfen PIN kodunuzu doğrulayın';
+            }
             return null;
           },
         ),
       ],
     );
+  }
+}
+
+/// Kiracı Hesap Açma Ekranı (AuthRegisterView için tip korumalı sarmalayıcı)
+class TenantRegisterView extends StatelessWidget {
+  final Function(String role, String name) onAuthenticated;
+
+  const TenantRegisterView({super.key, required this.onAuthenticated});
+
+  @override
+  Widget build(BuildContext context) {
+    return AuthRegisterView(role: AuthRole.tenant, onAuthenticated: onAuthenticated);
+  }
+}
+
+/// Ev Sahibi Hesap Açma Ekranı (AuthRegisterView için tip korumalı sarmalayıcı)
+class LandlordRegisterView extends StatelessWidget {
+  final Function(String role, String name) onAuthenticated;
+
+  const LandlordRegisterView({super.key, required this.onAuthenticated});
+
+  @override
+  Widget build(BuildContext context) {
+    return AuthRegisterView(role: AuthRole.landlord, onAuthenticated: onAuthenticated);
   }
 }

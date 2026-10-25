@@ -9,7 +9,6 @@ import '../models/record_model.dart';
 import '../widget/timeline_action_bar.dart';
 import '../widget/timeline_card_item.dart';
 import '../widget/timeline_hero_header.dart';
-import '../widget/timeline_pdf_export_footer.dart';
 import 'record_add_view.dart';
 import 'record_detail_view.dart';
 

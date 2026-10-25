@@ -6,7 +6,7 @@
 ## Şu An
 | Alan | Durum |
 |---|---|
-| Aktif görev | Koyu ve Açık tema kontrast/renk uyumu tüm ekran ve bileşenlerde tamamlandı |
+| Aktif görev | Sümeyye sorumluluğundaki UI dosyaları tarandı, 15 gereksiz/mükerrer dosya silindi, SOLID mimarisine uygun birleştirme yapıldı |
 | Aktif kişi | Sümeyye |
 | Engel | Yok |
 | Son güncelleme | 25.10.2026 |
@@ -66,3 +66,4 @@ Durum: ⬜ Bekliyor · 🟨 Devam · ✅ Bitti. Puan: S=1, M=2, L=3.
 | 24.10.2026 | **Backend kaldırıldı:** sunucu, PostgreSQL, JWT, davet/ortak dosya yok. Veri yerel SQLite; zaman damgası cihaz saati |
 | 24.10.2026 | Zaman güvenilirliği için: hash zinciri + saat anomalisi tespiti + mühür kodunu dışarıya (e-posta) gönderme |
 | 24.10.2026 | İş bölümü: Tuba = veri/mantık/formlar/ZIP; Sümeyye = tema/ekranlar/PDF/bildirim |
+| 25.10.2026 | Sümeyye UI bileşenleri sadeleştirildi: 15 gereksiz/mükerrer dosya silindi, Auth (giriş/kayıt) ve Onboarding formları SOLID (SRP & OCP) ilkeleriyle birleştirildi. Testler (84/84) ve analiz (0 uyarı) korundu |

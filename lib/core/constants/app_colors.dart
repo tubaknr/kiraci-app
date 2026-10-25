@@ -44,11 +44,6 @@ class AppColors {
   static const Color badgeIndigoBg = Color(0xFFEEF2FF);
   static const Color badgeIndigoText = Color(0xFF4338CA);
 
-  // Geriye dönük uyumluluk için genel aliaslar
-  static const Color background = lightBackground;
-  static const Color surface = lightSurface;
-  static const Color textPrimary = lightTextPrimary;
-
   // Tema Duyarlı Renk Yardımcıları (SOLID & Açık/Koyu Tema Uyumu)
   static Color cardBg(BuildContext context) {
     return Theme.of(context).brightness == Brightness.dark
@@ -72,12 +67,6 @@ class AppColors {
     return Theme.of(context).brightness == Brightness.dark
         ? darkTextSecondary
         : lightTextSecondary;
-  }
-
-  static Color badgeBg(BuildContext context, Color lightBg, Color darkBg) {
-    return Theme.of(context).brightness == Brightness.dark
-        ? darkBg
-        : lightBg;
   }
 
   static Color primaryCol(BuildContext context) {

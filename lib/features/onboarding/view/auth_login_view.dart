@@ -1,29 +1,50 @@
 import 'package:flutter/material.dart';
 import '../../../core/constants/app_colors.dart';
-import '../widget/auth_role_badge.dart';
-import '../widget/auth_submit_button.dart';
-import '../widget/auth_switch_prompt.dart';
-import '../widget/auth_text_field.dart';
-import 'tenant_register_view.dart';
+import '../widget/auth_form_widgets.dart';
+import 'auth_register_view.dart';
 
-/// Kiracı Giriş Ekranı (Sümeyye - SOLID SRP)
-class TenantLoginView extends StatefulWidget {
+/// Güvenli Giriş Rolü Tanımı (SOLID OCP)
+enum AuthRole {
+  tenant,
+  landlord;
+
+  bool get isTenant => this == AuthRole.tenant;
+  String get key => isTenant ? 'tenant' : 'landlord';
+  String get portalTitle => isTenant ? 'Kiracı Portalı' : 'Kiraya Veren Portalı';
+  String get roleBadgeTitle => isTenant ? 'Kiracı Modu' : 'Kiraya Veren Modu';
+  String get welcomeSubtitle => isTenant
+      ? 'Kiraladığınız konuta ait delil defterinize ve zaman çizelgenize erişmek için giriş yapın.'
+      : 'Kiraya verdiğiniz mülklerin delil kayıtlarına ve zaman çizelgelerine erişmek için giriş yapın.';
+  String get loginButtonLabel => isTenant ? 'Kiracı Girişi Yap' : 'Kiraya Veren Girişi Yap';
+  String get defaultDisplayName => isTenant ? 'Kiracı' : 'Ev Sahibi';
+  String get quickEntryMessage => isTenant
+      ? 'Giriş başarılı. Kiracı kasasına hoş geldiniz!'
+      : 'Giriş başarılı. Ev sahibi kasasına hoş geldiniz!';
+  String get switchPromptText => isTenant
+      ? 'Henüz kiracı hesabınız yok mu?'
+      : 'Henüz ev sahibi hesabınız yok mu?';
+  IconData get roleIcon => isTenant ? Icons.key_rounded : Icons.apartment_rounded;
+}
+
+/// Parametrik Kimlik Doğrulama Giriş Ekranı (Sümeyye - SOLID SRP & OCP)
+class AuthLoginView extends StatefulWidget {
+  final AuthRole role;
   final Function(String role, String name) onAuthenticated;
 
-  const TenantLoginView({
+  const AuthLoginView({
     super.key,
+    required this.role,
     required this.onAuthenticated,
   });
 
   @override
-  State<TenantLoginView> createState() => _TenantLoginViewState();
+  State<AuthLoginView> createState() => _AuthLoginViewState();
 }
 
-class _TenantLoginViewState extends State<TenantLoginView> {
+class _AuthLoginViewState extends State<AuthLoginView> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _contactController = TextEditingController();
   final TextEditingController _pinController = TextEditingController();
-  final bool _isLoading = false;
 
   @override
   void dispose() {
@@ -36,12 +57,17 @@ class _TenantLoginViewState extends State<TenantLoginView> {
     if (!_formKey.currentState!.validate()) return;
 
     final String displayName = _contactController.text.trim();
-    widget.onAuthenticated('tenant', displayName.isNotEmpty ? displayName : 'Kiracı');
+    widget.onAuthenticated(
+      widget.role.key,
+      displayName.isNotEmpty ? displayName : widget.role.defaultDisplayName,
+    );
     if (mounted) {
       Navigator.of(context, rootNavigator: true).popUntil((route) => route.isFirst);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Giriş başarılı. Hoş geldiniz, ${displayName.isNotEmpty ? displayName : "Kiracı"}!'),
+          content: Text(
+            'Giriş başarılı. Hoş geldiniz, ${displayName.isNotEmpty ? displayName : widget.role.defaultDisplayName}!',
+          ),
           backgroundColor: AppColors.success,
         ),
       );
@@ -49,12 +75,12 @@ class _TenantLoginViewState extends State<TenantLoginView> {
   }
 
   void _handleQuickEntry() {
-    widget.onAuthenticated('tenant', 'Kiracı');
+    widget.onAuthenticated(widget.role.key, widget.role.defaultDisplayName);
     if (mounted) {
       Navigator.of(context, rootNavigator: true).popUntil((route) => route.isFirst);
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Giriş başarılı. Kiracı kasasına hoş geldiniz!'),
+        SnackBar(
+          content: Text(widget.role.quickEntryMessage),
           backgroundColor: AppColors.success,
         ),
       );
@@ -64,7 +90,8 @@ class _TenantLoginViewState extends State<TenantLoginView> {
   void _openRegister() {
     Navigator.of(context).pushReplacement(
       MaterialPageRoute<void>(
-        builder: (context) => TenantRegisterView(
+        builder: (context) => AuthRegisterView(
+          role: widget.role,
           onAuthenticated: widget.onAuthenticated,
         ),
       ),
@@ -73,10 +100,14 @@ class _TenantLoginViewState extends State<TenantLoginView> {
 
   @override
   Widget build(BuildContext context) {
+    final Color actionColor = widget.role.isTenant
+        ? AppColors.primaryCol(context)
+        : AppColors.secondaryCol(context);
+
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title: const Text('Kiracı Portalı'),
+        title: Text(widget.role.portalTitle),
         elevation: 0,
       ),
       body: SafeArea(
@@ -87,15 +118,14 @@ class _TenantLoginViewState extends State<TenantLoginView> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildHeader(),
+                _buildHeader(context),
                 const SizedBox(height: 24),
                 _buildFormFields(),
                 const SizedBox(height: 24),
                 AuthSubmitButton(
-                  label: 'Kiracı Girişi Yap',
-                  icon: Icons.login_rounded,
-                  backgroundColor: AppColors.primaryCol(context),
-                  isLoading: _isLoading,
+                  label: widget.role.loginButtonLabel,
+                  icon: widget.role.roleIcon,
+                  backgroundColor: actionColor,
                   onPressed: _handleLogin,
                 ),
                 const SizedBox(height: 10),
@@ -108,13 +138,13 @@ class _TenantLoginViewState extends State<TenantLoginView> {
                 ),
                 const SizedBox(height: 10),
                 AuthSwitchPrompt(
-                  promptText: 'Henüz kiracı hesabınız yok mu?',
+                  promptText: widget.role.switchPromptText,
                   actionText: 'Hesap Açın',
-                  actionColor: AppColors.primaryCol(context),
+                  actionColor: actionColor,
                   onTap: _openRegister,
                 ),
                 const SizedBox(height: 24),
-                _buildSecurityNotice(context),
+                const _SecurityNoticeCard(),
               ],
             ),
           ),
@@ -123,14 +153,14 @@ class _TenantLoginViewState extends State<TenantLoginView> {
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const AuthRoleBadge(
-          roleName: 'Kiracı Modu',
-          icon: Icons.key_rounded,
-          isTenant: true,
+        AuthRoleBadge(
+          roleName: widget.role.roleBadgeTitle,
+          icon: widget.role.roleIcon,
+          isTenant: widget.role.isTenant,
         ),
         const SizedBox(height: 12),
         const Text(
@@ -139,7 +169,7 @@ class _TenantLoginViewState extends State<TenantLoginView> {
         ),
         const SizedBox(height: 4),
         Text(
-          'Kiraladığınız konuta ait delil defterinize ve zaman çizelgenize erişmek için giriş yapın.',
+          widget.role.welcomeSubtitle,
           style: TextStyle(fontSize: 13, color: AppColors.textMuted(context), height: 1.4),
         ),
       ],
@@ -180,18 +210,24 @@ class _TenantLoginViewState extends State<TenantLoginView> {
       ],
     );
   }
+}
 
-  Widget _buildSecurityNotice(BuildContext context) {
+/// Çevrimdışı güvence bilgilendirme kutusu (SOLID SRP)
+class _SecurityNoticeCard extends StatelessWidget {
+  const _SecurityNoticeCard();
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: AppColors.badgeBlueBg.withValues(alpha: 0.5),
+        color: AppColors.badgeBlueBgColor(context),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.primary.withValues(alpha: 0.15)),
+        border: Border.all(color: AppColors.primaryCol(context).withValues(alpha: 0.15)),
       ),
       child: Row(
         children: [
-          const Icon(Icons.shield_outlined, size: 20, color: AppColors.primary),
+          Icon(Icons.shield_outlined, size: 20, color: AppColors.primaryCol(context)),
           const SizedBox(width: 10),
           Expanded(
             child: Text(
@@ -202,5 +238,29 @@ class _TenantLoginViewState extends State<TenantLoginView> {
         ],
       ),
     );
+  }
+}
+
+/// Kiracı Giriş Ekranı (AuthLoginView için tip korumalı sarmalayıcı)
+class TenantLoginView extends StatelessWidget {
+  final Function(String role, String name) onAuthenticated;
+
+  const TenantLoginView({super.key, required this.onAuthenticated});
+
+  @override
+  Widget build(BuildContext context) {
+    return AuthLoginView(role: AuthRole.tenant, onAuthenticated: onAuthenticated);
+  }
+}
+
+/// Ev Sahibi Giriş Ekranı (AuthLoginView için tip korumalı sarmalayıcı)
+class LandlordLoginView extends StatelessWidget {
+  final Function(String role, String name) onAuthenticated;
+
+  const LandlordLoginView({super.key, required this.onAuthenticated});
+
+  @override
+  Widget build(BuildContext context) {
+    return AuthLoginView(role: AuthRole.landlord, onAuthenticated: onAuthenticated);
   }
 }

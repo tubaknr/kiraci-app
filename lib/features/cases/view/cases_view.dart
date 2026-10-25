@@ -7,10 +7,8 @@ import '../controller/case_list_controller.dart';
 import '../models/case_model.dart';
 import '../widget/case_item_card.dart';
 import '../widget/cases_app_bar.dart';
-import '../widget/cases_empty_state.dart';
 import '../widget/cases_filter_bar.dart';
-import '../widget/cases_integrity_banner.dart';
-import '../widget/cases_metrics_overview.dart';
+import '../widget/cases_overview_cards.dart';
 import 'case_create_view.dart';
 
 /// Dosyalarım & Kiralık Mülk Delil Kasaları Ekranı (Sümeyye - T07 - Stitch UI)

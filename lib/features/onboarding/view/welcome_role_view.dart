@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../widget/onboarding_policy_modal.dart';
-import '../widget/welcome_hero_logo.dart';
-import '../widget/welcome_role_buttons.dart';
-import 'landlord_login_view.dart';
-import 'tenant_login_view.dart';
+import '../widget/welcome_role_widgets.dart';
+import 'auth_login_view.dart';
 
 /// Uygulama Karşılama ve Rol Seçim Ekranı (Sümeyye - SOLID SRP)
 /// Kullanıcı isteğine göre: Logo + Altında Açıklayıcı Metin + Yan yana iki giriş butonu

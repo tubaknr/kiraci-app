@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:saferenthouse/features/onboarding/view/landlord_login_view.dart';
-import 'package:saferenthouse/features/onboarding/view/landlord_register_view.dart';
-import 'package:saferenthouse/features/onboarding/view/tenant_login_view.dart';
-import 'package:saferenthouse/features/onboarding/view/tenant_register_view.dart';
+import 'package:saferenthouse/features/onboarding/view/auth_login_view.dart';
+import 'package:saferenthouse/features/onboarding/view/auth_register_view.dart';
 import 'package:saferenthouse/features/onboarding/view/welcome_role_view.dart';
 
 void main() {
