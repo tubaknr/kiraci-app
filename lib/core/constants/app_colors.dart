@@ -34,6 +34,16 @@ class AppColors {
   static const Color darkTextSecondary = Color(0xFF94A3B8);
   static const Color darkTextHint = Color(0xFF64748B);
 
+  // Rozet ve Kart Arka Plan Renkleri (Stitch Tasarım Sistemi)
+  static const Color badgeGreenBg = Color(0xFFDCFCE7);
+  static const Color badgeGreenText = Color(0xFF15803D);
+  static const Color badgeBlueBg = Color(0xFFEFF6FF);
+  static const Color badgeBlueText = Color(0xFF1E40AF);
+  static const Color badgeAmberBg = Color(0xFFFEF3C7);
+  static const Color badgeAmberText = Color(0xFFB45309);
+  static const Color badgeIndigoBg = Color(0xFFEEF2FF);
+  static const Color badgeIndigoText = Color(0xFF4338CA);
+
   // Geriye dönük uyumluluk için genel aliaslar
   static const Color background = lightBackground;
   static const Color surface = lightSurface;
