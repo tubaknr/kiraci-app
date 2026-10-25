@@ -72,7 +72,7 @@ class _CasesViewState extends State<CasesView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.lightBackground,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: CasesAppBar(onRefresh: () => widget.controller.loadCases()),
       body: ValueListenableBuilder<ViewStatus>(
         valueListenable: widget.controller.status,

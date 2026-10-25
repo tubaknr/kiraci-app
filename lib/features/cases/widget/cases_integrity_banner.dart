@@ -18,7 +18,7 @@ class CasesIntegrityBanner extends StatelessWidget {
         children: [
           _buildLiveVaultBadge(),
           const SizedBox(height: 10),
-          _buildVerificationCard(),
+          _buildVerificationCard(context),
         ],
       ),
     );
@@ -47,13 +47,13 @@ class CasesIntegrityBanner extends StatelessWidget {
     );
   }
 
-  Widget _buildVerificationCard() {
+  Widget _buildVerificationCard(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.cardBg(context),
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: AppColors.lightBorder),
+        border: Border.all(color: AppColors.borderCol(context)),
         boxShadow: const [
           BoxShadow(
             color: Color(0x05000000),
@@ -85,12 +85,12 @@ class CasesIntegrityBanner extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
+                    Text(
                       'Kriptografik Defter Doğrulandı',
                       style: TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.bold,
-                        color: AppColors.lightTextPrimary,
+                        color: AppColors.textMain(context),
                       ),
                     ),
                     Container(
@@ -113,9 +113,9 @@ class CasesIntegrityBanner extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text(
                   'Bütünlük kontrolü başarılı: $totalRecords adet SHA-256 özeti müdahale edilemez defter ile eşleşiyor.',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 11,
-                    color: AppColors.lightTextSecondary,
+                    color: AppColors.textMuted(context),
                     height: 1.35,
                   ),
                 ),

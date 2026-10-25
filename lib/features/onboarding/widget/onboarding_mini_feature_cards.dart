@@ -61,9 +61,9 @@ class _MiniCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.cardBg(context),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.lightBorder),
+        border: Border.all(color: AppColors.borderCol(context)),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -72,19 +72,20 @@ class _MiniCard extends StatelessWidget {
           const SizedBox(height: 6),
           Text(
             title,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 11,
               fontWeight: FontWeight.bold,
               letterSpacing: -0.2,
+              color: AppColors.textMain(context),
             ),
           ),
           const SizedBox(height: 2),
           Text(
             subtitle,
             textAlign: TextAlign.center,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 9,
-              color: AppColors.lightTextSecondary,
+              color: AppColors.textMuted(context),
             ),
           ),
         ],

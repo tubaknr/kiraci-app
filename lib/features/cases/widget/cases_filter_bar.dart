@@ -22,52 +22,53 @@ class CasesFilterBar extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: Column(
         children: [
-          _buildSearchField(),
+          _buildSearchField(context),
           const SizedBox(height: 10),
-          _buildFilterChips(),
+          _buildFilterChips(context),
         ],
       ),
     );
   }
 
-  Widget _buildSearchField() {
+  Widget _buildSearchField(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.cardBg(context),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.lightBorder),
+        border: Border.all(color: AppColors.borderCol(context)),
       ),
       child: TextField(
         onChanged: onSearchChanged,
-        decoration: const InputDecoration(
+        style: TextStyle(color: AppColors.textMain(context)),
+        decoration: InputDecoration(
           hintText: 'Adres, yıl veya duruma göre ara...',
-          hintStyle: TextStyle(fontSize: 12, color: AppColors.lightTextHint),
-          prefixIcon: Icon(Icons.search, size: 20, color: AppColors.lightTextSecondary),
+          hintStyle: TextStyle(fontSize: 12, color: AppColors.textMuted(context)),
+          prefixIcon: Icon(Icons.search, size: 20, color: AppColors.textMuted(context)),
           border: InputBorder.none,
           enabledBorder: InputBorder.none,
           focusedBorder: InputBorder.none,
-          contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 14),
+          contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 14),
         ),
       ),
     );
   }
 
-  Widget _buildFilterChips() {
+  Widget _buildFilterChips(BuildContext context) {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
         children: [
-          _buildChip(0, 'Tüm Dosyalar ($totalCount)'),
+          _buildChip(context, 0, 'Tüm Dosyalar ($totalCount)'),
           const SizedBox(width: 8),
-          _buildChip(1, 'Kiracı Dosyaları'),
+          _buildChip(context, 1, 'Kiracı Dosyaları'),
           const SizedBox(width: 8),
-          _buildChip(2, 'Çözülen İhtilaflar'),
+          _buildChip(context, 2, 'Çözülen İhtilaflar'),
         ],
       ),
     );
   }
 
-  Widget _buildChip(int index, String label) {
+  Widget _buildChip(BuildContext context, int index, String label) {
     final bool isSelected = selectedFilter == index;
 
     return GestureDetector(
@@ -75,10 +76,10 @@ class CasesFilterBar extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.primary : Colors.white,
+          color: isSelected ? AppColors.primary : AppColors.cardBg(context),
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: isSelected ? AppColors.primary : AppColors.lightBorder,
+            color: isSelected ? AppColors.primary : AppColors.borderCol(context),
           ),
         ),
         child: Text(
@@ -86,7 +87,7 @@ class CasesFilterBar extends StatelessWidget {
           style: TextStyle(
             fontSize: 11,
             fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
-            color: isSelected ? Colors.white : AppColors.lightTextPrimary,
+            color: isSelected ? Colors.white : AppColors.textMain(context),
           ),
         ),
       ),

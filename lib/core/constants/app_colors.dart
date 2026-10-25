@@ -48,4 +48,35 @@ class AppColors {
   static const Color background = lightBackground;
   static const Color surface = lightSurface;
   static const Color textPrimary = lightTextPrimary;
+
+  // Tema Duyarlı Renk Yardımcıları (SOLID & Açık/Koyu Tema Uyumu)
+  static Color cardBg(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark
+        ? darkCard
+        : lightCard;
+  }
+
+  static Color borderCol(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark
+        ? darkBorder
+        : lightBorder;
+  }
+
+  static Color textMain(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark
+        ? darkTextPrimary
+        : lightTextPrimary;
+  }
+
+  static Color textMuted(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark
+        ? darkTextSecondary
+        : lightTextSecondary;
+  }
+
+  static Color badgeBg(BuildContext context, Color lightBg, Color darkBg) {
+    return Theme.of(context).brightness == Brightness.dark
+        ? darkBg
+        : lightBg;
+  }
 }

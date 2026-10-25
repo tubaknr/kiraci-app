@@ -40,12 +40,14 @@ class OnboardingPrincipleCard extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: item.isFeatured ? AppColors.badgeBlueBg.withValues(alpha: 0.4) : Colors.white,
+        color: item.isFeatured
+            ? AppColors.badgeBlueBg.withValues(alpha: 0.4)
+            : AppColors.cardBg(context),
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
           color: item.isFeatured
               ? AppColors.primary.withValues(alpha: 0.3)
-              : AppColors.lightBorder,
+              : AppColors.borderCol(context),
           width: item.isFeatured ? 1.2 : 1.0,
         ),
       ),
@@ -54,7 +56,7 @@ class OnboardingPrincipleCard extends StatelessWidget {
         children: [
           _buildHeaderRow(),
           const SizedBox(height: 8),
-          _buildDescription(),
+          _buildDescription(context),
         ],
       ),
     );
@@ -116,14 +118,14 @@ class OnboardingPrincipleCard extends StatelessWidget {
     );
   }
 
-  Widget _buildDescription() {
+  Widget _buildDescription(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 46.0),
       child: Text(
         item.description,
-        style: const TextStyle(
+        style: TextStyle(
           fontSize: 12,
-          color: AppColors.lightTextSecondary,
+          color: AppColors.textMuted(context),
           height: 1.45,
         ),
       ),

@@ -23,15 +23,15 @@ class TimelineCardItem extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          _buildTimelineIndicator(),
+          _buildTimelineIndicator(context),
           const SizedBox(width: 10),
-          Expanded(child: _buildCardContent()),
+          Expanded(child: _buildCardContent(context)),
         ],
       ),
     );
   }
 
-  Widget _buildTimelineIndicator() {
+  Widget _buildTimelineIndicator(BuildContext context) {
     final bool isLast = index == totalCount - 1;
     final bool isAnomaly = record.clockAnomaly;
 
@@ -44,7 +44,7 @@ class TimelineCardItem extends StatelessWidget {
             height: 14,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: Colors.white,
+              color: AppColors.cardBg(context),
               border: Border.all(
                 color: isAnomaly ? AppColors.warning : AppColors.secondary,
                 width: 3,
@@ -55,7 +55,7 @@ class TimelineCardItem extends StatelessWidget {
             Expanded(
               child: Container(
                 width: 2,
-                color: AppColors.lightBorder,
+                color: AppColors.borderCol(context),
               ),
             ),
         ],
@@ -63,7 +63,7 @@ class TimelineCardItem extends StatelessWidget {
     );
   }
 
-  Widget _buildCardContent() {
+  Widget _buildCardContent(BuildContext context) {
     final String dateStr = record.recordedAt.toLocal().toString().substring(0, 16);
     final String blockNum = (totalCount - index).toString().padLeft(2, '0');
     final bool isGenesis = index == totalCount - 1;
@@ -71,9 +71,9 @@ class TimelineCardItem extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.cardBg(context),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.lightBorder),
+        border: Border.all(color: AppColors.borderCol(context)),
         boxShadow: const [
           BoxShadow(
             color: Color(0x06000000),
@@ -94,11 +94,11 @@ class TimelineCardItem extends StatelessWidget {
               children: [
                 _buildCardHeader(dateStr, blockNum, isGenesis),
                 const SizedBox(height: 10),
-                _buildCardTitleAndCategory(),
+                _buildCardTitleAndCategory(context),
                 const SizedBox(height: 6),
-                _buildDescriptionText(),
+                _buildDescriptionText(context),
                 const SizedBox(height: 10),
-                _buildSpecializedPreview(),
+                _buildSpecializedPreview(context),
                 const SizedBox(height: 10),
                 _buildIntegrityFooter(isGenesis),
               ],
@@ -142,7 +142,7 @@ class TimelineCardItem extends StatelessWidget {
     );
   }
 
-  Widget _buildCardTitleAndCategory() {
+  Widget _buildCardTitleAndCategory(BuildContext context) {
     return Row(
       children: [
         Container(
@@ -169,7 +169,7 @@ class TimelineCardItem extends StatelessWidget {
               ),
               Text(
                 record.title,
-                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.textMain(context)),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -180,24 +180,24 @@ class TimelineCardItem extends StatelessWidget {
     );
   }
 
-  Widget _buildDescriptionText() {
+  Widget _buildDescriptionText(BuildContext context) {
     final String text = record.note != null && record.note!.isNotEmpty
         ? record.note!
         : 'Doğrulanmış ${record.type} kaydı oluşturuldu ve SHA-256 zincirine eklendi.';
 
     return Text(
       text,
-      style: const TextStyle(fontSize: 12, color: AppColors.lightTextSecondary, height: 1.4),
+      style: TextStyle(fontSize: 12, color: AppColors.textMuted(context), height: 1.4),
       maxLines: 2,
       overflow: TextOverflow.ellipsis,
     );
   }
 
-  Widget _buildSpecializedPreview() {
+  Widget _buildSpecializedPreview(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: AppColors.badgeBlueBg.withValues(alpha: 0.4),
+        color: AppColors.badgeBlueBg.withValues(alpha: 0.3),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Row(
@@ -207,11 +207,11 @@ class TimelineCardItem extends StatelessWidget {
           Expanded(
             child: Text(
               record.filePath ?? 'Doğrulanabilir Kriptografik Veri',
-              style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: AppColors.lightTextPrimary),
+              style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: AppColors.textMain(context)),
               overflow: TextOverflow.ellipsis,
             ),
           ),
-          const Icon(Icons.chevron_right, size: 14, color: AppColors.lightTextSecondary),
+          Icon(Icons.chevron_right, size: 14, color: AppColors.textMuted(context)),
         ],
       ),
     );

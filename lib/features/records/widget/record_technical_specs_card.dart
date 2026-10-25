@@ -21,16 +21,16 @@ class RecordTechnicalSpecsCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.cardBg(context),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.lightBorder),
+        border: Border.all(color: AppColors.borderCol(context)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildCardHeader(),
           const SizedBox(height: 12),
-          _buildSubjectBox(),
+          _buildSubjectBox(context),
           const SizedBox(height: 10),
           _buildTwoByTwoGrid(),
           const SizedBox(height: 12),
@@ -59,7 +59,7 @@ class RecordTechnicalSpecsCard extends StatelessWidget {
     );
   }
 
-  Widget _buildSubjectBox() {
+  Widget _buildSubjectBox(BuildContext context) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(10),
@@ -70,19 +70,19 @@ class RecordTechnicalSpecsCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'KAYIT KONUSU',
-            style: TextStyle(fontSize: 9, fontWeight: FontWeight.w700, color: AppColors.lightTextSecondary),
+            style: TextStyle(fontSize: 9, fontWeight: FontWeight.w700, color: AppColors.textMuted(context)),
           ),
           const SizedBox(height: 2),
           Text(
             record.title,
-            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.lightTextPrimary),
+            style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.textMain(context)),
           ),
           const SizedBox(height: 2),
           Text(
             'Tür: ${_getTypeLabel(record.type)}',
-            style: const TextStyle(fontSize: 11, color: AppColors.lightTextSecondary),
+            style: TextStyle(fontSize: 11, color: AppColors.textMuted(context)),
           ),
         ],
       ),
@@ -170,21 +170,21 @@ class RecordTechnicalSpecsCard extends StatelessWidget {
           const SizedBox(height: 6),
           SelectableText(
             record.contentHash,
-            style: const TextStyle(fontFamily: 'monospace', fontSize: 11, fontWeight: FontWeight.w600, color: AppColors.lightTextPrimary),
+            style: TextStyle(fontFamily: 'monospace', fontSize: 11, fontWeight: FontWeight.w600, color: AppColors.textMain(context)),
           ),
           const Divider(height: 16),
-          _buildHashSnippet('Önceki Blok:', record.prevChainHash),
+          _buildHashSnippet(context, 'Önceki Blok:', record.prevChainHash),
           const SizedBox(height: 4),
-          _buildHashSnippet('Mevcut Düğüm:', record.chainHash),
+          _buildHashSnippet(context, 'Mevcut Düğüm:', record.chainHash),
         ],
       ),
     );
   }
 
-  Widget _buildHashSnippet(String label, String hash) {
+  Widget _buildHashSnippet(BuildContext context, String label, String hash) {
     return Row(
       children: [
-        Text(label, style: const TextStyle(fontSize: 10, color: AppColors.lightTextSecondary)),
+        Text(label, style: TextStyle(fontSize: 10, color: AppColors.textMuted(context))),
         const SizedBox(width: 6),
         Expanded(
           child: SelectableText(
@@ -253,17 +253,17 @@ class _SpecTile extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.cardBg(context),
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: AppColors.lightBorder),
+        border: Border.all(color: AppColors.borderCol(context)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title, style: const TextStyle(fontSize: 9, color: AppColors.lightTextSecondary)),
+          Text(title, style: TextStyle(fontSize: 9, color: AppColors.textMuted(context))),
           const SizedBox(height: 2),
-          Text(value, style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold), maxLines: 1, overflow: TextOverflow.ellipsis),
-          Text(subtitle, style: const TextStyle(fontSize: 9, color: AppColors.lightTextHint), maxLines: 1, overflow: TextOverflow.ellipsis),
+          Text(value, style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.textMain(context)), maxLines: 1, overflow: TextOverflow.ellipsis),
+          Text(subtitle, style: TextStyle(fontSize: 9, color: AppColors.textMuted(context)), maxLines: 1, overflow: TextOverflow.ellipsis),
         ],
       ),
     );

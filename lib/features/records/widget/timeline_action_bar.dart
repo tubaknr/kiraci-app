@@ -26,7 +26,7 @@ class TimelineActionBar extends StatelessWidget {
         children: [
           _buildActionButtonsRow(),
           const SizedBox(height: 10),
-          _buildFilterChipsRow(),
+          _buildFilterChipsRow(context),
         ],
       ),
     );
@@ -75,26 +75,26 @@ class TimelineActionBar extends StatelessWidget {
     );
   }
 
-  Widget _buildFilterChipsRow() {
+  Widget _buildFilterChipsRow(BuildContext context) {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
         children: [
-          _buildChip(0, 'Tümü', '$totalCount'),
+          _buildChip(context, 0, 'Tümü', '$totalCount'),
           const SizedBox(width: 8),
-          _buildChip(1, 'Sözleşmeler', null),
+          _buildChip(context, 1, 'Sözleşmeler', null),
           const SizedBox(width: 8),
-          _buildChip(2, 'Ödemeler', null),
+          _buildChip(context, 2, 'Ödemeler', null),
           const SizedBox(width: 8),
-          _buildChip(3, 'Tadilat & Foto', null),
+          _buildChip(context, 3, 'Tadilat & Foto', null),
           const SizedBox(width: 8),
-          _buildChip(4, 'Yazışmalar', null),
+          _buildChip(context, 4, 'Yazışmalar', null),
         ],
       ),
     );
   }
 
-  Widget _buildChip(int index, String label, String? countBadge) {
+  Widget _buildChip(BuildContext context, int index, String label, String? countBadge) {
     final bool isSelected = selectedFilter == index;
 
     return GestureDetector(
@@ -102,10 +102,10 @@ class TimelineActionBar extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.primary : Colors.white,
+          color: isSelected ? AppColors.primary : AppColors.cardBg(context),
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: isSelected ? AppColors.primary : AppColors.lightBorder,
+            color: isSelected ? AppColors.primary : AppColors.borderCol(context),
           ),
         ),
         child: Row(
@@ -116,7 +116,7 @@ class TimelineActionBar extends StatelessWidget {
               style: TextStyle(
                 fontSize: 11,
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
-                color: isSelected ? Colors.white : AppColors.lightTextPrimary,
+                color: isSelected ? Colors.white : AppColors.textMain(context),
               ),
             ),
             if (countBadge != null) ...[

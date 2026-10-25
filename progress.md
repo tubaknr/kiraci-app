@@ -6,8 +6,8 @@
 ## Şu An
 | Alan | Durum |
 |---|---|
-| Aktif görev | Projedeki tüm görevler başarıyla tamamlandı (Tuba: 25 Puan, Sümeyye: 23 Puan) |
-| Aktif kişi | Tamamlandı |
+| Aktif görev | Karşılama, Kiracı & Kiraya Veren Giriş/Hesap Açma ekranları ve tema adaptasyonu tamamlandı |
+| Aktif kişi | Sümeyye |
 | Engel | Yok |
 | Son güncelleme | 25.10.2026 |
 

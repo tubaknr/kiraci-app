@@ -76,9 +76,9 @@ class _MetricCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.cardBg(context),
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: AppColors.lightBorder),
+        border: Border.all(color: AppColors.borderCol(context)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -89,10 +89,10 @@ class _MetricCard extends StatelessWidget {
               Expanded(
                 child: Text(
                   title,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 10,
                     fontWeight: FontWeight.w600,
-                    color: AppColors.lightTextSecondary,
+                    color: AppColors.textMuted(context),
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -111,16 +111,16 @@ class _MetricCard extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w800,
-                  color: valueColor ?? AppColors.lightTextPrimary,
+                  color: valueColor ?? AppColors.textMain(context),
                 ),
               ),
               const SizedBox(width: 4),
               Expanded(
                 child: Text(
                   subtitle,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 9,
-                    color: AppColors.lightTextSecondary,
+                    color: AppColors.textMuted(context),
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,

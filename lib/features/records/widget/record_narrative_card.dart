@@ -17,16 +17,16 @@ class RecordNarrativeCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.cardBg(context),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.lightBorder),
+        border: Border.all(color: AppColors.borderCol(context)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildHeader(),
           const SizedBox(height: 10),
-          _buildNoteBubble(),
+          _buildNoteBubble(context),
           const SizedBox(height: 10),
           _buildAttachmentTile(),
         ],
@@ -47,32 +47,32 @@ class RecordNarrativeCard extends StatelessWidget {
     );
   }
 
-  Widget _buildNoteBubble() {
+  Widget _buildNoteBubble(BuildContext context) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: AppColors.badgeBlueBg.withValues(alpha: 0.3),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.lightBorder),
+        border: Border.all(color: AppColors.borderCol(context)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'Kullanıcı Tarafından Kaydedilen Açıklama / Not:',
             style: TextStyle(
               fontSize: 10,
               fontWeight: FontWeight.w700,
-              color: AppColors.lightTextSecondary,
+              color: AppColors.textMuted(context),
             ),
           ),
           const SizedBox(height: 6),
           Text(
             record.note!,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 12,
-              color: AppColors.lightTextPrimary,
+              color: AppColors.textMain(context),
               height: 1.45,
             ),
           ),

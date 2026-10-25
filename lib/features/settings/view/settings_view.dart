@@ -9,11 +9,13 @@ import '../../lock/controller/lock_controller.dart';
 class SettingsView extends StatefulWidget {
   final LockController? lockController;
   final VoidCallback? onShowOnboarding;
+  final VoidCallback? onLogout;
 
   const SettingsView({
     super.key,
     this.lockController,
     this.onShowOnboarding,
+    this.onLogout,
   });
 
   @override
@@ -120,6 +122,8 @@ class _SettingsViewState extends State<SettingsView> {
           _buildDisclaimerCard(),
           const SizedBox(height: 16),
           _buildOnboardingButton(),
+          const SizedBox(height: 12),
+          _buildLogoutButton(),
         ],
       ),
     );
@@ -190,7 +194,7 @@ class _SettingsViewState extends State<SettingsView> {
                             isConfigured
                                 ? 'PIN kilidi devrede (SHA-256 tuzlu özet)'
                                 : 'Kilit aktif değil',
-                            style: const TextStyle(fontSize: 12, color: AppColors.lightTextSecondary),
+                            style: TextStyle(fontSize: 12, color: AppColors.textMuted(context)),
                           ),
                         ],
                       ),
@@ -235,22 +239,22 @@ class _SettingsViewState extends State<SettingsView> {
   }
 
   Widget _buildDisclaimerCard() {
-    return const Card(
+    return Card(
       child: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            const Text(
               'Dürüst Sınırlar & Güvenlik Politikası',
               style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Text(
               '• Sunucusuz Çevrimdışı: Verileriniz yalnızca bu cihazdaki SQLite tablosunda saklanır.\n'
               '• Saat Güvenilirliği: Zaman damgaları cihaz saatini referans alır. Saat geriye alma tespit edilir.\n'
               '• Delil Kabulü: Üretilen kayıtlar doğrulanabilir delildir; hukuki bağlayıcılık mahkeme takdirindedir.',
-              style: TextStyle(fontSize: 12, height: 1.5, color: AppColors.lightTextSecondary),
+              style: TextStyle(fontSize: 12, height: 1.5, color: AppColors.textMuted(context)),
             ),
           ],
         ),
@@ -259,10 +263,26 @@ class _SettingsViewState extends State<SettingsView> {
   }
 
   Widget _buildOnboardingButton() {
-    return ElevatedButton.icon(
+    return OutlinedButton.icon(
       onPressed: widget.onShowOnboarding,
       icon: const Icon(Icons.info_outline),
-      label: const Text('Aydınlatma & KVKK Metnini Yeniden Aç'),
+      label: const Text('Aydınlatma & KVKK Metnini Aç'),
+    );
+  }
+
+  Widget _buildLogoutButton() {
+    if (widget.onLogout == null) return const SizedBox.shrink();
+    return Padding(
+      padding: const EdgeInsets.only(top: 8.0),
+      child: ElevatedButton.icon(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: AppColors.error,
+          foregroundColor: Colors.white,
+        ),
+        onPressed: widget.onLogout,
+        icon: const Icon(Icons.logout_rounded),
+        label: const Text('Çıkış Yap / Rol Seçim Ekranına Dön'),
+      ),
     );
   }
 }

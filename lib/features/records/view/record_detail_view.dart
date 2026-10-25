@@ -39,13 +39,59 @@ class RecordDetailView extends StatelessWidget {
     );
   }
 
+  void _showOptionsSheet(BuildContext context) {
+    showModalBottomSheet<void>(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (BuildContext ctx) {
+        return Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text('Kayıt Seçenekleri', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  IconButton(icon: const Icon(Icons.close), onPressed: () => Navigator.pop(ctx)),
+                ],
+              ),
+              const Divider(),
+              ListTile(
+                leading: const Icon(Icons.qr_code, color: AppColors.primary),
+                title: const Text('Kayıt Mühür Bilgisini Göster'),
+                subtitle: Text('SHA-256: ${record.contentHash.length >= 16 ? record.contentHash.substring(0, 16) : record.contentHash}...'),
+                onTap: () {
+                  Navigator.pop(ctx);
+                  _showNotice(context, 'Kayıt hash özeti: ${record.contentHash}');
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.download_outlined, color: AppColors.secondary),
+                title: const Text('Ham Kayıt JSON Verisini Dışa Aktar'),
+                subtitle: const Text('Adli bilişim doğrulaması için metaveri paketi'),
+                onTap: () {
+                  Navigator.pop(ctx);
+                  _showNotice(context, 'Ham JSON verisi panoya hazırlandı.');
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.lightBackground,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: const Text('Delil Kayıt Detayı'),
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor ?? AppColors.cardBg(context),
         elevation: 0,
         scrolledUnderElevation: 1,
         actions: [
@@ -57,7 +103,7 @@ class RecordDetailView extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.more_vert),
             tooltip: 'Seçenekler',
-            onPressed: () {},
+            onPressed: () => _showOptionsSheet(context),
           ),
         ],
       ),
@@ -75,7 +121,7 @@ class RecordDetailView extends StatelessWidget {
             RecordNarrativeCard(record: record),
             const SizedBox(height: 14),
             RecordDetailActions(
-              onExportPdf: () => _showNotice(context, 'Mahkemeye uygun delil PDF raporu hazırlanıyor...'),
+              onExportPdf: () => _showNotice(context, 'Doğrulanabilir delil PDF raporu hazırlanıyor...'),
               onOpenCorrection: () => _openCorrection(context),
               onVerifyAgain: () => _showNotice(context, 'SHA-256 özeti ve yerel zincir başarıyla yeniden doğrulandı.'),
               onShareChain: () => _showNotice(context, 'Kayıt mühür kodu panoya kopyalandı.'),

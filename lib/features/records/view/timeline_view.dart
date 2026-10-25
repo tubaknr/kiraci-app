@@ -97,7 +97,7 @@ class _TimelineViewState extends State<TimelineView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.lightBackground,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: _buildAppBar(),
       body: _loading
           ? const Center(child: CircularProgressIndicator())
@@ -109,27 +109,27 @@ class _TimelineViewState extends State<TimelineView> {
 
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).appBarTheme.backgroundColor ?? AppColors.cardBg(context),
       elevation: 0,
       scrolledUnderElevation: 1,
-      title: const Row(
+      title: Row(
         children: [
-          CircleAvatar(
+          const CircleAvatar(
             radius: 15,
             backgroundColor: AppColors.badgeBlueBg,
             child: Icon(Icons.timeline_rounded, size: 16, color: AppColors.primary),
           ),
-          SizedBox(width: 8),
+          const SizedBox(width: 8),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 'SafeRentHouse',
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.lightTextPrimary),
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.textMain(context)),
               ),
               Text(
                 'Zaman Tüneli',
-                style: TextStyle(fontSize: 10, color: AppColors.lightTextSecondary),
+                style: TextStyle(fontSize: 10, color: AppColors.textMuted(context)),
               ),
             ],
           ),
@@ -147,7 +147,7 @@ class _TimelineViewState extends State<TimelineView> {
             IconButton(
               tooltip: 'Bildirimler',
               icon: const Icon(Icons.notifications_none_rounded, size: 22),
-              onPressed: () {},
+              onPressed: () => _showNotificationSheet(context),
             ),
             const Positioned(
               top: 12,
@@ -156,15 +156,95 @@ class _TimelineViewState extends State<TimelineView> {
             ),
           ],
         ),
-        const Padding(
-          padding: EdgeInsets.only(right: 14.0, left: 4.0),
-          child: CircleAvatar(
-            radius: 15,
-            backgroundColor: AppColors.badgeIndigoBg,
-            child: Icon(Icons.person, size: 18, color: AppColors.primary),
+        Padding(
+          padding: const EdgeInsets.only(right: 14.0, left: 4.0),
+          child: InkWell(
+            borderRadius: BorderRadius.circular(15),
+            onTap: () => _showProfileSheet(context),
+            child: const CircleAvatar(
+              radius: 15,
+              backgroundColor: AppColors.badgeIndigoBg,
+              child: Icon(Icons.person, size: 18, color: AppColors.primary),
+            ),
           ),
         ),
       ],
+    );
+  }
+
+  void _showNotificationSheet(BuildContext context) {
+    showModalBottomSheet<void>(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (BuildContext ctx) {
+        return Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text('Zaman Tüneli Bildirimleri', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  IconButton(icon: const Icon(Icons.close), onPressed: () => Navigator.pop(ctx)),
+                ],
+              ),
+              const Divider(),
+              const ListTile(
+                leading: CircleAvatar(backgroundColor: AppColors.badgeGreenBg, child: Icon(Icons.link, color: AppColors.success)),
+                title: Text('Zincir Bağlantısı Aktif'),
+                subtitle: Text('Tüm bloklar geriye dönük hash kontrolünden başarıyla geçmiştir.'),
+                dense: true,
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void _showProfileSheet(BuildContext context) {
+    showModalBottomSheet<void>(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (BuildContext ctx) {
+        return Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const CircleAvatar(
+                radius: 32,
+                backgroundColor: AppColors.primary,
+                child: Icon(Icons.person, size: 36, color: Colors.white),
+              ),
+              const SizedBox(height: 12),
+              const Text('Kullanıcı & Kasa Profili', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              Text('Çevrimdışı Bütünlük Korumalı Kasa', style: TextStyle(fontSize: 12, color: AppColors.textMuted(context))),
+              const SizedBox(height: 16),
+              const Divider(),
+              ListTile(
+                leading: const Icon(Icons.vpn_key_outlined, color: AppColors.primary),
+                title: const Text('Aktif Kasa ID'),
+                subtitle: Text('#${widget.caseId}'),
+              ),
+              const SizedBox(height: 10),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () => Navigator.pop(ctx),
+                  child: const Text('Tamam'),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
@@ -227,10 +307,10 @@ class _TimelineViewState extends State<TimelineView> {
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
-            const Text(
+            Text(
               'Eklenen tüm belgeler, sözleşmeler ve tutanaklar tarih sırasıyla burada listelenir.',
               textAlign: TextAlign.center,
-              style: TextStyle(color: AppColors.lightTextSecondary, height: 1.4),
+              style: TextStyle(color: AppColors.textMuted(context), height: 1.4),
             ),
             const SizedBox(height: 20),
             ElevatedButton.icon(

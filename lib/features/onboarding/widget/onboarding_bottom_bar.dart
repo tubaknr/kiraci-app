@@ -24,7 +24,7 @@ class OnboardingBottomBar extends StatelessWidget {
           const SizedBox(height: 14),
           _buildSubmitButton(),
           const SizedBox(height: 12),
-          _buildPolicyLink(),
+          _buildPolicyLink(context),
         ],
       ),
     );
@@ -43,16 +43,16 @@ class OnboardingBottomBar extends StatelessWidget {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(4),
               ),
-              side: const BorderSide(color: AppColors.lightBorder, width: 1.5),
+              side: BorderSide(color: AppColors.borderCol(context), width: 1.5),
               onChanged: (bool? val) => consentNotifier.value = val ?? false,
             ),
-            const Expanded(
+            Expanded(
               child: Text(
                 'Kriptografik anahtarların bu cihazda tutulduğunu anlıyorum',
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
-                  color: AppColors.lightTextPrimary,
+                  color: AppColors.textMain(context),
                 ),
               ),
             ),
@@ -71,7 +71,7 @@ class OnboardingBottomBar extends StatelessWidget {
           height: 52,
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: isConsented ? AppColors.primary : AppColors.lightBorder,
+              backgroundColor: isConsented ? AppColors.primary : AppColors.borderCol(context),
               foregroundColor: Colors.white,
               elevation: isConsented ? 2 : 0,
               shape: RoundedRectangleBorder(
@@ -96,10 +96,10 @@ class OnboardingBottomBar extends StatelessWidget {
     );
   }
 
-  Widget _buildPolicyLink() {
+  Widget _buildPolicyLink(BuildContext context) {
     return GestureDetector(
       onTap: onOpenPolicy,
-      child: const Row(
+      child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
@@ -107,15 +107,15 @@ class OnboardingBottomBar extends StatelessWidget {
             style: TextStyle(
               fontSize: 11,
               fontWeight: FontWeight.w500,
-              color: AppColors.lightTextSecondary,
+              color: AppColors.textMuted(context),
               decoration: TextDecoration.underline,
             ),
           ),
-          SizedBox(width: 4),
+          const SizedBox(width: 4),
           Icon(
             Icons.open_in_new_rounded,
             size: 12,
-            color: AppColors.lightTextSecondary,
+            color: AppColors.textMuted(context),
           ),
         ],
       ),

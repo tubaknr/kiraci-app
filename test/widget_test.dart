@@ -6,8 +6,16 @@ void main() {
   sqfliteFfiInit();
   databaseFactory = databaseFactoryFfi;
 
-  testWidgets('Uygulama baslangic widget testi', (WidgetTester tester) async {
-    await tester.pumpWidget(const SafeRentHouseApp());
+  testWidgets('Uygulama baslangic widget testi - Karsilama ve Rol Girisi', (WidgetTester tester) async {
+    await tester.pumpWidget(const SafeRentHouseApp(initialAuthenticated: false));
+    await tester.pump();
+    expect(find.text('SafeRentHouse'), findsWidgets);
+    expect(find.text('Kiracı Girişi'), findsOneWidget);
+    expect(find.text('Kiraya Veren Girişi'), findsOneWidget);
+  });
+
+  testWidgets('Uygulama baslangic widget testi - Kimlik Dogrulanmis Ana Ekran', (WidgetTester tester) async {
+    await tester.pumpWidget(const SafeRentHouseApp(initialAuthenticated: true));
     await tester.pump();
     expect(find.text('Dosyalarım'), findsWidgets);
   });
