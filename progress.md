@@ -6,7 +6,7 @@
 ## Şu An
 | Alan | Durum |
 |---|---|
-| Aktif görev | Karşılama, Kiracı & Kiraya Veren Giriş/Hesap Açma ekranları ve tema adaptasyonu tamamlandı |
+| Aktif görev | Koyu ve Açık tema kontrast/renk uyumu tüm ekran ve bileşenlerde tamamlandı |
 | Aktif kişi | Sümeyye |
 | Engel | Yok |
 | Son güncelleme | 25.10.2026 |
