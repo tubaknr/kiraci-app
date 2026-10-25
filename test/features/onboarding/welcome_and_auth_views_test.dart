@@ -105,5 +105,46 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text('Kiraya Veren Portalı'), findsOneWidget);
     });
+
+    testWidgets('TenantLoginView calls onAuthenticated and pops to root', (WidgetTester tester) async {
+      bool authenticated = false;
+      String authRole = '';
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Builder(
+            builder: (context) => Scaffold(
+              body: ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (context) => TenantLoginView(
+                        onAuthenticated: (role, name) {
+                          authenticated = true;
+                          authRole = role;
+                        },
+                      ),
+                    ),
+                  );
+                },
+                child: const Text('Ana Ekran'),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      await tester.tap(find.text('Ana Ekran'));
+      await tester.pumpAndSettle();
+
+      await tester.enterText(find.byType(TextFormField).at(0), 'ornek@posta.com');
+      await tester.enterText(find.byType(TextFormField).at(1), '1234');
+      await tester.tap(find.text('Kiracı Girişi Yap'));
+      await tester.pumpAndSettle();
+
+      expect(authenticated, isTrue);
+      expect(authRole, 'tenant');
+      expect(find.text('Ana Ekran'), findsOneWidget);
+    });
   });
 }

@@ -53,7 +53,9 @@ class WelcomeRoleView extends StatelessWidget {
                 onTenantSelected: () => _navigateToTenant(context),
                 onLandlordSelected: () => _navigateToLandlord(context),
               ),
-              const SizedBox(height: 32),
+              const SizedBox(height: 24),
+              _buildDirectAccessLink(context),
+              const SizedBox(height: 12),
               _buildPolicyLink(context),
               const SizedBox(height: 20),
               _buildTrustFooter(context),
@@ -85,6 +87,21 @@ class WelcomeRoleView extends StatelessWidget {
           },
         ),
       ],
+    );
+  }
+
+  Widget _buildDirectAccessLink(BuildContext context) {
+    return TextButton.icon(
+      onPressed: () => onAuthenticated('tenant', 'Kiracı'),
+      icon: const Icon(Icons.arrow_forward_rounded, size: 16),
+      label: const Text(
+        'Giriş Yapmadan Doğrudan Kasaya Geç',
+        style: TextStyle(
+          fontSize: 13,
+          fontWeight: FontWeight.bold,
+          color: AppColors.primaryLight,
+        ),
+      ),
     );
   }
 

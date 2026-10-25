@@ -23,7 +23,7 @@ class _TenantLoginViewState extends State<TenantLoginView> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _contactController = TextEditingController();
   final TextEditingController _pinController = TextEditingController();
-  bool _isLoading = false;
+  final bool _isLoading = false;
 
   @override
   void dispose() {
@@ -35,13 +35,30 @@ class _TenantLoginViewState extends State<TenantLoginView> {
   void _handleLogin() {
     if (!_formKey.currentState!.validate()) return;
 
-    setState(() => _isLoading = true);
-    Future.delayed(const Duration(milliseconds: 300), () {
-      if (!mounted) return;
-      setState(() => _isLoading = false);
-      final String displayName = _contactController.text.trim();
-      widget.onAuthenticated('tenant', displayName.isNotEmpty ? displayName : 'Kiracı');
-    });
+    final String displayName = _contactController.text.trim();
+    widget.onAuthenticated('tenant', displayName.isNotEmpty ? displayName : 'Kiracı');
+    if (mounted) {
+      Navigator.of(context, rootNavigator: true).popUntil((route) => route.isFirst);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Giriş başarılı. Hoş geldiniz, ${displayName.isNotEmpty ? displayName : "Kiracı"}!'),
+          backgroundColor: AppColors.success,
+        ),
+      );
+    }
+  }
+
+  void _handleQuickEntry() {
+    widget.onAuthenticated('tenant', 'Kiracı');
+    if (mounted) {
+      Navigator.of(context, rootNavigator: true).popUntil((route) => route.isFirst);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Giriş başarılı. Kiracı kasasına hoş geldiniz!'),
+          backgroundColor: AppColors.success,
+        ),
+      );
+    }
   }
 
   void _openRegister() {
@@ -81,7 +98,15 @@ class _TenantLoginViewState extends State<TenantLoginView> {
                   isLoading: _isLoading,
                   onPressed: _handleLogin,
                 ),
-                const SizedBox(height: 18),
+                const SizedBox(height: 10),
+                Center(
+                  child: TextButton.icon(
+                    onPressed: _handleQuickEntry,
+                    icon: const Icon(Icons.flash_on_rounded, size: 16),
+                    label: const Text('Hızlı Giriş Yap (Demo)'),
+                  ),
+                ),
+                const SizedBox(height: 10),
                 AuthSwitchPrompt(
                   promptText: 'Henüz kiracı hesabınız yok mu?',
                   actionText: 'Hesap Açın',

@@ -26,7 +26,7 @@ class _LandlordRegisterViewState extends State<LandlordRegisterView> {
   final TextEditingController _propertyController = TextEditingController();
   final TextEditingController _pinController = TextEditingController();
   final TextEditingController _pinConfirmController = TextEditingController();
-  bool _isLoading = false;
+  final bool _isLoading = false;
 
   @override
   void dispose() {
@@ -41,20 +41,24 @@ class _LandlordRegisterViewState extends State<LandlordRegisterView> {
   void _handleRegister() {
     if (!_formKey.currentState!.validate()) return;
 
-    if (_pinController.text != _pinConfirmController.text) {
+    if (_pinController.text.trim() != _pinConfirmController.text.trim()) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('PIN kodları birbiriyle eşleşmiyor.')),
       );
       return;
     }
 
-    setState(() => _isLoading = true);
-    Future.delayed(const Duration(milliseconds: 300), () {
-      if (!mounted) return;
-      setState(() => _isLoading = false);
-      final String name = _nameController.text.trim();
-      widget.onAuthenticated('landlord', name.isNotEmpty ? name : 'Ev Sahibi');
-    });
+    final String name = _nameController.text.trim();
+    widget.onAuthenticated('landlord', name.isNotEmpty ? name : 'Ev Sahibi');
+    if (mounted) {
+      Navigator.of(context, rootNavigator: true).popUntil((route) => route.isFirst);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Kiraya veren hesabı oluşturuldu. Hoş geldiniz, ${name.isNotEmpty ? name : "Ev Sahibi"}!'),
+          backgroundColor: AppColors.success,
+        ),
+      );
+    }
   }
 
   void _openLogin() {
@@ -149,14 +153,10 @@ class _LandlordRegisterViewState extends State<LandlordRegisterView> {
         const SizedBox(height: 12),
         AuthTextField(
           controller: _contactController,
-          label: 'E-posta veya Telefon Numarası',
+          label: 'E-posta veya Telefon Numarası (İsteğe Bağlı)',
           hintText: 'ornek@posta.com veya 0555 987 65 43',
           prefixIcon: Icons.contact_mail_outlined,
           keyboardType: TextInputType.emailAddress,
-          validator: (val) {
-            if (val == null || val.trim().isEmpty) return 'Lütfen iletişim bilginizi girin';
-            return null;
-          },
         ),
         const SizedBox(height: 12),
         AuthTextField(
