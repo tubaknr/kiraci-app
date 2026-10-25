@@ -142,6 +142,11 @@ class AppTheme {
         thickness: 1,
         space: 1,
       ),
+      floatingActionButtonTheme: const FloatingActionButtonThemeData(
+        backgroundColor: AppColors.primary,
+        foregroundColor: Colors.white,
+        elevation: 3,
+      ),
     );
   }
 
@@ -263,6 +268,11 @@ class AppTheme {
         color: AppColors.darkBorder,
         thickness: 1,
         space: 1,
+      ),
+      floatingActionButtonTheme: const FloatingActionButtonThemeData(
+        backgroundColor: AppColors.primaryLight,
+        foregroundColor: Colors.white,
+        elevation: 3,
       ),
     );
   }

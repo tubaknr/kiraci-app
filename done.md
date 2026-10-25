@@ -4,6 +4,11 @@
 
 | Tarih | ID | Görev | Kişi | Puan | Branch / Commit |
 |---|---|---|---|---|---|
+| 25.10.2026 | T04-AUTH | Karşılama, Kiracı & Kiraya Veren Girişi / Hesap Açma ekranları, Açık/Koyu tema ve buton düzeltmeleri | Sümeyye | 2 | sumeyye/T04-karsilama-rol-girisi |
+| 25.10.2026 | T10-UI | Stitch tasarımı ile Zaman Tüneli & Kronolojik Delil İzi ekranı yenilendi | Sümeyye | 2 | sumeyye/T10-zaman-cizelgesi-stitch |
+| 25.10.2026 | T12-UI | Stitch tasarımı ile Kayıt Detayı & Zincir Doğrulama ekranı yenilendi | Sümeyye | 1 | sumeyye/T12-kayit-detayi-stitch |
+| 25.10.2026 | T07-UI | Stitch tasarımı ile Dosyalarım & Mülk Kasaları ekranı yenilendi | Sümeyye | 2 | sumeyye/T07-dosyalarim-stitch |
+| 25.10.2026 | T04-UI | Stitch tasarımı ile Onboarding & Hukuki Güvence ekranı yenilendi | Sümeyye | 2 | sumeyye/T04-onboarding-kvkk |
 | 25.10.2026 | T25 | README ve demo senaryosu inceleme | Sümeyye | 1 | sumeyye/T23-ayarlar-kilit |
 | 25.10.2026 | T24 | Uçtan uca test, analyze/test temizliği (76 test) | Sümeyye | 1 | sumeyye/T23-ayarlar-kilit |
 | 25.10.2026 | T23 | Ayarlar + kilit ekranı + yedek hatırlatma | Sümeyye | 2 | sumeyye/T23-ayarlar-kilit |

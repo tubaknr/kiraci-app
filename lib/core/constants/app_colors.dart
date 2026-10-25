@@ -34,8 +34,98 @@ class AppColors {
   static const Color darkTextSecondary = Color(0xFF94A3B8);
   static const Color darkTextHint = Color(0xFF64748B);
 
-  // Geriye dönük uyumluluk için genel aliaslar
-  static const Color background = lightBackground;
-  static const Color surface = lightSurface;
-  static const Color textPrimary = lightTextPrimary;
+  // Rozet ve Kart Arka Plan Renkleri (Stitch Tasarım Sistemi)
+  static const Color badgeGreenBg = Color(0xFFDCFCE7);
+  static const Color badgeGreenText = Color(0xFF15803D);
+  static const Color badgeBlueBg = Color(0xFFEFF6FF);
+  static const Color badgeBlueText = Color(0xFF1E40AF);
+  static const Color badgeAmberBg = Color(0xFFFEF3C7);
+  static const Color badgeAmberText = Color(0xFFB45309);
+  static const Color badgeIndigoBg = Color(0xFFEEF2FF);
+  static const Color badgeIndigoText = Color(0xFF4338CA);
+
+  // Tema Duyarlı Renk Yardımcıları (SOLID & Açık/Koyu Tema Uyumu)
+  static Color cardBg(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark
+        ? darkCard
+        : lightCard;
+  }
+
+  static Color borderCol(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark
+        ? darkBorder
+        : lightBorder;
+  }
+
+  static Color textMain(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark
+        ? darkTextPrimary
+        : lightTextPrimary;
+  }
+
+  static Color textMuted(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark
+        ? darkTextSecondary
+        : lightTextSecondary;
+  }
+
+  static Color primaryCol(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark
+        ? primaryLight
+        : primary;
+  }
+
+  static Color secondaryCol(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark
+        ? secondaryLight
+        : secondary;
+  }
+
+  static Color badgeBlueBgColor(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark
+        ? const Color(0xFF1E3A8A).withValues(alpha: 0.35)
+        : badgeBlueBg;
+  }
+
+  static Color badgeBlueTextColor(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark
+        ? const Color(0xFF93C5FD)
+        : badgeBlueText;
+  }
+
+  static Color badgeGreenBgColor(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark
+        ? const Color(0xFF065F46).withValues(alpha: 0.35)
+        : badgeGreenBg;
+  }
+
+  static Color badgeGreenTextColor(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark
+        ? const Color(0xFF6EE7B7)
+        : badgeGreenText;
+  }
+
+  static Color badgeIndigoBgColor(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark
+        ? const Color(0xFF3730A3).withValues(alpha: 0.35)
+        : badgeIndigoBg;
+  }
+
+  static Color badgeIndigoTextColor(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark
+        ? const Color(0xFFA5B4FC)
+        : badgeIndigoText;
+  }
+
+  static Color badgeAmberBgColor(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark
+        ? const Color(0xFF78350F).withValues(alpha: 0.35)
+        : badgeAmberBg;
+  }
+
+  static Color badgeAmberTextColor(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark
+        ? const Color(0xFFFCD34D)
+        : badgeAmberText;
+  }
 }
