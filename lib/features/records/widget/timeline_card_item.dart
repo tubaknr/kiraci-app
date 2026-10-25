@@ -92,7 +92,7 @@ class TimelineCardItem extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildCardHeader(dateStr, blockNum, isGenesis),
+                _buildCardHeader(context, dateStr, blockNum, isGenesis),
                 const SizedBox(height: 10),
                 _buildCardTitleAndCategory(context),
                 const SizedBox(height: 6),
@@ -100,7 +100,7 @@ class TimelineCardItem extends StatelessWidget {
                 const SizedBox(height: 10),
                 _buildSpecializedPreview(context),
                 const SizedBox(height: 10),
-                _buildIntegrityFooter(isGenesis),
+                _buildIntegrityFooter(context, isGenesis),
               ],
             ),
           ),
@@ -109,24 +109,24 @@ class TimelineCardItem extends StatelessWidget {
     );
   }
 
-  Widget _buildCardHeader(String dateStr, String blockNum, bool isGenesis) {
+  Widget _buildCardHeader(BuildContext context, String dateStr, String blockNum, bool isGenesis) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Row(
           children: [
-            const Icon(Icons.access_time_rounded, size: 12, color: AppColors.lightTextSecondary),
+            Icon(Icons.access_time_rounded, size: 12, color: AppColors.textMuted(context)),
             const SizedBox(width: 4),
             Text(
               dateStr,
-              style: const TextStyle(fontSize: 11, color: AppColors.lightTextSecondary),
+              style: TextStyle(fontSize: 11, color: AppColors.textMuted(context)),
             ),
           ],
         ),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
           decoration: BoxDecoration(
-            color: isGenesis ? AppColors.badgeIndigoBg : AppColors.badgeBlueBg,
+            color: isGenesis ? AppColors.badgeIndigoBgColor(context) : AppColors.badgeBlueBgColor(context),
             borderRadius: BorderRadius.circular(10),
           ),
           child: Text(
@@ -134,7 +134,7 @@ class TimelineCardItem extends StatelessWidget {
             style: TextStyle(
               fontSize: 10,
               fontWeight: FontWeight.bold,
-              color: isGenesis ? AppColors.primary : AppColors.badgeBlueText,
+              color: isGenesis ? AppColors.badgeIndigoTextColor(context) : AppColors.badgeBlueTextColor(context),
             ),
           ),
         ),
@@ -148,10 +148,10 @@ class TimelineCardItem extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(6),
           decoration: BoxDecoration(
-            color: AppColors.badgeBlueBg,
+            color: AppColors.badgeBlueBgColor(context),
             borderRadius: BorderRadius.circular(8),
           ),
-          child: Icon(_getIconForType(record.type), size: 16, color: AppColors.primary),
+          child: Icon(_getIconForType(record.type), size: 16, color: AppColors.primaryCol(context)),
         ),
         const SizedBox(width: 8),
         Expanded(
@@ -160,11 +160,11 @@ class TimelineCardItem extends StatelessWidget {
             children: [
               Text(
                 _getCategoryLabel(record.type),
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 9,
                   fontWeight: FontWeight.w700,
                   letterSpacing: 0.6,
-                  color: AppColors.primary,
+                  color: AppColors.primaryCol(context),
                 ),
               ),
               Text(
@@ -197,12 +197,12 @@ class TimelineCardItem extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: AppColors.badgeBlueBg.withValues(alpha: 0.3),
+        color: AppColors.badgeBlueBgColor(context),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Row(
         children: [
-          const Icon(Icons.attach_file, size: 14, color: AppColors.primary),
+          Icon(Icons.attach_file, size: 14, color: AppColors.primaryCol(context)),
           const SizedBox(width: 6),
           Expanded(
             child: Text(
@@ -217,7 +217,7 @@ class TimelineCardItem extends StatelessWidget {
     );
   }
 
-  Widget _buildIntegrityFooter(bool isGenesis) {
+  Widget _buildIntegrityFooter(BuildContext context, bool isGenesis) {
     final String hashShort = record.chainHash.length >= 10
         ? '${record.chainHash.substring(0, 4)}...${record.chainHash.substring(record.chainHash.length - 4)}'
         : record.chainHash;
@@ -225,19 +225,19 @@ class TimelineCardItem extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: AppColors.badgeGreenBg,
+        color: AppColors.badgeGreenBgColor(context),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(Icons.verified, size: 12, color: AppColors.badgeGreenText),
+          Icon(Icons.verified, size: 12, color: AppColors.badgeGreenTextColor(context)),
           const SizedBox(width: 4),
           Text(
             isGenesis
                 ? 'Zincir Doğrulandı (İlk Blok Kayıt #01)'
                 : 'Zincir Doğrulandı (SHA-256: $hashShort)',
-            style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: AppColors.badgeGreenText),
+            style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: AppColors.badgeGreenTextColor(context)),
           ),
         ],
       ),

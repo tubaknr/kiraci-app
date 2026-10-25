@@ -94,7 +94,7 @@ class _TenantLoginViewState extends State<TenantLoginView> {
                 AuthSubmitButton(
                   label: 'Kiracı Girişi Yap',
                   icon: Icons.login_rounded,
-                  backgroundColor: AppColors.primary,
+                  backgroundColor: AppColors.primaryCol(context),
                   isLoading: _isLoading,
                   onPressed: _handleLogin,
                 ),
@@ -110,7 +110,7 @@ class _TenantLoginViewState extends State<TenantLoginView> {
                 AuthSwitchPrompt(
                   promptText: 'Henüz kiracı hesabınız yok mu?',
                   actionText: 'Hesap Açın',
-                  actionColor: AppColors.primary,
+                  actionColor: AppColors.primaryCol(context),
                   onTap: _openRegister,
                 ),
                 const SizedBox(height: 24),

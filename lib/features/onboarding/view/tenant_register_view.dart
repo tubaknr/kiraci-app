@@ -94,7 +94,7 @@ class _TenantRegisterViewState extends State<TenantRegisterView> {
                 AuthSubmitButton(
                   label: 'Kiracı Hesabını Başlat',
                   icon: Icons.person_add_rounded,
-                  backgroundColor: AppColors.primary,
+                  backgroundColor: AppColors.primaryCol(context),
                   isLoading: _isLoading,
                   onPressed: _handleRegister,
                 ),
@@ -102,7 +102,7 @@ class _TenantRegisterViewState extends State<TenantRegisterView> {
                 AuthSwitchPrompt(
                   promptText: 'Zaten bir kiracı hesabınız var mı?',
                   actionText: 'Giriş Yapın',
-                  actionColor: AppColors.primary,
+                  actionColor: AppColors.primaryCol(context),
                   onTap: _openLogin,
                 ),
                 const SizedBox(height: 24),

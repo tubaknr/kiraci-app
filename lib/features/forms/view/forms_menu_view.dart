@@ -148,20 +148,28 @@ class FormsMenuView extends StatelessWidget {
     required IconData icon,
     required VoidCallback onTap,
   }) {
+    final Color primaryColor = AppColors.primaryCol(context);
+
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
       child: ListTile(
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         leading: CircleAvatar(
-          backgroundColor: AppColors.primary.withValues(alpha: 0.1),
+          backgroundColor: primaryColor.withValues(alpha: 0.15),
           child: Text(
             code,
-            style: const TextStyle(fontWeight: FontWeight.bold, color: AppColors.primary),
+            style: TextStyle(fontWeight: FontWeight.bold, color: primaryColor),
           ),
         ),
-        title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
-        subtitle: Text(subtitle, style: const TextStyle(fontSize: 12, color: AppColors.lightTextSecondary)),
-        trailing: const Icon(Icons.chevron_right, color: AppColors.primary),
+        title: Text(
+          title,
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: AppColors.textMain(context)),
+        ),
+        subtitle: Text(
+          subtitle,
+          style: TextStyle(fontSize: 12, color: AppColors.textMuted(context)),
+        ),
+        trailing: Icon(Icons.chevron_right, color: primaryColor),
         onTap: onTap,
       ),
     );

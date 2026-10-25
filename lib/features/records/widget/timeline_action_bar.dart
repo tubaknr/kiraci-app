@@ -24,7 +24,7 @@ class TimelineActionBar extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 6.0),
       child: Column(
         children: [
-          _buildActionButtonsRow(),
+          _buildActionButtonsRow(context),
           const SizedBox(height: 10),
           _buildFilterChipsRow(context),
         ],
@@ -32,7 +32,7 @@ class TimelineActionBar extends StatelessWidget {
     );
   }
 
-  Widget _buildActionButtonsRow() {
+  Widget _buildActionButtonsRow(BuildContext context) {
     return Row(
       children: [
         Expanded(
@@ -40,7 +40,7 @@ class TimelineActionBar extends StatelessWidget {
             height: 46,
             child: ElevatedButton.icon(
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
+                backgroundColor: AppColors.primaryCol(context),
                 foregroundColor: Colors.white,
                 elevation: 0,
                 shape: RoundedRectangleBorder(
@@ -64,11 +64,11 @@ class TimelineActionBar extends StatelessWidget {
             width: 46,
             height: 46,
             decoration: BoxDecoration(
-              color: AppColors.badgeBlueBg,
+              color: AppColors.badgeBlueBgColor(context),
               shape: BoxShape.circle,
               border: Border.all(color: AppColors.primaryLight.withValues(alpha: 0.2)),
             ),
-            child: const Icon(Icons.tune, color: AppColors.primary, size: 20),
+            child: Icon(Icons.tune, color: AppColors.primaryCol(context), size: 20),
           ),
         ),
       ],
@@ -102,10 +102,10 @@ class TimelineActionBar extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.primary : AppColors.cardBg(context),
+          color: isSelected ? AppColors.primaryCol(context) : AppColors.cardBg(context),
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: isSelected ? AppColors.primary : AppColors.borderCol(context),
+            color: isSelected ? AppColors.primaryCol(context) : AppColors.borderCol(context),
           ),
         ),
         child: Row(
@@ -124,7 +124,7 @@ class TimelineActionBar extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
                 decoration: BoxDecoration(
-                  color: isSelected ? Colors.white : AppColors.badgeBlueBg,
+                  color: isSelected ? Colors.white : AppColors.badgeBlueBgColor(context),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Text(
@@ -132,7 +132,7 @@ class TimelineActionBar extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 10,
                     fontWeight: FontWeight.bold,
-                    color: isSelected ? AppColors.primary : AppColors.primaryLight,
+                    color: isSelected ? AppColors.primaryCol(context) : AppColors.primaryLight,
                   ),
                 ),
               ),

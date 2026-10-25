@@ -114,10 +114,10 @@ class _TimelineViewState extends State<TimelineView> {
       scrolledUnderElevation: 1,
       title: Row(
         children: [
-          const CircleAvatar(
+          CircleAvatar(
             radius: 15,
-            backgroundColor: AppColors.badgeBlueBg,
-            child: Icon(Icons.timeline_rounded, size: 16, color: AppColors.primary),
+            backgroundColor: AppColors.badgeBlueBgColor(context),
+            child: Icon(Icons.timeline_rounded, size: 16, color: AppColors.primaryCol(context)),
           ),
           const SizedBox(width: 8),
           Column(
@@ -146,7 +146,7 @@ class _TimelineViewState extends State<TimelineView> {
           children: [
             IconButton(
               tooltip: 'Bildirimler',
-              icon: const Icon(Icons.notifications_none_rounded, size: 22),
+              icon: Icon(Icons.notifications_none_rounded, size: 22, color: AppColors.textMain(context)),
               onPressed: () => _showNotificationSheet(context),
             ),
             const Positioned(
@@ -161,10 +161,10 @@ class _TimelineViewState extends State<TimelineView> {
           child: InkWell(
             borderRadius: BorderRadius.circular(15),
             onTap: () => _showProfileSheet(context),
-            child: const CircleAvatar(
+            child: CircleAvatar(
               radius: 15,
-              backgroundColor: AppColors.badgeIndigoBg,
-              child: Icon(Icons.person, size: 18, color: AppColors.primary),
+              backgroundColor: AppColors.badgeIndigoBgColor(context),
+              child: Icon(Icons.person, size: 18, color: AppColors.primaryCol(context)),
             ),
           ),
         ),
@@ -188,15 +188,15 @@ class _TimelineViewState extends State<TimelineView> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text('Zaman Tüneli Bildirimleri', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  Text('Zaman Tüneli Bildirimleri', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.textMain(context))),
                   IconButton(icon: const Icon(Icons.close), onPressed: () => Navigator.pop(ctx)),
                 ],
               ),
               const Divider(),
-              const ListTile(
-                leading: CircleAvatar(backgroundColor: AppColors.badgeGreenBg, child: Icon(Icons.link, color: AppColors.success)),
-                title: Text('Zincir Bağlantısı Aktif'),
-                subtitle: Text('Tüm bloklar geriye dönük hash kontrolünden başarıyla geçmiştir.'),
+              ListTile(
+                leading: CircleAvatar(backgroundColor: AppColors.badgeGreenBgColor(context), child: const Icon(Icons.link, color: AppColors.success)),
+                title: Text('Zincir Bağlantısı Aktif', style: TextStyle(color: AppColors.textMain(context))),
+                subtitle: Text('Tüm bloklar geriye dönük hash kontrolünden başarıyla geçmiştir.', style: TextStyle(color: AppColors.textMuted(context))),
                 dense: true,
               ),
             ],
@@ -218,13 +218,13 @@ class _TimelineViewState extends State<TimelineView> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const CircleAvatar(
+              CircleAvatar(
                 radius: 32,
-                backgroundColor: AppColors.primary,
-                child: Icon(Icons.person, size: 36, color: Colors.white),
+                backgroundColor: AppColors.primaryCol(context),
+                child: const Icon(Icons.person, size: 36, color: Colors.white),
               ),
               const SizedBox(height: 12),
-              const Text('Kullanıcı & Kasa Profili', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              Text('Kullanıcı & Kasa Profili', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.textMain(context))),
               Text('Çevrimdışı Bütünlük Korumalı Kasa', style: TextStyle(fontSize: 12, color: AppColors.textMuted(context))),
               const SizedBox(height: 16),
               const Divider(),
@@ -300,11 +300,11 @@ class _TimelineViewState extends State<TimelineView> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.timeline, size: 64, color: AppColors.lightTextHint),
+            Icon(Icons.timeline, size: 64, color: AppColors.textMuted(context)),
             const SizedBox(height: 16),
-            const Text(
+            Text(
               'Henüz delil veya form kaydı eklenmedi.',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.textMain(context)),
             ),
             const SizedBox(height: 8),
             Text(

@@ -16,7 +16,7 @@ class CasesIntegrityBanner extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
       child: Column(
         children: [
-          _buildLiveVaultBadge(),
+          _buildLiveVaultBadge(context),
           const SizedBox(height: 10),
           _buildVerificationCard(context),
         ],
@@ -24,25 +24,25 @@ class CasesIntegrityBanner extends StatelessWidget {
     );
   }
 
-  Widget _buildLiveVaultBadge() {
-    return const Row(
+  Widget _buildLiveVaultBadge(BuildContext context) {
+    return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Row(
           children: [
-            Icon(Icons.shield_outlined, size: 15, color: AppColors.primary),
-            SizedBox(width: 6),
+            Icon(Icons.shield_outlined, size: 15, color: AppColors.primaryCol(context)),
+            const SizedBox(width: 6),
             Text(
               'Belgelenmiş Kiralık Mülkler & Delil Kasalar',
               style: TextStyle(
                 fontSize: 11,
                 fontWeight: FontWeight.w600,
-                color: AppColors.lightTextSecondary,
+                color: AppColors.textMuted(context),
               ),
             ),
           ],
         ),
-        _LivePill(),
+        const _LivePill(),
       ],
     );
   }
@@ -67,8 +67,8 @@ class CasesIntegrityBanner extends StatelessWidget {
         children: [
           Container(
             padding: const EdgeInsets.all(8),
-            decoration: const BoxDecoration(
-              color: AppColors.badgeGreenBg,
+            decoration: BoxDecoration(
+              color: AppColors.badgeGreenBgColor(context),
               shape: BoxShape.circle,
             ),
             child: const Icon(
@@ -96,15 +96,15 @@ class CasesIntegrityBanner extends StatelessWidget {
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                       decoration: BoxDecoration(
-                        color: AppColors.badgeGreenBg,
+                        color: AppColors.badgeGreenBgColor(context),
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      child: const Text(
+                      child: Text(
                         'Eşitlendi',
                         style: TextStyle(
                           fontSize: 10,
                           fontWeight: FontWeight.w700,
-                          color: AppColors.badgeGreenText,
+                          color: AppColors.badgeGreenTextColor(context),
                         ),
                       ),
                     ),
@@ -136,20 +136,20 @@ class _LivePill extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
       decoration: BoxDecoration(
-        color: AppColors.badgeGreenBg,
+        color: AppColors.badgeGreenBgColor(context),
         borderRadius: BorderRadius.circular(12),
       ),
-      child: const Row(
+      child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          CircleAvatar(radius: 3, backgroundColor: AppColors.success),
-          SizedBox(width: 4),
+          const CircleAvatar(radius: 3, backgroundColor: AppColors.success),
+          const SizedBox(width: 4),
           Text(
             'Kasa Canlı',
             style: TextStyle(
               fontSize: 10,
               fontWeight: FontWeight.w700,
-              color: AppColors.badgeGreenText,
+              color: AppColors.badgeGreenTextColor(context),
             ),
           ),
         ],

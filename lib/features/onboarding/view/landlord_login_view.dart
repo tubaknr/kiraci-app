@@ -94,7 +94,7 @@ class _LandlordLoginViewState extends State<LandlordLoginView> {
                 AuthSubmitButton(
                   label: 'Kiraya Veren Girişi Yap',
                   icon: Icons.apartment_rounded,
-                  backgroundColor: AppColors.secondary,
+                  backgroundColor: AppColors.secondaryCol(context),
                   isLoading: _isLoading,
                   onPressed: _handleLogin,
                 ),
@@ -102,15 +102,15 @@ class _LandlordLoginViewState extends State<LandlordLoginView> {
                 Center(
                   child: TextButton.icon(
                     onPressed: _handleQuickEntry,
-                    icon: const Icon(Icons.flash_on_rounded, size: 16, color: AppColors.secondary),
-                    label: const Text('Hızlı Giriş Yap (Demo)', style: TextStyle(color: AppColors.secondary)),
+                    icon: Icon(Icons.flash_on_rounded, size: 16, color: AppColors.secondaryCol(context)),
+                    label: Text('Hızlı Giriş Yap (Demo)', style: TextStyle(color: AppColors.secondaryCol(context))),
                   ),
                 ),
                 const SizedBox(height: 10),
                 AuthSwitchPrompt(
                   promptText: 'Ev sahibi hesabınız yok mu?',
                   actionText: 'Hesap Açın',
-                  actionColor: AppColors.secondary,
+                  actionColor: AppColors.secondaryCol(context),
                   onTap: _openRegister,
                 ),
                 const SizedBox(height: 24),

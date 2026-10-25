@@ -9,6 +9,8 @@ class CasesEmptyState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Color primaryColor = AppColors.primaryCol(context);
+
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(32.0),
@@ -17,19 +19,23 @@ class CasesEmptyState extends StatelessWidget {
           children: [
             CircleAvatar(
               radius: 40,
-              backgroundColor: AppColors.primary.withValues(alpha: 0.1),
-              child: const Icon(Icons.folder_open, size: 40, color: AppColors.primary),
+              backgroundColor: primaryColor.withValues(alpha: 0.15),
+              child: Icon(Icons.folder_open, size: 40, color: primaryColor),
             ),
             const SizedBox(height: 20),
-            const Text(
+            Text(
               'Kayıtlı Kira Dosyası Bulunamadı',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: AppColors.textMain(context),
+              ),
             ),
             const SizedBox(height: 8),
-            const Text(
+            Text(
               'Tüm delil zinciri, formlar ve tutanaklar bir kira dosyası altında toplanır. Başlamak için yeni bir dosya oluşturun.',
               textAlign: TextAlign.center,
-              style: TextStyle(color: AppColors.lightTextSecondary, height: 1.4),
+              style: TextStyle(color: AppColors.textMuted(context), height: 1.4),
             ),
             const SizedBox(height: 20),
             ElevatedButton.icon(

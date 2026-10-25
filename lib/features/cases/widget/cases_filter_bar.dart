@@ -76,10 +76,10 @@ class CasesFilterBar extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.primary : AppColors.cardBg(context),
+          color: isSelected ? AppColors.primaryCol(context) : AppColors.cardBg(context),
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: isSelected ? AppColors.primary : AppColors.borderCol(context),
+            color: isSelected ? AppColors.primaryCol(context) : AppColors.borderCol(context),
           ),
         ),
         child: Text(

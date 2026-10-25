@@ -29,7 +29,7 @@ class SafeRentHouseApp extends StatefulWidget {
 }
 
 class _SafeRentHouseAppState extends State<SafeRentHouseApp> {
-  late bool _isAuthenticated;
+  bool _isAuthenticated = false;
   bool _showKvkkModal = false;
   int _currentIndex = 0;
   String _activeCaseId = 'varsayilan_case_1';
@@ -84,6 +84,7 @@ class _SafeRentHouseAppState extends State<SafeRentHouseApp> {
     }
 
     return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: IndexedStack(
         index: _currentIndex,
         children: [

@@ -47,9 +47,9 @@ class CaseItemCard extends StatelessWidget {
                 const SizedBox(height: 10),
                 _buildHighlightInfoBox(context),
                 const SizedBox(height: 10),
-                _buildRecentActivityRow(),
+                _buildRecentActivityRow(context),
                 const SizedBox(height: 12),
-                _buildActionButton(),
+                _buildActionButton(context),
               ],
             ),
           ),
@@ -62,13 +62,13 @@ class CaseItemCard extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildThumbnail(isTenant),
+        _buildThumbnail(context, isTenant),
         const SizedBox(width: 12),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildBadgesRow(isTenant),
+              _buildBadgesRow(context, isTenant),
               const SizedBox(height: 4),
               Text(
                 item.title,
@@ -88,51 +88,51 @@ class CaseItemCard extends StatelessWidget {
     );
   }
 
-  Widget _buildThumbnail(bool isTenant) {
+  Widget _buildThumbnail(BuildContext context, bool isTenant) {
     return Container(
       width: 52,
       height: 52,
       decoration: BoxDecoration(
-        color: isTenant ? AppColors.badgeBlueBg : AppColors.badgeGreenBg,
+        color: isTenant ? AppColors.badgeBlueBgColor(context) : AppColors.badgeGreenBgColor(context),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.lightBorder),
+        border: Border.all(color: AppColors.borderCol(context)),
       ),
       child: Icon(
         isTenant ? Icons.apartment_rounded : Icons.home_work_rounded,
         size: 26,
-        color: isTenant ? AppColors.primary : AppColors.secondary,
+        color: isTenant ? AppColors.primaryCol(context) : AppColors.secondaryCol(context),
       ),
     );
   }
 
-  Widget _buildBadgesRow(bool isTenant) {
+  Widget _buildBadgesRow(BuildContext context, bool isTenant) {
     return Row(
       children: [
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
           decoration: BoxDecoration(
-            color: AppColors.badgeIndigoBg,
+            color: AppColors.badgeIndigoBgColor(context),
             borderRadius: BorderRadius.circular(10),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(Icons.location_on, size: 10, color: AppColors.badgeIndigoText),
+              Icon(Icons.location_on, size: 10, color: AppColors.badgeIndigoTextColor(context)),
               const SizedBox(width: 3),
               Text(
                 isTenant ? 'Kiracı' : 'Ev Sahibi',
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 10,
                   fontWeight: FontWeight.w600,
-                  color: AppColors.badgeIndigoText,
+                  color: AppColors.badgeIndigoTextColor(context),
                 ),
               ),
-              const Text(
+              Text(
                 ' Dosyası',
                 style: TextStyle(
                   fontSize: 10,
                   fontWeight: FontWeight.w600,
-                  color: AppColors.badgeIndigoText,
+                  color: AppColors.badgeIndigoTextColor(context),
                 ),
               ),
             ],
@@ -142,20 +142,20 @@ class CaseItemCard extends StatelessWidget {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
           decoration: BoxDecoration(
-            color: AppColors.badgeGreenBg,
+            color: AppColors.badgeGreenBgColor(context),
             borderRadius: BorderRadius.circular(10),
           ),
-          child: const Row(
+          child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.check_circle_outline, size: 10, color: AppColors.badgeGreenText),
-              SizedBox(width: 3),
+              Icon(Icons.check_circle_outline, size: 10, color: AppColors.badgeGreenTextColor(context)),
+              const SizedBox(width: 3),
               Text(
                 'Mühürlü Kayıtlar',
                 style: TextStyle(
                   fontSize: 10,
                   fontWeight: FontWeight.w600,
-                  color: AppColors.badgeGreenText,
+                  color: AppColors.badgeGreenTextColor(context),
                 ),
               ),
             ],
@@ -213,10 +213,10 @@ class CaseItemCard extends StatelessWidget {
               const SizedBox(height: 2),
               Text(
                 '$startYear - $endYear',
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.primary,
+                  color: AppColors.primaryCol(context),
                 ),
               ),
             ],
@@ -250,19 +250,19 @@ class CaseItemCard extends StatelessWidget {
     );
   }
 
-  Widget _buildRecentActivityRow() {
-    return const Row(
+  Widget _buildRecentActivityRow(BuildContext context) {
+    return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Row(
           children: [
-            CircleAvatar(radius: 3, backgroundColor: AppColors.success),
-            SizedBox(width: 6),
+            const CircleAvatar(radius: 3, backgroundColor: AppColors.success),
+            const SizedBox(width: 6),
             Text(
               'Son kayıt: Kriptografik Tutanak / Makbuz',
               style: TextStyle(
                 fontSize: 11,
-                color: AppColors.lightTextSecondary,
+                color: AppColors.textMuted(context),
               ),
             ),
           ],
@@ -271,20 +271,20 @@ class CaseItemCard extends StatelessWidget {
           'Güncel',
           style: TextStyle(
             fontSize: 10,
-            color: AppColors.lightTextHint,
+            color: AppColors.textMuted(context),
           ),
         ),
       ],
     );
   }
 
-  Widget _buildActionButton() {
+  Widget _buildActionButton(BuildContext context) {
     return SizedBox(
       width: double.infinity,
       height: 42,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primary,
+          backgroundColor: AppColors.primaryCol(context),
           foregroundColor: Colors.white,
           elevation: 0,
           shape: RoundedRectangleBorder(

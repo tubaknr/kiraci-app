@@ -94,7 +94,7 @@ class _LandlordRegisterViewState extends State<LandlordRegisterView> {
                 AuthSubmitButton(
                   label: 'Ev Sahibi Hesabını Başlat',
                   icon: Icons.add_home_work_rounded,
-                  backgroundColor: AppColors.secondary,
+                  backgroundColor: AppColors.secondaryCol(context),
                   isLoading: _isLoading,
                   onPressed: _handleRegister,
                 ),
@@ -102,7 +102,7 @@ class _LandlordRegisterViewState extends State<LandlordRegisterView> {
                 AuthSwitchPrompt(
                   promptText: 'Zaten bir ev sahibi hesabınız var mı?',
                   actionText: 'Giriş Yapın',
-                  actionColor: AppColors.secondary,
+                  actionColor: AppColors.secondaryCol(context),
                   onTap: _openLogin,
                 ),
                 const SizedBox(height: 24),

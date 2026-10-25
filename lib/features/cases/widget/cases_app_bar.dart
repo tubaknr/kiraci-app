@@ -24,10 +24,10 @@ class CasesAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget _buildTitle(BuildContext context) {
     return Row(
       children: [
-        const CircleAvatar(
+        CircleAvatar(
           radius: 16,
-          backgroundColor: AppColors.badgeBlueBg,
-          child: Icon(Icons.shield_outlined, size: 18, color: AppColors.primary),
+          backgroundColor: AppColors.badgeBlueBgColor(context),
+          child: Icon(Icons.shield_outlined, size: 18, color: AppColors.primaryCol(context)),
         ),
         const SizedBox(width: 8),
         Column(
@@ -69,7 +69,7 @@ class CasesAppBar extends StatelessWidget implements PreferredSizeWidget {
         children: [
           IconButton(
             tooltip: 'Bildirimler',
-            icon: const Icon(Icons.notifications_none_rounded, size: 22),
+            icon: Icon(Icons.notifications_none_rounded, size: 22, color: AppColors.textMain(context)),
             onPressed: () => _showNotificationSheet(context),
           ),
           const Positioned(
@@ -87,10 +87,10 @@ class CasesAppBar extends StatelessWidget implements PreferredSizeWidget {
         child: InkWell(
           borderRadius: BorderRadius.circular(15),
           onTap: () => _showProfileSheet(context),
-          child: const CircleAvatar(
+          child: CircleAvatar(
             radius: 15,
-            backgroundColor: AppColors.badgeIndigoBg,
-            child: Icon(Icons.person, size: 18, color: AppColors.primary),
+            backgroundColor: AppColors.badgeIndigoBgColor(context),
+            child: Icon(Icons.person, size: 18, color: AppColors.primaryCol(context)),
           ),
         ),
       ),
@@ -118,16 +118,28 @@ class CasesAppBar extends StatelessWidget implements PreferredSizeWidget {
                 ],
               ),
               const Divider(),
-              const ListTile(
-                leading: CircleAvatar(backgroundColor: AppColors.badgeGreenBg, child: Icon(Icons.check, color: AppColors.success)),
-                title: Text('Kriptografik Defter Doğrulandı'),
-                subtitle: Text('Tüm SHA-256 kayıtları yerel defter ile tam eşleşmektedir.'),
+              ListTile(
+                leading: CircleAvatar(
+                  backgroundColor: AppColors.badgeGreenBgColor(context),
+                  child: const Icon(Icons.check, color: AppColors.success),
+                ),
+                title: Text('Kriptografik Defter Doğrulandı', style: TextStyle(color: AppColors.textMain(context))),
+                subtitle: Text(
+                  'Tüm SHA-256 kayıtları yerel defter ile tam eşleşmektedir.',
+                  style: TextStyle(color: AppColors.textMuted(context)),
+                ),
                 dense: true,
               ),
-              const ListTile(
-                leading: CircleAvatar(backgroundColor: AppColors.badgeBlueBg, child: Icon(Icons.security, color: AppColors.primary)),
-                title: Text('Güvenlik Uyarısı'),
-                subtitle: Text('Düzenli yedek alarak delillerinizi güvence altında tutun.'),
+              ListTile(
+                leading: CircleAvatar(
+                  backgroundColor: AppColors.badgeBlueBgColor(context),
+                  child: Icon(Icons.security, color: AppColors.primaryCol(context)),
+                ),
+                title: Text('Güvenlik Uyarısı', style: TextStyle(color: AppColors.textMain(context))),
+                subtitle: Text(
+                  'Düzenli yedek alarak delillerinizi güvence altında tutun.',
+                  style: TextStyle(color: AppColors.textMuted(context)),
+                ),
                 dense: true,
               ),
             ],
@@ -149,20 +161,29 @@ class CasesAppBar extends StatelessWidget implements PreferredSizeWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const CircleAvatar(
+              CircleAvatar(
                 radius: 32,
-                backgroundColor: AppColors.primary,
-                child: Icon(Icons.person, size: 36, color: Colors.white),
+                backgroundColor: AppColors.primaryCol(context),
+                child: const Icon(Icons.person, size: 36, color: Colors.white),
               ),
               const SizedBox(height: 12),
-              const Text('Kullanıcı Profili', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-              const Text('Çevrimdışı Yerel Kasa Kullanıcısı', style: TextStyle(fontSize: 12, color: AppColors.lightTextSecondary)),
+              Text(
+                'Kullanıcı Profili',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.textMain(context)),
+              ),
+              Text(
+                'Çevrimdışı Yerel Kasa Kullanıcısı',
+                style: TextStyle(fontSize: 12, color: AppColors.textMuted(context)),
+              ),
               const SizedBox(height: 16),
               const Divider(),
-              const ListTile(
-                leading: Icon(Icons.verified_outlined, color: AppColors.success),
-                title: Text('Kriptografik Anahtarlar'),
-                subtitle: Text('Bu cihazda yerel olarak saklanmaktadır.'),
+              ListTile(
+                leading: const Icon(Icons.verified_outlined, color: AppColors.success),
+                title: Text('Kriptografik Anahtarlar', style: TextStyle(color: AppColors.textMain(context))),
+                subtitle: Text(
+                  'Bu cihazda yerel olarak saklanmaktadır.',
+                  style: TextStyle(color: AppColors.textMuted(context)),
+                ),
               ),
               const SizedBox(height: 10),
               SizedBox(

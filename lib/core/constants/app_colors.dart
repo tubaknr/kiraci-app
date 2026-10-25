@@ -79,4 +79,64 @@ class AppColors {
         ? darkBg
         : lightBg;
   }
+
+  static Color primaryCol(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark
+        ? primaryLight
+        : primary;
+  }
+
+  static Color secondaryCol(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark
+        ? secondaryLight
+        : secondary;
+  }
+
+  static Color badgeBlueBgColor(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark
+        ? const Color(0xFF1E3A8A).withValues(alpha: 0.35)
+        : badgeBlueBg;
+  }
+
+  static Color badgeBlueTextColor(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark
+        ? const Color(0xFF93C5FD)
+        : badgeBlueText;
+  }
+
+  static Color badgeGreenBgColor(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark
+        ? const Color(0xFF065F46).withValues(alpha: 0.35)
+        : badgeGreenBg;
+  }
+
+  static Color badgeGreenTextColor(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark
+        ? const Color(0xFF6EE7B7)
+        : badgeGreenText;
+  }
+
+  static Color badgeIndigoBgColor(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark
+        ? const Color(0xFF3730A3).withValues(alpha: 0.35)
+        : badgeIndigoBg;
+  }
+
+  static Color badgeIndigoTextColor(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark
+        ? const Color(0xFFA5B4FC)
+        : badgeIndigoText;
+  }
+
+  static Color badgeAmberBgColor(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark
+        ? const Color(0xFF78350F).withValues(alpha: 0.35)
+        : badgeAmberBg;
+  }
+
+  static Color badgeAmberTextColor(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark
+        ? const Color(0xFFFCD34D)
+        : badgeAmberText;
+  }
 }

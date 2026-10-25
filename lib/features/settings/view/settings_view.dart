@@ -139,7 +139,7 @@ class _SettingsViewState extends State<SettingsView> {
           child: ListTile(
             leading: Icon(
               isDark ? Icons.dark_mode : Icons.light_mode,
-              color: AppColors.primary,
+              color: AppColors.primaryCol(context),
             ),
             title: const Text('Görünüm Teması'),
             subtitle: Text(
@@ -179,7 +179,7 @@ class _SettingsViewState extends State<SettingsView> {
                   children: [
                     Icon(
                       isConfigured ? Icons.lock : Icons.lock_open,
-                      color: isConfigured ? AppColors.secondary : AppColors.lightTextSecondary,
+                      color: isConfigured ? AppColors.secondaryCol(context) : AppColors.textMuted(context),
                     ),
                     const SizedBox(width: 12),
                     Expanded(
