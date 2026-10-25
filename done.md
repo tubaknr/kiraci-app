@@ -4,6 +4,7 @@
 
 | Tarih | ID | Görev | Kişi | Puan | Branch / Commit |
 |---|---|---|---|---|---|
+| 25.10.2026 | T07-UI | Stitch tasarımı ile Dosyalarım & Mülk Kasaları ekranı yenilendi | Sümeyye | 2 | sumeyye/T07-dosyalarim-stitch |
 | 25.10.2026 | T04-UI | Stitch tasarımı ile Onboarding & Hukuki Güvence ekranı yenilendi | Sümeyye | 2 | sumeyye/T04-onboarding-kvkk |
 | 25.10.2026 | T25 | README ve demo senaryosu inceleme | Sümeyye | 1 | sumeyye/T23-ayarlar-kilit |
 | 25.10.2026 | T24 | Uçtan uca test, analyze/test temizliği (76 test) | Sümeyye | 1 | sumeyye/T23-ayarlar-kilit |
