@@ -3,12 +3,17 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/db/record_repository.dart';
 import '../../../core/services/integrity_service.dart';
 import '../../../core/services/record_service.dart';
-import '../../records/models/record_model.dart';
+import '../../export/view/export_view.dart';
 import '../controller/record_add_controller.dart';
+import '../models/record_model.dart';
+import '../widget/timeline_action_bar.dart';
+import '../widget/timeline_card_item.dart';
+import '../widget/timeline_hero_header.dart';
+import '../widget/timeline_pdf_export_footer.dart';
 import 'record_add_view.dart';
 import 'record_detail_view.dart';
 
-/// Zaman Çizelgesi ve Delil Zinciri Ekranı (Sümeyye - T10)
+/// Zaman Çizelgesi ve Delil Zinciri Ekranı (Sümeyye - T10 - Stitch UI)
 class TimelineView extends StatefulWidget {
   final String caseId;
 
@@ -26,6 +31,7 @@ class _TimelineViewState extends State<TimelineView> {
   ChainVerificationResult? _verification;
   bool _loading = true;
   bool _newestFirst = true;
+  int _selectedFilter = 0;
 
   @override
   void initState() {
@@ -63,85 +69,147 @@ class _TimelineViewState extends State<TimelineView> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Zaman Çizelgesi & Zincir'),
-        actions: [
-          IconButton(
-            tooltip: _newestFirst ? 'Eskiden Yeniye Sırala' : 'Yeniden Eskiye Sırala',
-            icon: Icon(_newestFirst ? Icons.arrow_downward : Icons.arrow_upward),
-            onPressed: () => setState(() => _newestFirst = !_newestFirst),
-          ),
-          IconButton(
-            tooltip: 'Yenile ve Doğrula',
-            icon: const Icon(Icons.refresh),
-            onPressed: _loadData,
-          ),
-        ],
-      ),
-      body: _loading
-          ? const Center(child: CircularProgressIndicator())
-          : Column(
-              children: [
-                if (_verification != null) _buildIntegritySummaryCard(),
-                Expanded(
-                  child: _records.isEmpty
-                      ? _buildEmptyState()
-                      : _buildTimelineList(),
-                ),
-              ],
-            ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: _openAddRecord,
-        icon: const Icon(Icons.add),
-        label: const Text('Delil Ekle'),
+  void _openPdfExport() {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (BuildContext context) => ExportView(caseId: widget.caseId),
       ),
     );
   }
 
-  Widget _buildIntegritySummaryCard() {
-    final bool isValid = _verification!.isValid;
-    final Color statusColor = isValid ? AppColors.success : AppColors.error;
-    final int count = _records.length;
+  List<RecordModel> _getFilteredRecords() {
+    final List<RecordModel> source = _newestFirst ? _records.reversed.toList() : _records;
 
-    return Container(
-      margin: const EdgeInsets.fromLTRB(16, 12, 16, 4),
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: statusColor.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: statusColor, width: 1.2),
-      ),
-      child: Row(
+    return source.where((rec) {
+      if (_selectedFilter == 1) {
+        return rec.type == 'f1_lease' || rec.type == 'f2_handover' || rec.type == 'document';
+      } else if (_selectedFilter == 2) {
+        return rec.type == 'f4_payment';
+      } else if (_selectedFilter == 3) {
+        return rec.type == 'photo' || rec.type == 'f3_defect' || rec.type == 'video';
+      } else if (_selectedFilter == 4) {
+        return rec.type == 'chat' || rec.type == 'f5_incident' || rec.type == 'audio';
+      }
+      return true;
+    }).toList();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.lightBackground,
+      appBar: _buildAppBar(),
+      body: _loading
+          ? const Center(child: CircularProgressIndicator())
+          : _records.isEmpty
+              ? _buildEmptyState()
+              : _buildTimelineContent(),
+    );
+  }
+
+  PreferredSizeWidget _buildAppBar() {
+    return AppBar(
+      backgroundColor: Colors.white,
+      elevation: 0,
+      scrolledUnderElevation: 1,
+      title: const Row(
         children: [
-          Icon(isValid ? Icons.verified : Icons.gpp_bad, color: statusColor, size: 28),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  isValid ? 'Zincir Bütünlüğü Doğrulandı' : 'Tahrifat / Zincir Kırılması!',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: statusColor,
-                    fontSize: 14,
-                  ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  isValid
-                      ? '$count delil kaydı SHA-256 ile mühürlü • Tahrifat yok'
-                      : (_verification!.failureReason ?? 'Veri tabanı veya dosya değiştirilmiş!'),
-                  style: const TextStyle(fontSize: 11, color: AppColors.lightTextSecondary),
-                ),
-              ],
-            ),
+          CircleAvatar(
+            radius: 15,
+            backgroundColor: AppColors.badgeBlueBg,
+            child: Icon(Icons.timeline_rounded, size: 16, color: AppColors.primary),
+          ),
+          SizedBox(width: 8),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'SafeRentHouse',
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.lightTextPrimary),
+              ),
+              Text(
+                'Zaman Tüneli',
+                style: TextStyle(fontSize: 10, color: AppColors.lightTextSecondary),
+              ),
+            ],
           ),
         ],
       ),
+      actions: [
+        IconButton(
+          tooltip: 'Yenile ve Doğrula',
+          icon: const Icon(Icons.verified_user_outlined, size: 20, color: AppColors.success),
+          onPressed: _loadData,
+        ),
+        Stack(
+          alignment: Alignment.center,
+          children: [
+            IconButton(
+              tooltip: 'Bildirimler',
+              icon: const Icon(Icons.notifications_none_rounded, size: 22),
+              onPressed: () {},
+            ),
+            const Positioned(
+              top: 12,
+              right: 12,
+              child: CircleAvatar(radius: 4, backgroundColor: AppColors.error),
+            ),
+          ],
+        ),
+        const Padding(
+          padding: EdgeInsets.only(right: 14.0, left: 4.0),
+          child: CircleAvatar(
+            radius: 15,
+            backgroundColor: AppColors.badgeIndigoBg,
+            child: Icon(Icons.person, size: 18, color: AppColors.primary),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTimelineContent() {
+    final filtered = _getFilteredRecords();
+    final bool isChainValid = _verification?.isValid ?? true;
+
+    return ListView(
+      padding: const EdgeInsets.only(bottom: 40),
+      children: [
+        TimelineHeroHeader(
+          caseTitle: widget.caseId,
+          recordCount: _records.length,
+          isChainValid: isChainValid,
+        ),
+        TimelineActionBar(
+          totalCount: _records.length,
+          selectedFilter: _selectedFilter,
+          onAddRecord: _openAddRecord,
+          onToggleSort: () => setState(() => _newestFirst = !_newestFirst),
+          onFilterChanged: (idx) => setState(() => _selectedFilter = idx),
+        ),
+        const SizedBox(height: 8),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Column(
+            children: List.generate(filtered.length, (index) {
+              final rec = filtered[index];
+              return TimelineCardItem(
+                record: rec,
+                index: index,
+                totalCount: filtered.length,
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (BuildContext context) => RecordDetailView(record: rec),
+                    ),
+                  );
+                },
+              );
+            }),
+          ),
+        ),
+        TimelinePdfExportFooter(onExportPdf: _openPdfExport),
+      ],
     );
   }
 
@@ -174,111 +242,5 @@ class _TimelineViewState extends State<TimelineView> {
         ),
       ),
     );
-  }
-
-  Widget _buildTimelineList() {
-    final List<RecordModel> displayList = _newestFirst
-        ? _records.reversed.toList()
-        : _records;
-
-    return ListView.builder(
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 80),
-      itemCount: displayList.length,
-      itemBuilder: (BuildContext context, int index) {
-        final RecordModel rec = displayList[index];
-        return _buildTimelineItem(rec, index, displayList.length);
-      },
-    );
-  }
-
-  Widget _buildTimelineItem(RecordModel rec, int index, int total) {
-    return Card(
-      margin: const EdgeInsets.only(bottom: 10),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(12),
-        onTap: () {
-          Navigator.of(context).push(
-            MaterialPageRoute<void>(
-              builder: (BuildContext context) => RecordDetailView(record: rec),
-            ),
-          );
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(14.0),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildTypeAvatar(rec.type),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      rec.title,
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      'Tarih: ${rec.recordedAt.toLocal().toString().substring(0, 16)}',
-                      style: const TextStyle(fontSize: 12, color: AppColors.lightTextSecondary),
-                    ),
-                    const SizedBox(height: 2),
-                    Text(
-                      'Hash: ${rec.chainHash.substring(0, 16)}...',
-                      style: const TextStyle(
-                        fontSize: 11,
-                        fontFamily: 'monospace',
-                        color: AppColors.lightTextHint,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              _buildStatusPill(rec),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTypeAvatar(String type) {
-    return CircleAvatar(
-      radius: 20,
-      backgroundColor: AppColors.primary.withValues(alpha: 0.1),
-      child: Icon(_getIconForType(type), size: 20, color: AppColors.primary),
-    );
-  }
-
-  Widget _buildStatusPill(RecordModel rec) {
-    if (rec.clockAnomaly) {
-      return const Tooltip(
-        message: 'Saat geriye alınmış (Saat anomalisi)',
-        child: Icon(Icons.warning_amber_rounded, color: AppColors.warning),
-      );
-    }
-    return const Icon(Icons.verified_outlined, color: AppColors.secondary, size: 20);
-  }
-
-  static IconData _getIconForType(String type) {
-    switch (type) {
-      case 'f1_lease':
-      case 'f2_handover':
-      case 'f3_defect':
-      case 'f4_payment':
-      case 'f5_incident':
-        return Icons.assignment_outlined;
-      case 'photo':
-        return Icons.photo_camera_outlined;
-      case 'video':
-        return Icons.videocam_outlined;
-      case 'audio':
-        return Icons.mic_outlined;
-      case 'chat':
-        return Icons.chat_outlined;
-      default:
-        return Icons.description_outlined;
-    }
   }
 }
